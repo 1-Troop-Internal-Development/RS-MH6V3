@@ -1,12 +1,23 @@
 class CfgPatches
 {
-	class Vsqz_melber
+	class RS_MH6V3
 	{
-		units[] = {};
+		units[] = {"RHS_MELB_AH6M"};
 		weapons[] = {};
-		requiredVersion = 0.1;
+		requiredVersion = 1.96;
 		requiredAddons[] = {"rhsusf_main","rhsusf_c_airweapons","rhsusf_c_heavyweapons"};
 		magazines[] = {};
+	};
+};
+class CfgFunctions
+{
+	class RS_MH6V3
+	{
+		class functions
+		{
+			file = "\DEVGRU\RS_MH6V3\functions";
+			class syncPylonOwner {};
+		};
 	};
 };
 class SensorTemplatePassiveRadar;
@@ -34,13 +45,9 @@ class VehicleSystemsTemplateRightPilot: DefaultVehicleSystemsDisplayManagerRight
 {
 	class components;
 };
-class Mode_SemiAuto;
-class Mode_Burst;
-class Mode_FullAuto;
 class RHS_Effects_Helicopter_Hull_Destruction;
 class cfgAmmo
 {
-	class Bulletbase;
 	class B_127x99_SLAP;
 	class rhs_ammo_127x99_SLAP: B_127x99_SLAP
 	{
@@ -66,7 +73,6 @@ class cfgAmmo
 };
 class cfgMagazines
 {
-	class CA_Magazine;
 	class 5000Rnd_762x51_Belt;
 	class RHS_FakeMagazine_MELB: 5000Rnd_762x51_Belt
 	{
@@ -80,8 +86,84 @@ class cfgMagazines
 };
 class cfgWeapons
 {
-	class MGun;
 	class Laserdesignator_mounted;
+	class rhs_weap_FFARLauncher
+	{
+		magazines[] =
+		{
+			"rhs_mag_M151_19",
+			"rhs_mag_M151_19_green",
+			"rhs_mag_M151_7",
+			"rhs_mag_M151_7_green",
+			"rhs_mag_M151_7_USAF_LAU131",
+			"rhs_mag_M151_21_USAF_LAU131_3"
+		};
+		displayName = "Hydra (M151 HE)";
+		modes[] = {"Far_AI","Single","Two"};
+		class Far_AI
+		{
+			showToPlayer = 0;
+			dispersion = 0.011;
+			minRange = 150;
+			minRangeProbab = 0.6;
+			midRange = 600;
+			midRangeProbab = 0.9;
+			maxRange = 2500;
+			maxRangeProbab = 0.12;
+		};
+		class Single
+		{
+			displayName = "Single";
+			autoFire = 0;
+			salvo = 1;
+			reloadTime = 0.08;
+			dispersion = 0.012;
+			textureType = "semi";
+			minRange = 1;
+			minRangeProbab = 0.001;
+			midRange = 2;
+			midRangeProbab = 0.001;
+			maxRange = 3;
+			maxRangeProbab = 0.001;
+		};
+		class Two: Single
+		{
+			displayName = "2 Pylons";
+			salvo = 2;
+			burst = 1;
+		};
+	};
+	class rhs_weap_FFARLauncher_M229
+	{
+		displayName = "Hydra (M229 HEPD)";
+		magazines[] =
+		{
+			"rhs_mag_M229_19",
+			"rhs_mag_M229_19_green",
+			"rhs_mag_M229_7",
+			"rhs_mag_M229_7_green"
+		};
+	};
+	class rhs_weap_FFARLauncher_M257
+	{
+		displayName = "Hydra (M257 ILLUM)";
+		magazines[] =
+		{
+			"rhs_mag_M257_7",
+			"rhs_mag_M257_7_green",
+			"rhs_mag_M257_7_USAF_LAU131"
+		};
+		modes[] = {"Far_AI","Single"};
+		class Far_AI
+		{
+			minRange = 3000;
+			minRangeProbab = 0.6;
+			midRange = 4000;
+			midRangeProbab = 0.9;
+			maxRange = 6000;
+			maxRangeProbab = 0.6;
+		};
+	};
 	class RHS_Laserdesignator_MELB: Laserdesignator_mounted
 	{
 		displayName = "Laser Designator";
@@ -1513,8 +1595,10 @@ class CfgVehicles
 				gunnerGetInAction = "Chopperlight_R_In_H";
 				gunnergetOutAction = "GetOutLow";
 				gunnerOpticsModel = "";
-				TurretCanSee = "1+2+4+8";
-				showAllTargets = 1;
+				TurretCanSee = "1+2+4+8+16";
+				gunnerCanSee = 31;
+				showAllTargets = 6;
+				showCrewAim = 4;
 				gunnerHasFlares = 1;
 				usepip = 1;
 				canUseScanners = 1;
@@ -1672,7 +1756,7 @@ class CfgVehicles
 		dlc = "RHS_USAF";
 		picture = "rhsusf\addons\rhsusf_melb\Data\ui\melb_ah_6m_ca.paa";
 		icon = "rhsusf\addons\rhsusf_melb\Data\ui\map_melb_ah_6m_l_ca.paa";
-		displayName = "AH-6M Little Bird Vsqz";
+		displayName = "AH-6M Little Bird 1TRP";
 		slingLoadMaxCargoMass = 0;
 		fuelCapacity = 436;
 		fuelConsumptionRate = 0.08;
@@ -1694,6 +1778,16 @@ class CfgVehicles
 		class Turrets: Turrets
 		{
 			class CopilotTurret: CopilotTurret{};
+		};
+		class EventHandlers: EventHandlers
+		{
+			class RS_MH6V3_EH
+			{
+				init = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				seatSwitched = "_this call RS_MH6V3_fnc_syncPylonOwner";
+			};
 		};
 		class AnimationSources: AnimationSources
 		{

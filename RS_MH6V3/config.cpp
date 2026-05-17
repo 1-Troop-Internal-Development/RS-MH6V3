@@ -16,7 +16,17 @@ class CfgFunctions
 		class functions
 		{
 			file = "\DEVGRU\RS_MH6V3\functions";
+			class findIZLIDLaserSource {};
+			class holdIZLID {};
+			class initKeybinds
+			{
+				postInit = 1;
+			};
+			class renderIZLID {};
+			class quickLaunchHydra {};
+			class setIZLIDState {};
 			class syncPylonOwner {};
+			class toggleIZLID {};
 		};
 	};
 };
@@ -86,8 +96,10 @@ class cfgMagazines
 };
 class cfgWeapons
 {
+	class MGun;
+	class RocketPods;
 	class Laserdesignator_mounted;
-	class rhs_weap_FFARLauncher
+	class rhs_weap_FFARLauncher: RocketPods
 	{
 		magazines[] =
 		{
@@ -96,13 +108,25 @@ class cfgWeapons
 			"rhs_mag_M151_7",
 			"rhs_mag_M151_7_green",
 			"rhs_mag_M151_7_USAF_LAU131",
-			"rhs_mag_M151_21_USAF_LAU131_3"
+			"rhs_mag_M151_21_USAF_LAU131_3",
+			"rhs_mag_FFAR_7_USAF",
+			"rhs_mag_FFAR_21_USAF_LAU68_3",
+			"rhs_mag_FFAR_19_USAF",
+			"rhs_mag_FFAR_57_USAF_LAU61_3"
 		};
 		displayName = "Hydra (M151 HE)";
 		modes[] = {"Far_AI","Single","Two"};
-		class Far_AI
+		cursor = "rocket";
+		cursorAim = "EmptyCursor";
+		cursorSize = 0;
+		class Far_AI: RocketPods
 		{
+			displayName = "Hydra";
+			burst = 1;
+			reloadTime = 0.08;
+			autoFire = 0;
 			showToPlayer = 0;
+			soundBurst = 0;
 			dispersion = 0.011;
 			minRange = 150;
 			minRangeProbab = 0.6;
@@ -111,29 +135,41 @@ class cfgWeapons
 			maxRange = 2500;
 			maxRangeProbab = 0.12;
 		};
-		class Single
+		class Burst: RocketPods
 		{
-			displayName = "Single";
-			autoFire = 0;
-			salvo = 1;
+			displayName = "ALL";
+			burst = 1;
+			salvo = 2;
 			reloadTime = 0.08;
+			soundContinuous = 0;
+			autoFire = 1;
+			aiDispersionCoefX = 1.5;
+			aiDispersionCoefY = 1;
 			dispersion = 0.012;
-			textureType = "semi";
+			textureType = "fullAuto";
 			minRange = 1;
 			minRangeProbab = 0.001;
 			midRange = 2;
 			midRangeProbab = 0.001;
 			maxRange = 3;
 			maxRangeProbab = 0.001;
+			soundBurst = 0;
+		};
+		class Single: Burst
+		{
+			displayName = "1";
+			autoFire = 0;
+			salvo = 1;
+			textureType = "semi";
 		};
 		class Two: Single
 		{
-			displayName = "2 Pylons";
+			displayName = "2";
 			salvo = 2;
 			burst = 1;
 		};
 	};
-	class rhs_weap_FFARLauncher_M229
+	class rhs_weap_FFARLauncher_M229: rhs_weap_FFARLauncher
 	{
 		displayName = "Hydra (M229 HEPD)";
 		magazines[] =
@@ -144,7 +180,7 @@ class cfgWeapons
 			"rhs_mag_M229_7_green"
 		};
 	};
-	class rhs_weap_FFARLauncher_M257
+	class rhs_weap_FFARLauncher_M257: rhs_weap_FFARLauncher
 	{
 		displayName = "Hydra (M257 ILLUM)";
 		magazines[] =
@@ -154,7 +190,7 @@ class cfgWeapons
 			"rhs_mag_M257_7_USAF_LAU131"
 		};
 		modes[] = {"Far_AI","Single"};
-		class Far_AI
+		class Far_AI: Far_AI
 		{
 			minRange = 3000;
 			minRangeProbab = 0.6;
@@ -1778,16 +1814,6 @@ class CfgVehicles
 		class Turrets: Turrets
 		{
 			class CopilotTurret: CopilotTurret{};
-		};
-		class EventHandlers: EventHandlers
-		{
-			class RS_MH6V3_EH
-			{
-				init = "_this call RS_MH6V3_fnc_syncPylonOwner";
-				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
-				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
-				seatSwitched = "_this call RS_MH6V3_fnc_syncPylonOwner";
-			};
 		};
 		class AnimationSources: AnimationSources
 		{

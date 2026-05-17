@@ -2,7 +2,7 @@
 	Reassign AH-6M pylon ownership after crew changes.
 	Default owner is the pilot. If the copilot is the current pilot/controller,
 	pylons move to turret [0] so the copilot gets the active weapon controls.
-*/
+.*/
 private _vehicle = objNull;
 
 if (_this isEqualType objNull) then {

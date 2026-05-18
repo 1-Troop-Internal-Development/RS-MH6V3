@@ -15,6 +15,7 @@ if (!_enabled) exitWith {
 	if (isNull _holdVehicle || {!(_holdVehicle isKindOf "RHS_MELB_AH6M")}) exitWith {false};
 
 	[_holdVehicle, _restoreState] call RS_MH6V3_fnc_setIZLIDState;
+	[_holdVehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
 	true
 };
 
@@ -31,4 +32,5 @@ player setVariable ["RS_MH6V3_izlidHoldVehicle", _vehicle, false];
 player setVariable ["RS_MH6V3_izlidHoldPreviousState", _vehicle getVariable ["RS_MH6V3_izlidEnabled", false], false];
 
 [_vehicle, true] call RS_MH6V3_fnc_setIZLIDState;
+[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
 true

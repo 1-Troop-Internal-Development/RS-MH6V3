@@ -12,11 +12,11 @@ if !(player isEqualTo driver _vehicle || {player isEqualTo (_vehicle turretUnit 
 if (_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]) exitWith {
 	[_vehicle, false] call RS_MH6V3_fnc_setIZLIDState;
 	playSound "ACE_Sound_Click";
-	hintSilent "IZLID OFF";
+	[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
 	true
 };
 
 [_vehicle, true] call RS_MH6V3_fnc_setIZLIDState;
 playSound "ACE_Sound_Click";
-hintSilent "IZLID ON";
+[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
 true

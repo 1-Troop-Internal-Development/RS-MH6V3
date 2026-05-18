@@ -49,8 +49,15 @@ if !(_vehicle getVariable ["RS_MH6V3_pylonOwnerMonitor", false]) then {
 	private _ownerTurret = [];
 	private _ownerKey = "driver";
 	private _copilot = _vehicle turretUnit [0];
+	private _activeCopilot = _vehicle getVariable ["RS_MH6V3_activeCopilot", objNull];
 
-	if (!isNull _copilot && {currentPilot _vehicle isEqualTo _copilot}) then {
+	if (
+		!isNull _copilot
+		&& {
+			currentPilot _vehicle isEqualTo _copilot
+			|| {_activeCopilot isEqualTo _copilot}
+		}
+	) then {
 		_ownerTurret = [0];
 		_ownerKey = "copilot";
 	};

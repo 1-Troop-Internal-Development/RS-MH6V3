@@ -152,36 +152,80 @@ class RS_MH6V3_LiveryMenu
 
 class RscTitles
 {
-	class RS_MH6V3_QuickFireStatus
+	class RS_MH6V3_ExternalWeaponControl
 	{
 		idd = -1;
 		duration = 2;
 		fadeIn = 0;
 		fadeOut = 0.25;
 		movingEnable = 0;
-		onLoad = "uiNamespace setVariable ['RS_MH6V3_quickFireStatusDisplay', _this # 0]";
-		onUnload = "uiNamespace setVariable ['RS_MH6V3_quickFireStatusDisplay', displayNull]";
+		onLoad = "uiNamespace setVariable ['RS_MH6V3_externalWeaponControlDisplay', _this # 0]";
+		onUnload = "uiNamespace setVariable ['RS_MH6V3_externalWeaponControlDisplay', displayNull]";
 
 		class controls
 		{
 			class Background: RS_MH6V3_RscText
 			{
 				idc = 86101;
-				x = 0.815 * safezoneW + safezoneX;
-				y = 0.72 * safezoneH + safezoneY;
-				w = 0.15 * safezoneW;
-				h = 0.035 * safezoneH;
+				x = 0.765 * safezoneW + safezoneX;
+				y = 0.70 * safezoneH + safezoneY;
+				w = 0.20 * safezoneW;
+				h = 0.09 * safezoneH;
 				colorBackground[] = {0,0,0,0.72};
 			};
-			class Status: RS_MH6V3_RscText
+			class Title: RS_MH6V3_RscText
 			{
 				idc = 86102;
-				text = "QUICK FIRE: NOT-ARMED";
-				x = 0.82 * safezoneW + safezoneX;
-				y = 0.724 * safezoneH + safezoneY;
-				w = 0.14 * safezoneW;
+				text = "EXTERNAL WEAPON CONTROL";
+				x = 0.772 * safezoneW + safezoneX;
+				y = 0.706 * safezoneH + safezoneY;
+				w = 0.186 * safezoneW;
 				h = 0.026 * safezoneH;
 				sizeEx = 0.03;
+				colorText[] = {1,1,1,1};
+			};
+			class IZLIDLabel: RS_MH6V3_RscText
+			{
+				idc = 86103;
+				text = "IZLID:";
+				x = 0.772 * safezoneW + safezoneX;
+				y = 0.736 * safezoneH + safezoneY;
+				w = 0.10 * safezoneW;
+				h = 0.022 * safezoneH;
+				sizeEx = 0.028;
+				colorText[] = {1,1,1,1};
+			};
+			class IZLIDStatus: RS_MH6V3_RscText
+			{
+				idc = 86104;
+				text = "OFF";
+				x = 0.895 * safezoneW + safezoneX;
+				y = 0.736 * safezoneH + safezoneY;
+				w = 0.06 * safezoneW;
+				h = 0.022 * safezoneH;
+				sizeEx = 0.028;
+				colorText[] = {1,0.38,0.32,1};
+			};
+			class HydraLabel: RS_MH6V3_RscText
+			{
+				idc = 86105;
+				text = "HYDRA QUICK FIRE:";
+				x = 0.772 * safezoneW + safezoneX;
+				y = 0.762 * safezoneH + safezoneY;
+				w = 0.12 * safezoneW;
+				h = 0.022 * safezoneH;
+				sizeEx = 0.028;
+				colorText[] = {1,1,1,1};
+			};
+			class HydraStatus: RS_MH6V3_RscText
+			{
+				idc = 86106;
+				text = "NOT-ARMED";
+				x = 0.895 * safezoneW + safezoneX;
+				y = 0.762 * safezoneH + safezoneY;
+				w = 0.07 * safezoneW;
+				h = 0.022 * safezoneH;
+				sizeEx = 0.028;
 				colorText[] = {1,0.38,0.32,1};
 			};
 		};

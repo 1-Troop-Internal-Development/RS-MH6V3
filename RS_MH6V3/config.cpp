@@ -68,7 +68,7 @@ class CfgFunctions
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\weapons";
 			class quickLaunchHydra {};
-			class showQuickFireStatus {};
+			class showExternalWeaponControl {};
 			class toggleQuickFireArm {};
 		};
 	};
@@ -1738,6 +1738,10 @@ class CfgVehicles
 		{
 			class RHS_MELB_EH
 			{
+				init = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				controlsShifted = "params ['_vehicle', '_activeCopilot']; _vehicle setVariable ['RS_MH6V3_activeCopilot', _activeCopilot, true]; [_vehicle] call RS_MH6V3_fnc_syncPylonOwner";
 				handleDamage = "_this call RHS_MELB_fnc_fallDamage";
 				postInit = "_this call rhs_fnc_reapplyTextures";
 			};

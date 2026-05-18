@@ -1,6 +1,8 @@
 params [
 	["_vehicle", objNull],
-	["_operator", objNull]
+	["_operator", objNull],
+	["_hydraWeapon", ""],
+	["_mode", "Single"]
 ];
 
 if (!hasInterface) exitWith {false};
@@ -17,8 +19,8 @@ if (isNull _vehicle || {!alive _vehicle}) exitWith {false};
 if !(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]) exitWith {false};
 if !(_operator in [driver _vehicle, gunner _vehicle]) exitWith {false};
 if !(_operator in _vehicle) exitWith {false};
-if !(_operator getVariable ["RS_MH6V3_quickFireArmed", false]) exitWith {
-	[false] call RS_MH6V3_fnc_showQuickFireStatus;
+if !(_vehicle getVariable ["RS_MH6V3_quickFireArmed", false]) exitWith {
+	[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
 	false
 };
 
@@ -26,16 +28,57 @@ private _lastFire = _vehicle getVariable ["RS_MH6V3_quickHydraLastFire", -1];
 if (time - _lastFire < 0.15) exitWith {false};
 _vehicle setVariable ["RS_MH6V3_quickHydraLastFire", time];
 
-private _hydraPylons = [];
+private _hydraWeapons = [
+	"rhs_weap_FFARLauncher",
+	"rhs_weap_FFARLauncher_M229",
+	"rhs_weap_FFARLauncher_M257",
+	"rhs_weap_FFARLauncher_M282",
+	"rhs_weap_FFARLauncher_M247",
+	"rhs_weap_FFARLauncher_M156",
+	"rhs_weap_FFARLauncher_M274",
+	"rhs_weap_FFARLauncher_M278"
+];
 
-{
-	private _pylonIndex = _forEachIndex + 1;
-	private _magazine = _x;
+private _findHydraWeaponFromMagazine = {
+	params ["_magazine", "_fallbackWeapons"];
+
 	private _magazineLower = toLower _magazine;
+	private _weapon = getText (configFile >> "CfgMagazines" >> _magazine >> "pylonWeapon");
 
-	if (_magazine != "" && {_vehicle ammoOnPylon _pylonIndex > 0}) then {
-		private _weapon = "";
+	if (_weapon == "") then {
+		{
+			private _candidate = _x;
+			private _magazines = getArray (configFile >> "CfgWeapons" >> _candidate >> "magazines");
 
+			if (_magazine in _magazines) exitWith {
+				_weapon = _candidate;
+			};
+		} forEach _fallbackWeapons;
+	};
+
+	if (_weapon == "") then {
+		private _weaponClasses = "true" configClasses (configFile >> "CfgWeapons");
+
+		{
+			private _candidate = configName _x;
+			private _candidateLower = toLower _candidate;
+			private _displayNameLower = toLower getText (_x >> "displayName");
+
+			if (
+				(
+					(_candidateLower find "ffar") >= 0
+					|| {(_candidateLower find "hydra") >= 0}
+					|| {(_displayNameLower find "hydra") >= 0}
+					|| {(_displayNameLower find "ffar") >= 0}
+				)
+				&& {_magazine in getArray (_x >> "magazines")}
+			) exitWith {
+				_weapon = _candidate;
+			};
+		} forEach _weaponClasses;
+	};
+
+	if (_weapon == "") then {
 		if (
 			(_magazineLower find "m151") >= 0
 			|| {(_magazineLower find "ffar") >= 0}
@@ -50,42 +93,69 @@ private _hydraPylons = [];
 		if ((_magazineLower find "m257") >= 0) then {
 			_weapon = "rhs_weap_FFARLauncher_M257";
 		};
-
-		if (_weapon == "") then {
-			_weapon = getText (configFile >> "CfgMagazines" >> _magazine >> "pylonWeapon");
-		};
-
-		if (_weapon != "" && {isClass (configFile >> "CfgWeapons" >> _weapon)}) then {
-			_hydraPylons pushBack [_pylonIndex, _weapon, _magazine];
-		};
 	};
-} forEach getPylonMagazines _vehicle;
 
-if (_hydraPylons isEqualTo []) exitWith {
+	_weapon
+};
+
+if (_hydraWeapon == "") then {
+	private _availableWeapons = (weapons _vehicle) + (_vehicle weaponsTurret [-1]) + (_vehicle weaponsTurret []) + (_vehicle weaponsTurret [0]);
+
+	{
+		private _weaponLower = toLower _x;
+		private _displayNameLower = toLower getText (configFile >> "CfgWeapons" >> _x >> "displayName");
+
+		if (
+			(
+				_x in _hydraWeapons
+				|| {(_weaponLower find "ffar") >= 0}
+				|| {(_weaponLower find "hydra") >= 0}
+				|| {(_displayNameLower find "hydra") >= 0}
+				|| {(_displayNameLower find "ffar") >= 0}
+			)
+		) exitWith {
+			_hydraWeapon = _x;
+		};
+	} forEach _availableWeapons;
+};
+
+if (_hydraWeapon == "") then {
+	private _pylonMagazines = getPylonMagazines _vehicle;
+
+	{
+		private _pylonIndex = _forEachIndex + 1;
+
+		if (_x != "" && {_vehicle ammoOnPylon _pylonIndex > 0}) then {
+			private _pylonWeapon = [_x, _hydraWeapons] call _findHydraWeaponFromMagazine;
+
+			if (_pylonWeapon != "" && {isClass (configFile >> "CfgWeapons" >> _pylonWeapon)}) exitWith {
+				_hydraWeapon = _pylonWeapon;
+			};
+		};
+	} forEach _pylonMagazines;
+};
+
+if (_hydraWeapon == "") exitWith {
 	hintSilent "Hydra unavailable";
 	false
 };
 
-private _lastPylon = _vehicle getVariable ["RS_MH6V3_quickHydraLastPylon", 0];
-private _selected = _hydraPylons # 0;
+private _turretPath = if (_operator isEqualTo gunner _vehicle) then {[0]} else {[-1]};
+private _weaponState = weaponState [_vehicle, _turretPath];
 
-{
-	if ((_x # 0) > _lastPylon) exitWith {
-		_selected = _x;
-	};
-} forEach _hydraPylons;
+_operator forceWeaponFire [_hydraWeapon, _mode];
 
-if ((_selected # 0) <= _lastPylon) then {
-	_selected = _hydraPylons # 0;
-};
+[_vehicle, _turretPath, _weaponState] spawn {
+	params ["_vehicle", "_turretPath", "_weaponState"];
 
-_vehicle setVariable ["RS_MH6V3_quickHydraLastPylon", _selected # 0];
+	sleep 0.01;
 
-private _fired = _vehicle fireAtTarget [objNull, _selected # 1];
+	if (isNull _vehicle || {count _weaponState < 1}) exitWith {};
 
-if (!_fired) exitWith {
-	hintSilent "Hydra failed to fire";
-	false
+	private _previousWeapon = _weaponState # 0;
+	if (_previousWeapon == "") exitWith {};
+
+	_vehicle selectWeaponTurret [_previousWeapon, _turretPath];
 };
 
 true

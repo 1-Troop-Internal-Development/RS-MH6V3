@@ -34,4 +34,4 @@
 			_x setVariable ["RS_MH6V3_izlidIlluminatorClass", ""];
 		};
 	};
-} forEach vehicles;
+} forEach (vehicles select {_x isKindOf "RHS_MELB_AH6M"});

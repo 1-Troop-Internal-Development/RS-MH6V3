@@ -2,6 +2,24 @@
 
 if (!hasInterface) exitWith {};
 
+if (isNil "RS_MH6V3_controlsShiftedEh") then {
+	RS_MH6V3_controlsShiftedEh = addMissionEventHandler ["ControlsShifted", {
+		params ["_newController", "_oldController", "_vehicle"];
+
+		if (isNull _vehicle || {!(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"])}) exitWith {};
+
+		private _copilot = _vehicle turretUnit [0];
+		private _activeCopilot = if (!isNull _copilot && {_newController isEqualTo _copilot}) then {
+			_copilot
+		} else {
+			objNull
+		};
+
+		_vehicle setVariable ["RS_MH6V3_activeCopilot", _activeCopilot, true];
+		[_vehicle] call RS_MH6V3_fnc_syncPylonOwner;
+	}];
+};
+
 [
 	"RS MH-6V3",
 	"RS_MH6V3_toggleIZLID",

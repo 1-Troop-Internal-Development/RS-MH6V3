@@ -9,6 +9,7 @@ private _index = lbCurSel _combo;
 
 if (_index < 0) exitWith {};
 if (isNull _vehicle || {!alive _vehicle}) exitWith {};
+if !(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]) exitWith {};
 
 private _data = _combo lbData _index;
 if (_data == "") exitWith {};

@@ -10,7 +10,7 @@ if (!hasInterface) exitWith {};
 		[] call RS_MH6V3_fnc_toggleIZLID
 	},
 	{false},
-	[DIK_I, [false, false, true]],
+	[],
 	false,
 	0
 ] call CBA_fnc_addKeybind;
@@ -38,7 +38,20 @@ if (!hasInterface) exitWith {};
 		[] call RS_MH6V3_fnc_quickLaunchHydra
 	},
 	{false},
-	[DIK_H, [false, false, true]],
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
+[
+	"RS MH-6V3",
+	"RS_MH6V3_toggleQuickFireArm",
+	["Toggle Quick Fire Master Arm", "Arm or safe the AH-6M quick-fire Hydra key."],
+	{
+		[] call RS_MH6V3_fnc_toggleQuickFireArm
+	},
+	{false},
+	[],
 	false,
 	0
 ] call CBA_fnc_addKeybind;

@@ -5,29 +5,84 @@ class CfgPatches
 		units[] = {"RHS_MELB_AH6M"};
 		weapons[] = {};
 		requiredVersion = 1.96;
-		requiredAddons[] = {"rhsusf_main","rhsusf_c_airweapons","rhsusf_c_heavyweapons"};
+		requiredAddons[] =
+		{
+			"rhsusf_main",
+			"rhsusf_c_melb",
+			"rhsusf_c_airweapons",
+			"rhsusf_c_heavyweapons"
+		};
 		magazines[] = {};
 	};
 };
+
 class CfgFunctions
 {
 	class RS_MH6V3
 	{
-		class functions
+		class ace
 		{
-			file = "\DEVGRU\RS_MH6V3\functions";
-			class findIZLIDLaserSource {};
-			class holdIZLID {};
+			file = "\DEVGRU\RS_MH6V3\functions\ace";
+			class initAceActions
+			{
+				postInit = 1;
+			};
+		};
+		class camera
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\camera";
+			class resetCameras {};
+		};
+		class livery
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\livery";
+			class applyLivery {};
+			class applySelectedLivery {};
+			class getAvailableLiveries {};
+			class openLiveryMenu {};
+			class populateLiveryMenu {};
+		};
+		class input
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\input";
 			class initKeybinds
 			{
 				postInit = 1;
 			};
+		};
+		class izlid
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\izlid";
+			class findIZLIDLaserSource {};
+			class holdIZLID {};
 			class renderIZLID {};
-			class quickLaunchHydra {};
 			class setIZLIDState {};
-			class syncPylonOwner {};
 			class toggleIZLID {};
 		};
+		class pylons
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\pylons";
+			class syncPylonOwner {};
+		};
+		class weapons
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\weapons";
+			class quickLaunchHydra {};
+			class showQuickFireStatus {};
+			class toggleQuickFireArm {};
+		};
+	};
+};
+
+#include "ui.hpp"
+
+class CfgSounds
+{
+	class RS_MH6V3_FuelDrain
+	{
+		name = "RS_MH6V3_FuelDrain";
+		sound[] = {"\DEVGRU\RS_MH6V3\sounds\FuelDrain.ogg", 2, 1, 35};
+		titles[] = {};
 	};
 };
 class SensorTemplatePassiveRadar;
@@ -212,18 +267,6 @@ class cfgWeapons
 		midRangeProbab = 0.01;
 		maxRange = 3;
 		maxRangeProbab = 0.01;
-	};
-};
-class CfgMovesBasic
-{
-	class DefaultDie;
-	class ManActions
-	{
-		MELB_Pilot = "MELB_Pilot";
-		MELB_Copilot = "MELB_Copilot";
-		MELB_FL_Bench = "MELB_FL_Bench";
-		MELB_L_Rack = "MELB_L_Rack";
-		MELB_L_Rack_in = "MELB_L_Rack_in";
 	};
 };
 class CfgVehicles
@@ -870,6 +913,8 @@ class CfgVehicles
 					maxFov = 1.2;
 					visionMode[] = {"Normal","NVG","Ti"};
 					thermalMode[] = {0,1};
+					directionStabilized = 0;
+					horizontallyStabilized = 0;
 					gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_wf.p3d";
 				};
 				showMiniMapInOptics = 0;
@@ -914,10 +959,6 @@ class CfgVehicles
 				direction = "exhaust1_dir";
 				effect = "ExhaustEffectHeli";
 			};
-		};
-		class Library
-		{
-			libTextDesc = "Syko's Little Birds";
 		};
 		armor = 35;
 		armorStructural = 20;
@@ -1349,6 +1390,17 @@ class CfgVehicles
 				statement = "call RHS_MELB_fnc_MFD_toggle";
 				showWindow = 0;
 			};
+			class RS_MH6V3_ResetCameras
+			{
+				displayName = "<t color='#7fd8ff'>Reset Cameras</t>";
+				onlyforplayer = 1;
+				position = "doplnovani";
+				radius = 2;
+				condition = "((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)";
+				statement = "[this] call RS_MH6V3_fnc_resetCameras";
+				showWindow = 0;
+				priority = 9.8;
+			};
 			class SAFEMODE
 			{
 				displayName = "<t color='#00FF7F'>MASTERSAFE</t>";
@@ -1662,13 +1714,13 @@ class CfgVehicles
 						initAngleY = 0;
 						minAngleY = -15;
 						maxAngleY = 85;
-						initFov = 0.3;
-						minFov = 0.3;
-						maxFov = 0.3;
+						initFov = 0.75;
+						minFov = 0.25;
+						maxFov = 0.9;
 						visionMode[] = {"Normal","NVG","Ti"};
 						thermalMode[] = {0,1};
-						directionStabilized = 1;
-						horizontallyStabilized = 1;
+						directionStabilized = 0;
+						horizontallyStabilized = 0;
 						gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_wf.p3d";
 						opticsPPEffects[] = {"OpticsCHAbera3","OpticsBlur3"};
 						gunnerOpticsEffect[] = {"TankCommanderOptics2"};

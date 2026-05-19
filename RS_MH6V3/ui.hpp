@@ -167,65 +167,88 @@ class RscTitles
 			class Background: RS_MH6V3_RscText
 			{
 				idc = 86101;
-				x = 0.765 * safezoneW + safezoneX;
+				x = 0.805 * safezoneW + safezoneX;
 				y = 0.70 * safezoneH + safezoneY;
-				w = 0.20 * safezoneW;
-				h = 0.09 * safezoneH;
+				w = 0.17 * safezoneW;
+				h = 0.105 * safezoneH;
 				colorBackground[] = {0,0,0,0.72};
 			};
 			class Title: RS_MH6V3_RscText
 			{
 				idc = 86102;
+				style = 2;
 				text = "EXTERNAL WEAPON CONTROL";
-				x = 0.772 * safezoneW + safezoneX;
+				x = 0.812 * safezoneW + safezoneX;
 				y = 0.706 * safezoneH + safezoneY;
-				w = 0.186 * safezoneW;
-				h = 0.026 * safezoneH;
-				sizeEx = 0.03;
+				w = 0.156 * safezoneW;
+				h = 0.022 * safezoneH;
+				sizeEx = 0.026;
 				colorText[] = {1,1,1,1};
 			};
 			class IZLIDLabel: RS_MH6V3_RscText
 			{
 				idc = 86103;
 				text = "IZLID:";
-				x = 0.772 * safezoneW + safezoneX;
-				y = 0.736 * safezoneH + safezoneY;
-				w = 0.10 * safezoneW;
-				h = 0.022 * safezoneH;
-				sizeEx = 0.028;
+				x = 0.826 * safezoneW + safezoneX;
+				y = 0.733 * safezoneH + safezoneY;
+				w = 0.06 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
 				colorText[] = {1,1,1,1};
 			};
 			class IZLIDStatus: RS_MH6V3_RscText
 			{
 				idc = 86104;
 				text = "OFF";
-				x = 0.895 * safezoneW + safezoneX;
-				y = 0.736 * safezoneH + safezoneY;
-				w = 0.06 * safezoneW;
-				h = 0.022 * safezoneH;
-				sizeEx = 0.028;
+				x = 0.882 * safezoneW + safezoneX;
+				y = 0.733 * safezoneH + safezoneY;
+				w = 0.076 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
 				colorText[] = {1,0.38,0.32,1};
+			};
+			class ModeLabel: RS_MH6V3_RscText
+			{
+				idc = 86107;
+				text = "MODE:";
+				x = 0.826 * safezoneW + safezoneX;
+				y = 0.756 * safezoneH + safezoneY;
+				w = 0.06 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
+				colorText[] = {1,1,1,1};
+			};
+			class ModeStatus: RS_MH6V3_RscText
+			{
+				idc = 86108;
+				text = "IZLID/ILLUM";
+				x = 0.882 * safezoneW + safezoneX;
+				y = 0.756 * safezoneH + safezoneY;
+				w = 0.076 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
+				colorText[] = {1,0.78,0.32,1};
 			};
 			class HydraLabel: RS_MH6V3_RscText
 			{
 				idc = 86105;
 				text = "HYDRA QUICK FIRE:";
-				x = 0.772 * safezoneW + safezoneX;
-				y = 0.762 * safezoneH + safezoneY;
-				w = 0.12 * safezoneW;
-				h = 0.022 * safezoneH;
-				sizeEx = 0.028;
+				x = 0.826 * safezoneW + safezoneX;
+				y = 0.779 * safezoneH + safezoneY;
+				w = 0.06 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
 				colorText[] = {1,1,1,1};
 			};
 			class HydraStatus: RS_MH6V3_RscText
 			{
 				idc = 86106;
 				text = "NOT-ARMED";
-				x = 0.895 * safezoneW + safezoneX;
-				y = 0.762 * safezoneH + safezoneY;
-				w = 0.07 * safezoneW;
-				h = 0.022 * safezoneH;
-				sizeEx = 0.028;
+				x = 0.882 * safezoneW + safezoneX;
+				y = 0.779 * safezoneH + safezoneY;
+				w = 0.076 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
 				colorText[] = {1,0.38,0.32,1};
 			};
 		};

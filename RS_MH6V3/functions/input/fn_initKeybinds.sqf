@@ -50,6 +50,19 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 
 [
 	"RS MH-6V3",
+	"RS_MH6V3_toggleIZLIDMode",
+	["Cycle IZLID Mode", "Cycle between IZLID, IR illuminator, and combined output."],
+	{
+		[] call RS_MH6V3_fnc_toggleIZLIDMode
+	},
+	{false},
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
+[
+	"RS MH-6V3",
 	"RS_MH6V3_quickLaunchHydra",
 	["Quick Launch Hydra", "Fire one AH-6M Hydra without selecting rockets."],
 	{
@@ -74,6 +87,14 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 	0
 ] call CBA_fnc_addKeybind;
 
-addMissionEventHandler ["Draw3D", {
-	call RS_MH6V3_fnc_renderIZLID;
-}];
+if (isNil "RS_MH6V3_izlidIlluminatorEh") then {
+	RS_MH6V3_izlidIlluminatorEh = addMissionEventHandler ["EachFrame", {
+		call RS_MH6V3_fnc_updateIZLIDIlluminators;
+	}];
+};
+
+if (isNil "RS_MH6V3_izlidRenderEh") then {
+	RS_MH6V3_izlidRenderEh = addMissionEventHandler ["Draw3D", {
+		call RS_MH6V3_fnc_renderIZLID;
+	}];
+};

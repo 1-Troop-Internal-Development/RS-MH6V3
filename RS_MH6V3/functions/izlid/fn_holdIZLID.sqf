@@ -21,6 +21,7 @@ if (!_enabled) exitWith {
 
 if !(_vehicle isKindOf "RHS_MELB_AH6M") exitWith {false};
 if !(player in _vehicle) exitWith {false};
+if !(alive _vehicle && {isEngineOn _vehicle}) exitWith {false};
 
 if !(player isEqualTo driver _vehicle || {player isEqualTo (_vehicle turretUnit [0])}) exitWith {
 	false

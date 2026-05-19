@@ -1,20 +1,20 @@
 {
 	if ([_x] call RS_MH6V3_fnc_canUseIZLID) then {
 		private _mode = _x getVariable ["RS_MH6V3_izlidMode", 3];
-		if (_mode in [1, 2, 3]) then {
 
+		if (_mode in [2, 3]) then {
 			private _laser = [_x] call RS_MH6V3_fnc_findIZLIDLaserSource;
 
 			if !(_laser isEqualTo [-1, -1]) then {
 				_laser params ["_origin", "_direction"];
-				private _laserMax = 3000;
-				private _laserStartOffset = -0.25;
+				private _illuminatorOffset = 2;
 
-				if (_mode in [1, 3]) then {
-					private _begPos = _origin vectorAdd (_direction vectorMultiply _laserStartOffset);
-					drawLaser [_begPos, _direction, [250, 0, 0, 1], [], 0.45, 0.8, _laserMax, true];
-				};
+				[_x, _origin, _direction, _illuminatorOffset] call RS_MH6V3_fnc_updateIlluminator;
 			};
+		} else {
+			[_x] call RS_MH6V3_fnc_cleanupIlluminator;
 		};
+	} else {
+		[_x] call RS_MH6V3_fnc_cleanupIlluminator;
 	};
 } forEach (vehicles select {_x isKindOf "RHS_MELB_AH6M"});

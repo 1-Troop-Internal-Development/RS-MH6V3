@@ -8,6 +8,7 @@ class CfgPatches
 		requiredAddons[] =
 		{
 			"rhsusf_main",
+			"A3_Data_F",
 			"rhsusf_c_melb",
 			"rhsusf_c_airweapons",
 			"rhsusf_c_heavyweapons"
@@ -53,11 +54,21 @@ class CfgFunctions
 		class izlid
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\izlid";
+			class canUseIZLID {};
 			class findIZLIDLaserSource {};
+			class handleIZLIDPowerState {};
 			class holdIZLID {};
 			class renderIZLID {};
 			class setIZLIDState {};
+			class toggleIZLIDMode {};
 			class toggleIZLID {};
+			class updateIZLIDIlluminators {};
+		};
+		class itn
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\izlid\itn";
+			class cleanupIlluminator {};
+			class updateIlluminator {};
 		};
 		class pylons
 		{
@@ -271,6 +282,46 @@ class cfgWeapons
 };
 class CfgVehicles
 {
+	class Lamps_base_F;
+	class RS_MH6V3_IZLID_Illuminator: Lamps_base_F
+	{
+		scope = 1;
+		scopeCurator = 1;
+		displayName = "RS MH-6V3 IR Illuminator";
+		model = "\DEVGRU\RS_MH6V3\data\light.p3d";
+		class Hitpoints {};
+		class AnimationSources {};
+		class Reflectors
+		{
+			class Light_1
+			{
+				irLight = 1;
+				color[] = {4,4,4};
+				ambient[] = {0,0,0};
+				intensity = 180000;
+				size = 1;
+				innerAngle = 7.65;
+				outerAngle = 9;
+				coneFadeCoef = 1;
+				position = "light_pos";
+				direction = "light_dir";
+				hitpoint = "";
+				selection = "";
+				useFlare = 1;
+				flareSize = 0.2;
+				flareMaxDistance = 5000;
+				class Attenuation
+				{
+					start = 1;
+					constant = "3.14159*0.012";
+					linear = 0;
+					quadratic = 1;
+					hardLimitStart = 4000;
+					hardLimitEnd = 6000;
+				};
+			};
+		};
+	};
 	class Helicopter;
 	class Helicopter_Base_F: Helicopter
 	{
@@ -1741,6 +1792,8 @@ class CfgVehicles
 				init = "_this call RS_MH6V3_fnc_syncPylonOwner";
 				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
 				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				engine = "params ['_vehicle', '_engineOn']; [_vehicle, _engineOn] call RS_MH6V3_fnc_handleIZLIDPowerState";
+				killed = "params ['_vehicle']; [_vehicle, false] call RS_MH6V3_fnc_handleIZLIDPowerState";
 				controlsShifted = "params ['_vehicle', '_activeCopilot']; _vehicle setVariable ['RS_MH6V3_activeCopilot', _activeCopilot, true]; [_vehicle] call RS_MH6V3_fnc_syncPylonOwner";
 				handleDamage = "_this call RHS_MELB_fnc_fallDamage";
 				postInit = "_this call rhs_fnc_reapplyTextures";

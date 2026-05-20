@@ -26,7 +26,6 @@ if !(_vehicle getVariable ["RS_MH6V3_quickFireArmed", false]) exitWith {
 
 private _lastFire = _vehicle getVariable ["RS_MH6V3_quickHydraLastFire", -1];
 if (time - _lastFire < 0.15) exitWith {false};
-_vehicle setVariable ["RS_MH6V3_quickHydraLastFire", time];
 
 private _hydraWeapons = [
 	"rhs_weap_FFARLauncher",
@@ -98,6 +97,27 @@ private _findHydraWeaponFromMagazine = {
 	_weapon
 };
 
+private _hasHydraAmmo = false;
+private _pylonMagazines = getPylonMagazines _vehicle;
+
+{
+	private _pylonIndex = _forEachIndex + 1;
+
+	if (_x != "" && {_vehicle ammoOnPylon _pylonIndex > 0}) then {
+		private _pylonWeapon = [_x, _hydraWeapons] call _findHydraWeaponFromMagazine;
+
+		if (_pylonWeapon != "" && {isClass (configFile >> "CfgWeapons" >> _pylonWeapon)}) exitWith {
+			_hasHydraAmmo = true;
+
+			if (_hydraWeapon == "") then {
+				_hydraWeapon = _pylonWeapon;
+			};
+		};
+	};
+} forEach _pylonMagazines;
+
+if (!_hasHydraAmmo) exitWith {false};
+
 if (_hydraWeapon == "") then {
 	private _availableWeapons = (weapons _vehicle) + (_vehicle weaponsTurret [-1]) + (_vehicle weaponsTurret []) + (_vehicle weaponsTurret [0]);
 
@@ -119,26 +139,9 @@ if (_hydraWeapon == "") then {
 	} forEach _availableWeapons;
 };
 
-if (_hydraWeapon == "") then {
-	private _pylonMagazines = getPylonMagazines _vehicle;
+if (_hydraWeapon == "") exitWith {false};
 
-	{
-		private _pylonIndex = _forEachIndex + 1;
-
-		if (_x != "" && {_vehicle ammoOnPylon _pylonIndex > 0}) then {
-			private _pylonWeapon = [_x, _hydraWeapons] call _findHydraWeaponFromMagazine;
-
-			if (_pylonWeapon != "" && {isClass (configFile >> "CfgWeapons" >> _pylonWeapon)}) exitWith {
-				_hydraWeapon = _pylonWeapon;
-			};
-		};
-	} forEach _pylonMagazines;
-};
-
-if (_hydraWeapon == "") exitWith {
-	hintSilent "Hydra unavailable";
-	false
-};
+_vehicle setVariable ["RS_MH6V3_quickHydraLastFire", time];
 
 private _turretPath = if (_operator isEqualTo gunner _vehicle) then {[0]} else {[-1]};
 private _weaponState = weaponState [_vehicle, _turretPath];

@@ -483,6 +483,10 @@ RS_MH6V3_fnc_assembleRotors = {
 	_newVehicle setVariable ["RS_MH6V3_quickFireArmed", false, true];
 	_newVehicle setVariable ["RS_MH6V3_izlidEnabled", false, true];
 	_newVehicle setVariable ["RS_MH6V3_izlidMode", 3, true];
+	_newVehicle setVariable ["RS_MH6V3_izlidConeMode", 1, true];
+	_newVehicle setVariable ["RS_MH6V3_izlidConeTriggerNarrow", false, true];
+	_newVehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessPercent", 100, true];
+	_newVehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessActive", nil, true];
 	_newVehicle setVariable ["RS_MH6V3_activeCopilot", objNull, true];
 
 	if (_texture != "") then {
@@ -585,6 +589,10 @@ RS_MH6V3_fnc_convertVariant = {
 	_newVehicle setVariable ["RS_MH6V3_quickFireArmed", false, true];
 	_newVehicle setVariable ["RS_MH6V3_izlidEnabled", false, true];
 	_newVehicle setVariable ["RS_MH6V3_izlidMode", 3, true];
+	_newVehicle setVariable ["RS_MH6V3_izlidConeMode", 1, true];
+	_newVehicle setVariable ["RS_MH6V3_izlidConeTriggerNarrow", false, true];
+	_newVehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessPercent", 100, true];
+	_newVehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessActive", nil, true];
 	_newVehicle setVariable ["RS_MH6V3_activeCopilot", objNull, true];
 
 	if (_texture != "") then {

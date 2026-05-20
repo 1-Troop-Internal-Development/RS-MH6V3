@@ -2,6 +2,36 @@
 
 if (!hasInterface) exitWith {};
 
+[] spawn {
+	waitUntil {!isNull findDisplay 46};
+
+	private _display = findDisplay 46;
+
+	if (!isNil "RS_MH6V3_mouseFireDownEh") then {
+		_display displayRemoveEventHandler ["MouseButtonDown", RS_MH6V3_mouseFireDownEh];
+	};
+
+	if (!isNil "RS_MH6V3_mouseFireUpEh") then {
+		_display displayRemoveEventHandler ["MouseButtonUp", RS_MH6V3_mouseFireUpEh];
+	};
+
+	RS_MH6V3_mouseFireDownEh = _display displayAddEventHandler ["MouseButtonDown", {
+		params ["", "_button"];
+
+		if (_button isEqualTo 0) then {
+			missionNamespace setVariable ["RS_MH6V3_fireInputHeld", true];
+		};
+	}];
+
+	RS_MH6V3_mouseFireUpEh = _display displayAddEventHandler ["MouseButtonUp", {
+		params ["", "_button"];
+
+		if (_button isEqualTo 0) then {
+			missionNamespace setVariable ["RS_MH6V3_fireInputHeld", false];
+		};
+	}];
+};
+
 if (isNil "RS_MH6V3_controlsShiftedEh") then {
 	RS_MH6V3_controlsShiftedEh = addMissionEventHandler ["ControlsShifted", {
 		params ["_newController", "_oldController", "_vehicle"];
@@ -21,7 +51,7 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 };
 
 [
-	"RS MH-6V3",
+	"[RS] MH-6V3",
 	"RS_MH6V3_toggleIZLID",
 	["Toggle IZLID", "Toggle the AH-6M IZLID marking laser."],
 	{
@@ -34,7 +64,7 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 ] call CBA_fnc_addKeybind;
 
 [
-	"RS MH-6V3",
+	"[RS] MH-6V3",
 	"RS_MH6V3_holdIZLID",
 	["Hold IZLID", "Keep the AH-6M IZLID on while this key is held."],
 	{
@@ -49,9 +79,9 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 ] call CBA_fnc_addKeybind;
 
 [
-	"RS MH-6V3",
+	"[RS] MH-6V3",
 	"RS_MH6V3_toggleIZLIDMode",
-	["Cycle IZLID Mode", "Cycle between IZLID, IR illuminator, and combined output."],
+	["[RS] Cycle IZLID Mode", "Cycle between IZLID output and wide, narrow, or dynamic illuminator cone modes."],
 	{
 		[] call RS_MH6V3_fnc_toggleIZLIDMode
 	},
@@ -62,7 +92,7 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 ] call CBA_fnc_addKeybind;
 
 [
-	"RS MH-6V3",
+	"[RS] MH-6V3",
 	"RS_MH6V3_quickLaunchHydra",
 	["Quick Launch Hydra", "Fire one AH-6M Hydra without selecting rockets."],
 	{
@@ -75,7 +105,7 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 ] call CBA_fnc_addKeybind;
 
 [
-	"RS MH-6V3",
+	"[RS] MH-6V3",
 	"RS_MH6V3_toggleQuickFireArm",
 	["Toggle Quick Fire Master Arm", "Arm or safe the AH-6M quick-fire Hydra key."],
 	{
@@ -87,14 +117,19 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 	0
 ] call CBA_fnc_addKeybind;
 
-if (isNil "RS_MH6V3_izlidIlluminatorEh") then {
-	RS_MH6V3_izlidIlluminatorEh = addMissionEventHandler ["EachFrame", {
-		call RS_MH6V3_fnc_updateIZLIDIlluminators;
-	}];
+if (!isNil "RS_MH6V3_izlidIlluminatorEh") then {
+	removeMissionEventHandler ["EachFrame", RS_MH6V3_izlidIlluminatorEh];
 };
 
-if (isNil "RS_MH6V3_izlidRenderEh") then {
-	RS_MH6V3_izlidRenderEh = addMissionEventHandler ["Draw3D", {
-		call RS_MH6V3_fnc_renderIZLID;
-	}];
+RS_MH6V3_izlidIlluminatorEh = addMissionEventHandler ["EachFrame", {
+	call RS_MH6V3_fnc_updateIZLIDTriggerCone;
+	call RS_MH6V3_fnc_updateIZLIDIlluminators;
+}];
+
+if (!isNil "RS_MH6V3_izlidRenderEh") then {
+	removeMissionEventHandler ["Draw3D", RS_MH6V3_izlidRenderEh];
 };
+
+RS_MH6V3_izlidRenderEh = addMissionEventHandler ["Draw3D", {
+	call RS_MH6V3_fnc_renderIZLID;
+}];

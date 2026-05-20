@@ -1,3 +1,9 @@
+if (!hasInterface) exitWith {};
+
+private _frameNo = diag_frameNo;
+if ((missionNamespace getVariable ["RS_MH6V3_izlidLastRenderFrame", -1]) isEqualTo _frameNo) exitWith {};
+missionNamespace setVariable ["RS_MH6V3_izlidLastRenderFrame", _frameNo];
+
 {
 	if ([_x] call RS_MH6V3_fnc_canUseIZLID) then {
 		private _mode = _x getVariable ["RS_MH6V3_izlidMode", 3];

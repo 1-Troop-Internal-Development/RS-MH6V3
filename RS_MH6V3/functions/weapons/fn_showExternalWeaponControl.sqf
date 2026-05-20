@@ -14,9 +14,11 @@ if (!isNull _vehicle && {!(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", 
 
 private _izlidOn = false;
 private _izlidMode = 3;
+private _coneMode = 1;
 if (!isNull _vehicle && {_vehicle isKindOf "RHS_MELB_AH6M"}) then {
 	_izlidOn = _vehicle getVariable ["RS_MH6V3_izlidEnabled", false];
 	_izlidMode = _vehicle getVariable ["RS_MH6V3_izlidMode", 3];
+	_coneMode = _vehicle getVariable ["RS_MH6V3_izlidConeMode", 1];
 };
 
 private _quickFireArmed = if (isNull _vehicle) then {
@@ -43,10 +45,22 @@ _izlidStatus ctrlSetTextColor ([_red, _green] select _izlidOn);
 _hydraStatus ctrlSetText (["NOT-ARMED", "ARMED"] select _quickFireArmed);
 _hydraStatus ctrlSetTextColor ([_red, _green] select _quickFireArmed);
 
-private _modeText = switch (_izlidMode) do {
+private _outputText = switch (_izlidMode) do {
 	case 1: {"IZLID"};
 	case 2: {"ILLUM"};
 	default {"IZLID/ILLUM"};
+};
+
+private _coneText = switch (_coneMode) do {
+	case 2: {"NARROW"};
+	case 3: {"DYNAMIC"};
+	default {"WIDE"};
+};
+
+private _modeText = if (_izlidMode == 1) then {
+	_outputText
+} else {
+	format ["%1 %2", _outputText, _coneText]
 };
 
 _modeStatus ctrlSetText _modeText;

@@ -1,3 +1,5 @@
+if (!hasInterface) exitWith {};
+
 {
 	if ([_x] call RS_MH6V3_fnc_canUseIZLID) then {
 		private _mode = _x getVariable ["RS_MH6V3_izlidMode", 3];
@@ -8,8 +10,9 @@
 			if !(_laser isEqualTo [-1, -1]) then {
 				_laser params ["_origin", "_direction"];
 				private _illuminatorOffset = 2;
+				private _coneMode = _x getVariable ["RS_MH6V3_izlidConeMode", 1];
 
-				[_x, _origin, _direction, _illuminatorOffset] call RS_MH6V3_fnc_updateIlluminator;
+				[_x, _origin, _direction, _illuminatorOffset, _coneMode] call RS_MH6V3_fnc_updateIlluminator;
 			};
 		} else {
 			[_x] call RS_MH6V3_fnc_cleanupIlluminator;

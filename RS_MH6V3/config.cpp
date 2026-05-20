@@ -7,6 +7,7 @@ class CfgPatches
 		requiredVersion = 1.96;
 		requiredAddons[] =
 		{
+			"cba_main",
 			"rhsusf_main",
 			"A3_Data_F",
 			"rhsusf_c_melb",
@@ -51,6 +52,14 @@ class CfgFunctions
 				postInit = 1;
 			};
 		};
+		class settings
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\settings";
+			class initSettings
+			{
+				postInit = 1;
+			};
+		};
 		class izlid
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\izlid";
@@ -63,6 +72,7 @@ class CfgFunctions
 			class toggleIZLIDMode {};
 			class toggleIZLID {};
 			class updateIZLIDIlluminators {};
+			class updateIZLIDTriggerCone {};
 		};
 		class itn
 		{
@@ -287,7 +297,7 @@ class CfgVehicles
 	{
 		scope = 1;
 		scopeCurator = 1;
-		displayName = "RS MH-6V3 IR Illuminator";
+		displayName = "RS MH-6V3 IR Illuminator Wide";
 		model = "\DEVGRU\RS_MH6V3\data\light.p3d";
 		class Hitpoints {};
 		class AnimationSources {};
@@ -298,10 +308,10 @@ class CfgVehicles
 				irLight = 1;
 				color[] = {4,4,4};
 				ambient[] = {0,0,0};
-				intensity = 180000;
+				intensity = 4000000;
 				size = 1;
-				innerAngle = 7.65;
-				outerAngle = 9;
+				innerAngle = 6.8;
+				outerAngle = 8;
 				coneFadeCoef = 1;
 				position = "light_pos";
 				direction = "light_dir";
@@ -309,19 +319,51 @@ class CfgVehicles
 				selection = "";
 				useFlare = 1;
 				flareSize = 0.2;
-				flareMaxDistance = 5000;
+				flareMaxDistance = 20000;
 				class Attenuation
 				{
 					start = 1;
-					constant = "3.14159*0.012";
+					constant = "3.14159*0.000305";
 					linear = 0;
 					quadratic = 1;
-					hardLimitStart = 4000;
-					hardLimitEnd = 6000;
+					hardLimitStart = 3000;
+					hardLimitEnd = 4000;
 				};
 			};
 		};
 	};
+	class RS_MH6V3_IZLID_Illuminator_Narrow: RS_MH6V3_IZLID_Illuminator
+	{
+		displayName = "RS MH-6V3 IR Illuminator Narrow";
+		class Reflectors: Reflectors
+		{
+			class Light_1: Light_1
+			{
+				innerAngle = 2.55;
+				outerAngle = 3;
+			};
+		};
+	};
+	class RS_MH6V3_IZLID_Illuminator_B90: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3600000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B80: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3200000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B70: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2800000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B60: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2400000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B50: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2000000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B40: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1600000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B30: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1200000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B20: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 800000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B10: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 400000;};};};
+	class RS_MH6V3_IZLID_Illuminator_B0: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 0;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B90: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3600000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B80: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3200000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B70: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2800000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B60: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2400000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B50: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2000000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B40: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1600000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B30: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1200000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B20: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 800000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B10: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 400000;};};};
+	class RS_MH6V3_IZLID_Illuminator_Narrow_B0: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 0;};};};
 	class Helicopter;
 	class Helicopter_Base_F: Helicopter
 	{

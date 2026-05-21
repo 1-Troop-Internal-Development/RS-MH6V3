@@ -18,6 +18,10 @@ private _radioId = _radioCombo lbData _selected;
 if (_radioId isEqualTo "") exitWith {
 	systemChat "RS MH-6V3: selected radio is invalid.";
 };
+private _radioOwner = _radioCombo lbValue _selected;
+if (_radioOwner isEqualTo 0) then {
+	missionNamespace setVariable ["RS_MH6V3_acreSelectedRadioId", _radioId];
+};
 
 private _channelText = ctrlText _channelEdit;
 private _channel = parseNumber _channelText;
@@ -25,10 +29,23 @@ if (_channel < 1) exitWith {
 	systemChat "RS MH-6V3: enter a channel number of 1 or higher.";
 };
 
+if (_radioOwner isEqualTo 1) exitWith {
+	private _vehicle = uiNamespace getVariable ["RS_MH6V3_acreProgrammerVehicle", vehicle player];
+	private _otherUnit = uiNamespace getVariable ["RS_MH6V3_acreProgrammerOtherUnit", objNull];
+	if (isNull _otherUnit || {!isPlayer _otherUnit}) exitWith {
+		systemChat "RS MH-6V3: other seat radio owner is unavailable.";
+	};
+
+	[player, _vehicle, _radioId, _channel] remoteExecCall ["RS_MH6V3_fnc_applyACRERadioTune", owner _otherUnit];
+	systemChat format ["RS MH-6V3: requested other seat radio channel %1.", _channel];
+	[true] call RS_MH6V3_fnc_populateACRERadioProgrammer;
+};
+
 private _success = [_radioId, _channel] call acre_api_fnc_setRadioChannel;
 if (isNil "_success" || {!(_success isEqualTo false)}) then {
 	playSound "RS_MH6V3_ACRETune";
-	systemChat format ["RS MH-6V3: tuned radio to channel %1.", _channel];
+	private _radioOwnerText = ["radio", "other seat AI radio"] select (_radioOwner isEqualTo 2);
+	systemChat format ["RS MH-6V3: tuned %1 to channel %2.", _radioOwnerText, _channel];
 } else {
 	systemChat "RS MH-6V3: radio tune failed.";
 };

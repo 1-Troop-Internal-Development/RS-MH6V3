@@ -54,11 +54,14 @@ if (!hasInterface) exitWith {};
 		}] call CBA_fnc_addEventHandler;
 	};
 
-	private _wasVisible = false;
-	private _visibleUntil = 0;
-	private _lastSignature = "";
+	RS_MH6V3_acreCanShowRadioStatus = {
+		private _vehicle = vehicle player;
+		!isNull _vehicle &&
+			{_vehicle isKindOf "RHS_MELB_AH6M"} &&
+			{player in [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]]}
+	};
 
-	private _buildSignature = {
+	RS_MH6V3_acreBuildRadioStatusSignature = {
 		params ["_vehicle"];
 
 		private _acreReady = false;
@@ -83,6 +86,7 @@ if (!hasInterface) exitWith {};
 		private _parts = [format ["ACTIVE:%1", _currentRadio]];
 		_parts pushBack format ["SPEAKING:%1", missionNamespace getVariable ["RS_MH6V3_acrePTTHeld", false]];
 		_parts pushBack format ["PTT_NONCE:%1", missionNamespace getVariable ["RS_MH6V3_acrePTTNonce", 0]];
+		_parts pushBack format ["SELECTION:%1:%2", missionNamespace getVariable ["RS_MH6V3_acreSelectedRadioId", ""], missionNamespace getVariable ["RS_MH6V3_acreSelectionNonce", 0]];
 		private _accessibleRackRadios = if (isNil "ACRE_ACCESSIBLE_RACK_RADIOS") then {[]} else {+ACRE_ACCESSIBLE_RACK_RADIOS};
 		private _hearableRackRadios = if (isNil "ACRE_HEARABLE_RACK_RADIOS") then {[]} else {+ACRE_HEARABLE_RACK_RADIOS};
 		_parts pushBack format ["RACKS:%1:%2", _accessibleRackRadios, _hearableRackRadios];
@@ -96,7 +100,7 @@ if (!hasInterface) exitWith {};
 		{
 			private _info = [_x, _x isEqualTo _currentRadio] call RS_MH6V3_fnc_getACRERadioInfo;
 			_parts pushBack format [
-				"%1:%2:%3:%4:%5",
+				"%1:%2:%3:%4:%5:%6",
 				_x,
 				_info get "channel",
 				_info get "channelName",
@@ -109,43 +113,101 @@ if (!hasInterface) exitWith {};
 		_parts joinString "|"
 	};
 
-	while {true} do {
-		private _vehicle = vehicle player;
-		private _canShow = !isNull _vehicle &&
-			{_vehicle isKindOf "RHS_MELB_AH6M"} &&
-			{player in [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]]} &&
-			{!isNil "acre_api_fnc_isInitialized"} &&
-			{!isNil "acre_api_fnc_getCurrentRadio"} &&
-			{!isNil "acre_api_fnc_getCurrentRadioList"};
+	RS_MH6V3_acreStopRadioStatus = {
+		RS_MH6V3_acreRadioStatusToken = (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusToken", 0]) + 1;
+		if (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusVisible", false]) then {
+			"RS_MH6V3_ACRERadioStatusLayer" cutText ["", "PLAIN"];
+		};
+		missionNamespace setVariable ["RS_MH6V3_acreRadioStatusRunning", false];
+		missionNamespace setVariable ["RS_MH6V3_acreRadioStatusVisible", false];
+	};
 
-		if (_canShow) then {
-			private _signature = [_vehicle] call _buildSignature;
-			private _forceStatus = missionNamespace getVariable ["RS_MH6V3_acreForceStatus", false];
-			if (_signature isNotEqualTo "" && {(_signature isNotEqualTo _lastSignature) || {_forceStatus}}) then {
-				missionNamespace setVariable ["RS_MH6V3_acreForceStatus", false];
-				_lastSignature = _signature;
-				_visibleUntil = diag_tickTime + 3;
-				"RS_MH6V3_ACRERadioStatusLayer" cutRsc ["RS_MH6V3_ACRERadioStatus", "PLAIN", 0, false];
-				_wasVisible = true;
+	RS_MH6V3_acreStartRadioStatus = {
+		if !(call RS_MH6V3_acreCanShowRadioStatus) exitWith {};
+		if (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusRunning", false]) exitWith {};
+
+		RS_MH6V3_acreRadioStatusToken = (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusToken", 0]) + 1;
+		private _token = RS_MH6V3_acreRadioStatusToken;
+		missionNamespace setVariable ["RS_MH6V3_acreRadioStatusRunning", true];
+
+		[_token] spawn {
+			params ["_token"];
+
+			private _wasVisible = false;
+			private _visibleUntil = 0;
+			private _lastSignature = "";
+
+			while {
+				_token isEqualTo (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusToken", -1]) &&
+				{call RS_MH6V3_acreCanShowRadioStatus}
+			} do {
+				private _vehicle = vehicle player;
+				private _signature = [_vehicle] call RS_MH6V3_acreBuildRadioStatusSignature;
+				private _forceStatus = missionNamespace getVariable ["RS_MH6V3_acreForceStatus", false];
+				if (_signature isNotEqualTo "" && {(_signature isNotEqualTo _lastSignature) || {_forceStatus}}) then {
+					missionNamespace setVariable ["RS_MH6V3_acreForceStatus", false];
+					_lastSignature = _signature;
+					_visibleUntil = diag_tickTime + 3;
+					if (!_wasVisible) then {
+						"RS_MH6V3_ACRERadioStatusLayer" cutRsc ["RS_MH6V3_ACRERadioStatus", "PLAIN", 0, false];
+					};
+					_wasVisible = true;
+				};
+
+				if (_wasVisible && {diag_tickTime < _visibleUntil}) then {
+					[_vehicle] call RS_MH6V3_fnc_updateACRERadioStatus;
+				};
+
+				if (_wasVisible && {diag_tickTime >= _visibleUntil}) then {
+					"RS_MH6V3_ACRERadioStatusLayer" cutText ["", "PLAIN"];
+					_wasVisible = false;
+				};
+
+				missionNamespace setVariable ["RS_MH6V3_acreRadioStatusVisible", _wasVisible];
+				uiSleep 0.2;
 			};
 
-			if (_wasVisible && {diag_tickTime < _visibleUntil}) then {
-				[_vehicle] call RS_MH6V3_fnc_updateACRERadioStatus;
-			};
-
-			if (_wasVisible && {diag_tickTime >= _visibleUntil}) then {
-				"RS_MH6V3_ACRERadioStatusLayer" cutText ["", "PLAIN"];
-				_wasVisible = false;
-			};
-		} else {
 			if (_wasVisible) then {
 				"RS_MH6V3_ACRERadioStatusLayer" cutText ["", "PLAIN"];
-				_wasVisible = false;
 			};
-			_lastSignature = "";
-			_visibleUntil = 0;
+			if (_token isEqualTo (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusToken", -1])) then {
+				missionNamespace setVariable ["RS_MH6V3_acreRadioStatusRunning", false];
+			};
+			missionNamespace setVariable ["RS_MH6V3_acreRadioStatusVisible", false];
 		};
-
-		uiSleep 0.12;
 	};
+
+	private _refreshStatusWorker = {
+		if (call RS_MH6V3_acreCanShowRadioStatus) then {
+			[] call RS_MH6V3_acreStartRadioStatus;
+		} else {
+			[] call RS_MH6V3_acreStopRadioStatus;
+		};
+	};
+
+	if (!isNil "RS_MH6V3_acreStatusGetInEh") then {
+		player removeEventHandler ["GetInMan", RS_MH6V3_acreStatusGetInEh];
+	};
+	if (!isNil "RS_MH6V3_acreStatusGetOutEh") then {
+		player removeEventHandler ["GetOutMan", RS_MH6V3_acreStatusGetOutEh];
+	};
+	if (!isNil "RS_MH6V3_acreStatusSeatSwitchedEh") then {
+		player removeEventHandler ["SeatSwitchedMan", RS_MH6V3_acreStatusSeatSwitchedEh];
+	};
+
+	RS_MH6V3_acreStatusGetInEh = player addEventHandler ["GetInMan", {
+		[] call RS_MH6V3_acreStartRadioStatus;
+	}];
+	RS_MH6V3_acreStatusGetOutEh = player addEventHandler ["GetOutMan", {
+		[] call RS_MH6V3_acreStopRadioStatus;
+	}];
+	RS_MH6V3_acreStatusSeatSwitchedEh = player addEventHandler ["SeatSwitchedMan", {
+		if (call RS_MH6V3_acreCanShowRadioStatus) then {
+			[] call RS_MH6V3_acreStartRadioStatus;
+		} else {
+			[] call RS_MH6V3_acreStopRadioStatus;
+		};
+	}];
+
+	call _refreshStatusWorker;
 };

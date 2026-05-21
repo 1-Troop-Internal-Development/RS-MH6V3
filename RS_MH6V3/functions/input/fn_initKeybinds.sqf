@@ -117,6 +117,45 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 	0
 ] call CBA_fnc_addKeybind;
 
+[
+	"[RS] MH-6V3",
+	"RS_MH6V3_cycleACRERadioSelection",
+	["Cycle Selected ACRE Radio", "Select the next Little Bird ACRE radio for volume controls."],
+	{
+		[1] call RS_MH6V3_fnc_cycleACRERadioSelection
+	},
+	{false},
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
+[
+	"[RS] MH-6V3",
+	"RS_MH6V3_increaseSelectedACRERadioVolume",
+	["Increase Selected ACRE Radio Volume", "Increase the selected Little Bird ACRE radio volume."],
+	{
+		[0.25] call RS_MH6V3_fnc_adjustACRERadioVolume
+	},
+	{false},
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
+[
+	"[RS] MH-6V3",
+	"RS_MH6V3_decreaseSelectedACRERadioVolume",
+	["Decrease Selected ACRE Radio Volume", "Decrease the selected Little Bird ACRE radio volume."],
+	{
+		[-0.25] call RS_MH6V3_fnc_adjustACRERadioVolume
+	},
+	{false},
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
 if (!isNil "RS_MH6V3_izlidIlluminatorEh") then {
 	removeMissionEventHandler ["EachFrame", RS_MH6V3_izlidIlluminatorEh];
 };

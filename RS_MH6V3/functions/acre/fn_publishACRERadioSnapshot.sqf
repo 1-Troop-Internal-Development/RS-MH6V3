@@ -27,7 +27,11 @@ if (_acreReady) then {
 		{
 			private _info = [_x, false] call RS_MH6V3_fnc_getACRERadioInfo;
 			private _on = ["OFF", "ON"] select (_info get "on");
-			_rows pushBack format ["%1 | %2 | %3", _info get "name", _info get "channel", _on];
+			_rows pushBack createHashMapFromArray [
+				["id", _x],
+				["channelNumber", _info get "channelNumber"],
+				["text", format ["%1 | %2 | %3", _info get "name", _info get "channel", _on]]
+			];
 		} forEach _radios;
 	};
 

@@ -44,11 +44,19 @@ class CfgFunctions
 			{
 				postInit = 1;
 			};
+			class initACRERadioVolume
+			{
+				postInit = 1;
+			};
+			class adjustACRERadioVolume {};
+			class applyACRERadioTune {};
+			class cycleACRERadioSelection {};
 			class openACRERadioProgrammer {};
 			class populateACRERadioProgrammer {};
 			class publishACRERadioSnapshot {};
 			class receiveACRERadioSnapshot {};
 			class tuneACRERadio {};
+			class tuneACRERadioFromOther {};
 			class updateACRERadioStatus {};
 		};
 		class livery

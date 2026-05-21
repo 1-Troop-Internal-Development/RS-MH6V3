@@ -160,23 +160,32 @@ class RS_MH6V3_ACRERadioProgrammer
 		class Background: RS_MH6V3_RscText
 		{
 			idc = 86301;
-			x = 0.24 * safezoneW + safezoneX;
-			y = 0.16 * safezoneH + safezoneY;
-			w = 0.52 * safezoneW;
-			h = 0.62 * safezoneH;
+			x = 0.205 * safezoneW + safezoneX;
+			y = 0.13 * safezoneH + safezoneY;
+			w = 0.59 * safezoneW;
+			h = 0.69 * safezoneH;
 			colorBackground[] = {0.04,0.045,0.04,0.95};
 		};
 		class Header: RS_MH6V3_RscText
 		{
 			idc = 86302;
 			text = "ACRE RADIO PROGRAMMING";
-			x = 0.24 * safezoneW + safezoneX;
-			y = 0.16 * safezoneH + safezoneY;
-			w = 0.52 * safezoneW;
+			x = 0.205 * safezoneW + safezoneX;
+			y = 0.13 * safezoneH + safezoneY;
+			w = 0.59 * safezoneW;
 			h = 0.045 * safezoneH;
 			style = 2;
 			sizeEx = 0.038;
 			colorBackground[] = {0.14,0.19,0.15,1};
+		};
+		class TunePanel: RS_MH6V3_RscText
+		{
+			idc = 86307;
+			x = 0.225 * safezoneW + safezoneX;
+			y = 0.635 * safezoneH + safezoneY;
+			w = 0.55 * safezoneW;
+			h = 0.105 * safezoneH;
+			colorBackground[] = {0.025,0.03,0.027,0.9};
 		};
 	};
 
@@ -185,10 +194,10 @@ class RS_MH6V3_ACRERadioProgrammer
 		class MyHeader: RS_MH6V3_RscText
 		{
 			idc = 86303;
-			text = "YOUR INVENTORY";
-			x = 0.255 * safezoneW + safezoneX;
-			y = 0.225 * safezoneH + safezoneY;
-			w = 0.235 * safezoneW;
+			text = "YOUR INVENTORY RADIOS";
+			x = 0.225 * safezoneW + safezoneX;
+			y = 0.20 * safezoneH + safezoneY;
+			w = 0.255 * safezoneW;
 			h = 0.03 * safezoneH;
 			sizeEx = 0.028;
 			colorText[] = {0.78,0.82,0.78,1};
@@ -196,24 +205,38 @@ class RS_MH6V3_ACRERadioProgrammer
 		class OtherHeader: MyHeader
 		{
 			idc = 86304;
-			text = "OTHER SEAT INVENTORY";
-			x = 0.51 * safezoneW + safezoneX;
+			text = "OTHER SEAT INVENTORY RADIOS";
+			x = 0.52 * safezoneW + safezoneX;
+			w = 0.145 * safezoneW;
+		};
+		class OtherSearch: RS_MH6V3_RscEdit
+		{
+			idc = 86328;
+			text = "";
+			x = 0.667 * safezoneW + safezoneX;
+			y = 0.20 * safezoneH + safezoneY;
+			w = 0.108 * safezoneW;
+			h = 0.03 * safezoneH;
+			sizeEx = 0.026;
+			tooltip = "Filter other seat radios";
+			onKeyUp = "[false] call RS_MH6V3_fnc_populateACRERadioProgrammer";
 		};
 		class MyRadiosList: RS_MH6V3_RscListBox
 		{
 			idc = 86310;
-			x = 0.255 * safezoneW + safezoneX;
-			y = 0.26 * safezoneH + safezoneY;
-			w = 0.235 * safezoneW;
-			h = 0.145 * safezoneH;
+			x = 0.225 * safezoneW + safezoneX;
+			y = 0.235 * safezoneH + safezoneY;
+			w = 0.255 * safezoneW;
+			h = 0.165 * safezoneH;
 		};
 		class OtherRadiosList: RS_MH6V3_RscListBox
 		{
 			idc = 86311;
-			x = 0.51 * safezoneW + safezoneX;
-			y = 0.26 * safezoneH + safezoneY;
-			w = 0.235 * safezoneW;
-			h = 0.145 * safezoneH;
+			onLBSelChanged = "uiNamespace setVariable ['RS_MH6V3_acreOtherRadioSource', ctrlIDC (_this # 0)]";
+			x = 0.52 * safezoneW + safezoneX;
+			y = 0.235 * safezoneH + safezoneY;
+			w = 0.255 * safezoneW;
+			h = 0.165 * safezoneH;
 		};
 		class MyRackHeader: MyHeader
 		{
@@ -225,54 +248,85 @@ class RS_MH6V3_ACRERadioProgrammer
 		{
 			idc = 86306;
 			text = "OTHER SEAT RACKS";
-			x = 0.51 * safezoneW + safezoneX;
+			x = 0.52 * safezoneW + safezoneX;
 		};
 		class MyRackList: RS_MH6V3_RscListBox
 		{
 			idc = 86312;
-			x = 0.255 * safezoneW + safezoneX;
+			x = 0.225 * safezoneW + safezoneX;
 			y = 0.46 * safezoneH + safezoneY;
-			w = 0.235 * safezoneW;
-			h = 0.11 * safezoneH;
+			w = 0.255 * safezoneW;
+			h = 0.13 * safezoneH;
 		};
 		class OtherRackList: RS_MH6V3_RscListBox
 		{
 			idc = 86313;
-			x = 0.51 * safezoneW + safezoneX;
+			onLBSelChanged = "uiNamespace setVariable ['RS_MH6V3_acreOtherRadioSource', ctrlIDC (_this # 0)]";
+			x = 0.52 * safezoneW + safezoneX;
 			y = 0.46 * safezoneH + safezoneY;
-			w = 0.235 * safezoneW;
-			h = 0.11 * safezoneH;
+			w = 0.255 * safezoneW;
+			h = 0.13 * safezoneH;
+		};
+		class CopyOtherChannelButton: RS_MH6V3_RscButton
+		{
+			idc = 86329;
+			text = "Copy Channel";
+			x = 0.657 * safezoneW + safezoneX;
+			y = 0.598 * safezoneH + safezoneY;
+			w = 0.118 * safezoneW;
+			h = 0.03 * safezoneH;
+			sizeEx = 0.028;
+			tooltip = "Tune the selected target radio to the selected other seat radio channel";
+			action = "[] call RS_MH6V3_fnc_tuneACRERadioFromOther";
 		};
 		class TuneHeader: MyHeader
 		{
 			idc = 86320;
-			text = "TUNE CHANNEL";
-			y = 0.60 * safezoneH + safezoneY;
+			text = "PROGRAM SELECTED RADIO";
+			x = 0.24 * safezoneW + safezoneX;
+			y = 0.649 * safezoneH + safezoneY;
+			w = 0.51 * safezoneW;
+		};
+		class TargetLabel: MyHeader
+		{
+			idc = 86326;
+			text = "RADIO";
+			x = 0.24 * safezoneW + safezoneX;
+			y = 0.681 * safezoneH + safezoneY;
+			w = 0.04 * safezoneW;
+		};
+		class ChannelLabel: TargetLabel
+		{
+			idc = 86327;
+			text = "CHANNEL";
+			x = 0.62 * safezoneW + safezoneX;
+			w = 0.07 * safezoneW;
 		};
 		class RadioCombo: RS_MH6V3_RscCombo
 		{
 			idc = 86321;
-			x = 0.255 * safezoneW + safezoneX;
-			y = 0.638 * safezoneH + safezoneY;
-			w = 0.31 * safezoneW;
+			onLBSelChanged = "if (((_this # 0) lbValue (_this # 1)) isEqualTo 0) then {missionNamespace setVariable ['RS_MH6V3_acreSelectedRadioId', (_this # 0) lbData (_this # 1)]; missionNamespace setVariable ['RS_MH6V3_acreForceStatus', true]; missionNamespace setVariable ['RS_MH6V3_acreSelectionNonce', (missionNamespace getVariable ['RS_MH6V3_acreSelectionNonce', 0]) + 1]}";
+			x = 0.285 * safezoneW + safezoneX;
+			y = 0.678 * safezoneH + safezoneY;
+			w = 0.325 * safezoneW;
 			h = 0.04 * safezoneH;
 		};
 		class ChannelEdit: RS_MH6V3_RscEdit
 		{
 			idc = 86322;
 			text = "1";
-			x = 0.575 * safezoneW + safezoneX;
-			y = 0.638 * safezoneH + safezoneY;
-			w = 0.055 * safezoneW;
+			x = 0.692 * safezoneW + safezoneX;
+			y = 0.678 * safezoneH + safezoneY;
+			w = 0.04 * safezoneW;
 			h = 0.04 * safezoneH;
 		};
 		class TuneButton: RS_MH6V3_RscButton
 		{
 			idc = 86323;
 			text = "Tune";
-			x = 0.64 * safezoneW + safezoneX;
-			y = 0.638 * safezoneH + safezoneY;
-			w = 0.05 * safezoneW;
+			x = 0.735 * safezoneW + safezoneX;
+			y = 0.678 * safezoneH + safezoneY;
+			w = 0.04 * safezoneW;
 			h = 0.04 * safezoneH;
 			action = "[] call RS_MH6V3_fnc_tuneACRERadio";
 		};
@@ -280,8 +334,8 @@ class RS_MH6V3_ACRERadioProgrammer
 		{
 			idc = 86324;
 			text = "Refresh";
-			x = 0.255 * safezoneW + safezoneX;
-			y = 0.705 * safezoneH + safezoneY;
+			x = 0.225 * safezoneW + safezoneX;
+			y = 0.76 * safezoneH + safezoneY;
 			w = 0.07 * safezoneW;
 			h = 0.04 * safezoneH;
 			action = "[true] call RS_MH6V3_fnc_populateACRERadioProgrammer";
@@ -290,8 +344,8 @@ class RS_MH6V3_ACRERadioProgrammer
 		{
 			idc = 86325;
 			text = "Close";
-			x = 0.675 * safezoneW + safezoneX;
-			y = 0.705 * safezoneH + safezoneY;
+			x = 0.705 * safezoneW + safezoneX;
+			y = 0.76 * safezoneH + safezoneY;
 			w = 0.07 * safezoneW;
 			h = 0.04 * safezoneH;
 			action = "closeDialog 0";
@@ -382,52 +436,52 @@ class RscTitles
 		fadeIn = 0;
 		fadeOut = 0.2;
 		movingEnable = 0;
-		onLoad = "uiNamespace setVariable ['RS_MH6V3_acreRadioStatusDisplay', _this # 0]";
-		onUnload = "uiNamespace setVariable ['RS_MH6V3_acreRadioStatusDisplay', displayNull]";
+		onLoad = "uiNamespace setVariable ['RS_MH6V3_acreRadioStatusDisplay', _this # 0]; uiNamespace setVariable ['RS_MH6V3_acreRadioStatusLayout', '']; uiNamespace setVariable ['RS_MH6V3_acreRadioStatusRows', createHashMap]";
+		onUnload = "uiNamespace setVariable ['RS_MH6V3_acreRadioStatusDisplay', displayNull]; uiNamespace setVariable ['RS_MH6V3_acreRadioStatusLayout', '']; uiNamespace setVariable ['RS_MH6V3_acreRadioStatusRows', createHashMap]";
 
 		class controls
 		{
 			class Background: RS_MH6V3_RscText
 			{
 				idc = 86200;
-				x = 0.036 * safezoneW + safezoneX;
-				y = 0.545 * safezoneH + safezoneY;
-				w = 0.165 * safezoneW;
-				h = 0.16 * safezoneH;
+				x = 0.034 * safezoneW + safezoneX;
+				y = 0.535 * safezoneH + safezoneY;
+				w = 0.178 * safezoneW;
+				h = 0.18 * safezoneH;
 				colorBackground[] = {0,0,0,0.72};
 			};
 			class Title: RS_MH6V3_RscText
 			{
 				idc = 86201;
 				style = 2;
-				text = "ACRE RADIO STATUS";
-				x = 0.041 * safezoneW + safezoneX;
-				y = 0.551 * safezoneH + safezoneY;
-				w = 0.155 * safezoneW;
-				h = 0.024 * safezoneH;
-				sizeEx = 0.026;
+				text = "ACRE STATUS";
+				x = 0.039 * safezoneW + safezoneX;
+				y = 0.542 * safezoneH + safezoneY;
+				w = 0.168 * safezoneW;
+				h = 0.026 * safezoneH;
+				sizeEx = 0.029;
 				colorText[] = {1,1,1,1};
 			};
 			class ActiveHeader: RS_MH6V3_RscText
 			{
 				idc = 86202;
-				text = "AVAILABLE";
+				text = "INVENTORY RADIOS";
 				style = 2;
-				x = 0.041 * safezoneW + safezoneX;
-				y = 0.579 * safezoneH + safezoneY;
-				w = 0.155 * safezoneW;
-				h = 0.018 * safezoneH;
-				sizeEx = 0.022;
+				x = 0.039 * safezoneW + safezoneX;
+				y = 0.573 * safezoneH + safezoneY;
+				w = 0.168 * safezoneW;
+				h = 0.02 * safezoneH;
+				sizeEx = 0.024;
 				colorText[] = {0.78,0.82,0.78,1};
 			};
 			class ActiveRow: RS_MH6V3_RscStructuredText
 			{
 				idc = 86203;
-				x = 0.041 * safezoneW + safezoneX;
-				y = 0.599 * safezoneH + safezoneY;
-				w = 0.155 * safezoneW;
-				h = 0.02 * safezoneH;
-				size = 0.024;
+				x = 0.039 * safezoneW + safezoneX;
+				y = 0.596 * safezoneH + safezoneY;
+				w = 0.168 * safezoneW;
+				h = 0.022 * safezoneH;
+				size = 0.026;
 				class Attributes
 				{
 					font = "RobotoCondensed";
@@ -452,7 +506,7 @@ class RscTitles
 			class RackHeader: ActiveHeader
 			{
 				idc = 86230;
-				text = "RACKS";
+				text = "RACK RADIOS";
 				y = 0.755 * safezoneH + safezoneY;
 			};
 			class RackRow1: ActiveRow { idc = 86231; y = 0.775 * safezoneH + safezoneY; };

@@ -852,6 +852,43 @@ private _cameraResetAction = [
 	}
 ] call ace_interact_menu_fnc_createAction;
 
+private _acreRadioProgrammerAction = [
+	"RS_MH6V3_acre_radio_programmer",
+	"ACRE Radio Programming",
+	"",
+	{
+		params ["_target"];
+		[_target] call RS_MH6V3_fnc_openACRERadioProgrammer;
+	},
+	{
+		params ["_target", "_player"];
+		alive _target
+		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
+		&& {_player in [driver _target, gunner _target, _target turretUnit [0]]}
+		&& {!isNil "acre_api_fnc_isInitialized"}
+		&& {!isNil "acre_api_fnc_getCurrentRadioList"}
+	}
+] call ace_interact_menu_fnc_createAction;
+
+private _acreRadioProgrammerSelfAction = [
+	"RS_MH6V3_acre_radio_programmer_self",
+	"ACRE Radio Programming",
+	"",
+	{
+		[vehicle player] call RS_MH6V3_fnc_openACRERadioProgrammer;
+	},
+	{
+		private _vehicle = vehicle player;
+		!isNull _vehicle
+		&& {_vehicle != player}
+		&& {alive _vehicle}
+		&& {typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES}
+		&& {player in [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]]}
+		&& {!isNil "acre_api_fnc_isInitialized"}
+		&& {!isNil "acre_api_fnc_getCurrentRadioList"}
+	}
+] call ace_interact_menu_fnc_createAction;
+
 private _disassembleAction = [
 	"RS_MH6V3_disassemble_rotors",
 	"Disassemble Rotors",
@@ -904,7 +941,10 @@ private _assembleAction = [
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _stopDrainFuelAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _liveryAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _cameraResetAction, true] call ace_interact_menu_fnc_addActionToClass;
+	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _acreRadioProgrammerAction, true] call ace_interact_menu_fnc_addActionToClass;
 } forEach RS_MH6V3_SERVICE_CLASSES;
+
+["CAManBase", 1, ["ACE_SelfActions"], _acreRadioProgrammerSelfAction, true] call ace_interact_menu_fnc_addActionToClass;
 
 {
 	private _position = _x;

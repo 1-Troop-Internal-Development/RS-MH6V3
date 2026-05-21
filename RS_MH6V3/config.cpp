@@ -35,6 +35,22 @@ class CfgFunctions
 			file = "\DEVGRU\RS_MH6V3\functions\camera";
 			class resetCameras {};
 		};
+		class acre
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\acre";
+			class getACRERadioInfo {};
+			class getACRERadioLists {};
+			class initACRERadioStatus
+			{
+				postInit = 1;
+			};
+			class openACRERadioProgrammer {};
+			class populateACRERadioProgrammer {};
+			class publishACRERadioSnapshot {};
+			class receiveACRERadioSnapshot {};
+			class tuneACRERadio {};
+			class updateACRERadioStatus {};
+		};
 		class livery
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\livery";
@@ -103,6 +119,12 @@ class CfgSounds
 	{
 		name = "RS_MH6V3_FuelDrain";
 		sound[] = {"\DEVGRU\RS_MH6V3\sounds\FuelDrain.ogg", 2, 1, 35};
+		titles[] = {};
+	};
+	class RS_MH6V3_ACRETune
+	{
+		name = "RS_MH6V3_ACRETune";
+		sound[] = {"\DEVGRU\RS_MH6V3\sounds\ACRETune.ogg", 1.5, 1};
 		titles[] = {};
 	};
 };

@@ -15,6 +15,11 @@ private _otherInventoryList = _display displayCtrl 86311;
 private _myRackList = _display displayCtrl 86312;
 private _otherRackList = _display displayCtrl 86313;
 private _radioCombo = _display displayCtrl 86321;
+private _selectedRadioId = "";
+private _selectedRadioIndex = lbCurSel _radioCombo;
+if (_selectedRadioIndex >= 0) then {
+	_selectedRadioId = _radioCombo lbData _selectedRadioIndex;
+};
 
 lbClear _myInventoryList;
 lbClear _otherInventoryList;
@@ -150,7 +155,15 @@ if ((lbSize _myRackList) == 0) then {
 };
 
 if ((lbSize _radioCombo) > 0) then {
-	_radioCombo lbSetCurSel 0;
+	private _selectedIndex = 0;
+	if (_selectedRadioId isNotEqualTo "") then {
+		for "_idx" from 0 to ((lbSize _radioCombo) - 1) do {
+			if ((_radioCombo lbData _idx) isEqualTo _selectedRadioId) exitWith {
+				_selectedIndex = _idx;
+			};
+		};
+	};
+	_radioCombo lbSetCurSel _selectedIndex;
 };
 
 private _otherUnit = if (player isEqualTo driver _vehicle) then {

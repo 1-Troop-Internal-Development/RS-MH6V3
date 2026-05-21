@@ -83,6 +83,9 @@ if (!hasInterface) exitWith {};
 		private _parts = [format ["ACTIVE:%1", _currentRadio]];
 		_parts pushBack format ["SPEAKING:%1", missionNamespace getVariable ["RS_MH6V3_acrePTTHeld", false]];
 		_parts pushBack format ["PTT_NONCE:%1", missionNamespace getVariable ["RS_MH6V3_acrePTTNonce", 0]];
+		private _accessibleRackRadios = if (isNil "ACRE_ACCESSIBLE_RACK_RADIOS") then {[]} else {+ACRE_ACCESSIBLE_RACK_RADIOS};
+		private _hearableRackRadios = if (isNil "ACRE_HEARABLE_RACK_RADIOS") then {[]} else {+ACRE_HEARABLE_RACK_RADIOS};
+		_parts pushBack format ["RACKS:%1:%2", _accessibleRackRadios, _hearableRackRadios];
 		if (!isNil "acre_api_fnc_isBroadcasting") then {
 			private _broadcasting = [player] call acre_api_fnc_isBroadcasting;
 			if (isNil "_broadcasting" || {!(_broadcasting isEqualType true)}) then {

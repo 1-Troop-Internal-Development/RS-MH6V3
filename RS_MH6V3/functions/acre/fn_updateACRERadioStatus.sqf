@@ -70,7 +70,7 @@ if (isNil "_currentRadio" || {!(_currentRadio isEqualType "")}) then {
 };
 
 private _formatRadio = {
-	params ["_radioId", "_active", ["_isRack", false]];
+	params ["_radioId", "_active", ["_isRack", false], ["_rackInUse", true]];
 
 	private _info = [_radioId, _active] call RS_MH6V3_fnc_getACRERadioInfo;
 	private _channel = _info get "channel";
@@ -82,12 +82,16 @@ private _formatRadio = {
 		_color = ["#8a8a8a", "#ff4f4f"] select _isRack;
 	};
 
-	if (_info get "incoming") then {
+	if (_isRack && {!_rackInUse}) then {
+		_color = "#ff4f4f";
+	};
+
+	if ((_info get "incoming") && {!_isRack || {_rackInUse}}) then {
 		_color = "#ffffff";
 		_suffix = " (INC)";
 	};
 
-	if (_info get "ptt") then {
+	if ((_info get "ptt") && {!_isRack || {_rackInUse}}) then {
 		_color = "#ffffff";
 		_suffix = " (+PTT)";
 	};
@@ -107,6 +111,9 @@ private _formatRadio = {
 private _lists = [_vehicle] call RS_MH6V3_fnc_getACRERadioLists;
 private _inventoryRadios = _lists get "inventory";
 private _rackRadios = _lists get "racks";
+private _accessibleRackRadios = if (isNil "ACRE_ACCESSIBLE_RACK_RADIOS") then {[]} else {+ACRE_ACCESSIBLE_RACK_RADIOS};
+private _hearableRackRadios = if (isNil "ACRE_HEARABLE_RACK_RADIOS") then {[]} else {+ACRE_HEARABLE_RACK_RADIOS};
+private _inUseRackRadios = _accessibleRackRadios + _hearableRackRadios;
 private _inventoryCount = ((count _inventoryRadios) min 7) max 1;
 private _rackCount = (count _rackRadios) min 3;
 private _panelX = 0.036;
@@ -147,7 +154,7 @@ _y = _y + _headerH + 0.002;
 	[_idc, _panelX + _padX, _y + ((_rowH + _rowGap) * _idx), _panelW - (_padX * 2), _rowH] call _setCtrlPos;
 	if (_idx < count _rackRadios) then {
 		private _radio = _rackRadios select _idx;
-		([_idc] + ([_radio, _radio isEqualTo _currentRadio, true] call _formatRadio)) call _setRow;
+		([_idc] + ([_radio, _radio isEqualTo _currentRadio, true, _radio in _inUseRackRadios] call _formatRadio)) call _setRow;
 	};
 } forEach [86231, 86232, 86233];
 

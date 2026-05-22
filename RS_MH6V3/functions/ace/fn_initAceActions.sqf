@@ -145,7 +145,7 @@ RS_MH6V3_fnc_startServiceFx = {
 	private _fxId = format ["RS_MH6V3_service_%1_%2", round (diag_tickTime * 1000), floor random 10000];
 	_unit setVariable ["RS_MH6V3_serviceFxId", _fxId, true];
 	[_unit, _duration, _fxId] remoteExecCall ["RS_MH6V3_fnc_serviceFxLocalStart", owner _unit];
-	[_vehicle, _unit, _duration, _fxId] remoteExecCall ["RS_MH6V3_fnc_serviceSoundLocalStart", 0];
+	[_vehicle, _unit, _duration, _fxId] remoteExecCall ["RS_MH6V3_fnc_serviceSoundLocalStart", owner _unit];
 	_fxId
 };
 
@@ -565,21 +565,27 @@ RS_MH6V3_fnc_convertVariant = {
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
 	if !(_newClass in RS_MH6V3_SERVICE_CLASSES) exitWith {};
 
-	private _pos = getPosWorld _vehicle;
+	private _terrainPos = getPosATL _vehicle;
+	_terrainPos set [2, 0];
+	private _terrainLiftPos = +_terrainPos;
+	_terrainLiftPos set [2, 1];
 	private _dir = getDir _vehicle;
-	private _vectorUp = vectorUp _vehicle;
+	private _terrainUp = surfaceNormal _terrainPos;
 	private _fuel = fuel _vehicle;
 	private _damage = damage _vehicle;
+	private _damageAllowed = isDamageAllowed _vehicle;
 	private _rotorsAssembled = _vehicle getVariable ["RS_MH6V3_rotorsAssembled", true];
 	private _texture = _vehicle getVariable ["RS_MH6V3_liveryTexture", ""];
 
 	[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
 	deleteVehicle _vehicle;
 
-	private _newVehicle = createVehicle [_newClass, _pos, [], 0, "CAN_COLLIDE"];
-	_newVehicle setPosWorld _pos;
+	private _newVehicle = createVehicle [_newClass, [0, 0, 1000], [], 0, "CAN_COLLIDE"];
+	_newVehicle allowDamage false;
 	_newVehicle setDir _dir;
-	_newVehicle setVectorUp _vectorUp;
+	_newVehicle setPosATL _terrainLiftPos;
+	_newVehicle setVectorUp _terrainUp;
+	_newVehicle setVelocity [0, 0, 0];
 	_newVehicle setFuel _fuel;
 	_newVehicle setDamage _damage;
 	_newVehicle setVariable ["RS_MH6V3_rotorsAssembled", _rotorsAssembled, true];
@@ -614,6 +620,24 @@ RS_MH6V3_fnc_convertVariant = {
 
 	if (!_rotorsAssembled) then {
 		[_newVehicle] call RS_MH6V3_fnc_breakRotorsForCargo;
+	};
+
+	[_newVehicle, _terrainPos, _dir, _terrainUp, _damageAllowed] spawn {
+		params ["_newVehicle", "_terrainPos", "_dir", "_terrainUp", "_damageAllowed"];
+
+		sleep 0.05;
+		if (!isNull _newVehicle && {alive _newVehicle}) then {
+			_newVehicle setDir _dir;
+			_newVehicle setVehiclePosition [_terrainPos, [], 0, "CAN_COLLIDE"];
+			_newVehicle setVectorUp _terrainUp;
+			_newVehicle setVelocity [0, 0, 0];
+		};
+
+		sleep 0.95;
+		if (!isNull _newVehicle && {alive _newVehicle}) then {
+			_newVehicle setVelocity [0, 0, 0];
+			_newVehicle allowDamage _damageAllowed;
+		};
 	};
 
 	[format ["RS MH-6V3: aircraft package changed to %1.", _newClass], _newVehicle] call RS_MH6V3_fnc_notifyAircrew;
@@ -889,6 +913,20 @@ private _acreRadioProgrammerSelfAction = [
 	}
 ] call ace_interact_menu_fnc_createAction;
 
+private _izlidModeActionRoot = [
+	"RS_MH6V3_izlid_mode",
+	"IZLID / Illuminator Mode",
+	"",
+	{},
+	{
+		params ["_target", "_player"];
+
+		alive _target
+		&& {_target isKindOf "RHS_MELB_AH6M"}
+		&& {_player in [driver _target, _target turretUnit [0]]}
+	}
+] call ace_interact_menu_fnc_createAction;
+
 private _disassembleAction = [
 	"RS_MH6V3_disassemble_rotors",
 	"Disassemble Rotors",
@@ -945,6 +983,47 @@ private _assembleAction = [
 } forEach RS_MH6V3_SERVICE_CLASSES;
 
 ["CAManBase", 1, ["ACE_SelfActions"], _acreRadioProgrammerSelfAction, true] call ace_interact_menu_fnc_addActionToClass;
+[RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions"], _izlidModeActionRoot, true] call ace_interact_menu_fnc_addActionToClass;
+
+{
+	_x params ["_id", "_label", "_mode", "_coneMode"];
+
+	private _izlidModeAction = [
+		format ["RS_MH6V3_izlid_mode_%1", _id],
+		_label,
+		"",
+		{
+			params ["_target", "_player", "_params"];
+			_params params ["_mode", "_coneMode"];
+
+			[_target, _mode, _coneMode] call RS_MH6V3_fnc_setIZLIDMode;
+		},
+		{
+			params ["_target", "_player", "_params"];
+			_params params ["_mode", "_coneMode"];
+
+			alive _target
+			&& {_target isKindOf "RHS_MELB_AH6M"}
+			&& {_player in [driver _target, _target turretUnit [0]]}
+			&& {
+				(_target getVariable ["RS_MH6V3_izlidMode", 3]) != _mode
+				|| {(_target getVariable ["RS_MH6V3_izlidConeMode", 1]) != _coneMode}
+			}
+		},
+		{},
+		[_mode, _coneMode]
+	] call ace_interact_menu_fnc_createAction;
+
+	[RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions", "RS_MH6V3_izlid_mode"], _izlidModeAction, true] call ace_interact_menu_fnc_addActionToClass;
+} forEach [
+	["izlid", "IZLID Only", 1, 1],
+	["illum_wide", "IR Illuminator Only - Wide", 2, 1],
+	["illum_narrow", "IR Illuminator Only - Narrow", 2, 2],
+	["illum_dynamic", "IR Illuminator Only - Dynamic", 2, 3],
+	["combined_wide", "IZLID / IR Illuminator - Wide", 3, 1],
+	["combined_narrow", "IZLID / IR Illuminator - Narrow", 3, 2],
+	["combined_dynamic", "IZLID / IR Illuminator - Dynamic", 3, 3]
+];
 
 {
 	private _position = _x;

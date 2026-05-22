@@ -156,6 +156,14 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 	0
 ] call CBA_fnc_addKeybind;
 
+missionNamespace setVariable [
+	"RS_MH6V3_activeIZLIDVehicles",
+	vehicles select {
+		_x isKindOf "RHS_MELB_AH6M" &&
+		{[_x] call RS_MH6V3_fnc_canUseIZLID}
+	}
+];
+
 if (!isNil "RS_MH6V3_izlidIlluminatorEh") then {
 	removeMissionEventHandler ["EachFrame", RS_MH6V3_izlidIlluminatorEh];
 };

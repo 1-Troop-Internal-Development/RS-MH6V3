@@ -26,12 +26,20 @@ _brightnessPercent = 0 max (_brightnessPercent min 100);
 private _brightness = (_brightnessPercent / 100) * 4000000;
 
 private _maxImpactDistance = 1000;
-private _impactEnd = _illuminatorOrigin vectorAdd (_illuminatorDirection vectorMultiply _maxImpactDistance);
-private _surfaces = lineIntersectsSurfaces [_illuminatorOrigin, _impactEnd, _vehicle, _illuminator, true, 1, "GEOM", "NONE"];
-private _impactDistance = _maxImpactDistance;
+private _impactDistance = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorTraceDistance", _maxImpactDistance];
+private _lastImpactTrace = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorTraceTime", -1];
 
-if (_surfaces isNotEqualTo []) then {
-	_impactDistance = _illuminatorOrigin distance (_surfaces # 0 # 0);
+if ((diag_tickTime - _lastImpactTrace) >= 0.1) then {
+	private _impactEnd = _illuminatorOrigin vectorAdd (_illuminatorDirection vectorMultiply _maxImpactDistance);
+	private _surfaces = lineIntersectsSurfaces [_illuminatorOrigin, _impactEnd, _vehicle, _illuminator, true, 1, "GEOM", "NONE"];
+	_impactDistance = _maxImpactDistance;
+
+	if (_surfaces isNotEqualTo []) then {
+		_impactDistance = _illuminatorOrigin distance (_surfaces # 0 # 0);
+	};
+
+	_vehicle setVariable ["RS_MH6V3_izlidIlluminatorTraceDistance", _impactDistance, false];
+	_vehicle setVariable ["RS_MH6V3_izlidIlluminatorTraceTime", diag_tickTime, false];
 };
 
 private _smoothedImpactDistance = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorImpactDistance", _impactDistance];

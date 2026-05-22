@@ -44,7 +44,9 @@ if (player isEqualTo _brightnessOwner) then {
 
 if (isNil {_vehicle getVariable "RS_MH6V3_izlidFiredEh"}) then {
 	private _firedEh = _vehicle addEventHandler ["Fired", {
-		params ["_vehicle"];
+		params ["_vehicle", "_weapon"];
+
+		if (_weapon isEqualTo "rhsusf_weap_LWIRCM") exitWith {};
 
 		_vehicle setVariable ["RS_MH6V3_izlidLastFiredTime", diag_tickTime, true];
 	}];

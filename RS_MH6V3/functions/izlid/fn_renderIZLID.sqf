@@ -4,8 +4,12 @@ private _frameNo = diag_frameNo;
 if ((missionNamespace getVariable ["RS_MH6V3_izlidLastRenderFrame", -1]) isEqualTo _frameNo) exitWith {};
 missionNamespace setVariable ["RS_MH6V3_izlidLastRenderFrame", _frameNo];
 
+private _activeVehicles = missionNamespace getVariable ["RS_MH6V3_activeIZLIDVehicles", []];
+private _trackedVehicles = [];
+
 {
 	if ([_x] call RS_MH6V3_fnc_canUseIZLID) then {
+		_trackedVehicles pushBack _x;
 		private _mode = _x getVariable ["RS_MH6V3_izlidMode", 3];
 		if (_mode in [1, 2, 3]) then {
 
@@ -23,4 +27,8 @@ missionNamespace setVariable ["RS_MH6V3_izlidLastRenderFrame", _frameNo];
 			};
 		};
 	};
-} forEach (vehicles select {_x isKindOf "RHS_MELB_AH6M"});
+} forEach _activeVehicles;
+
+if !(_trackedVehicles isEqualTo _activeVehicles) then {
+	missionNamespace setVariable ["RS_MH6V3_activeIZLIDVehicles", _trackedVehicles];
+};

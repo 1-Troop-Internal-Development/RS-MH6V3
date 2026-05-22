@@ -92,7 +92,9 @@ class CfgFunctions
 			class handleIZLIDPowerState {};
 			class holdIZLID {};
 			class renderIZLID {};
+			class setIZLIDMode {};
 			class setIZLIDState {};
+			class trackIZLIDVehicle {};
 			class toggleIZLIDMode {};
 			class toggleIZLID {};
 			class updateIZLIDIlluminators {};
@@ -1868,7 +1870,7 @@ class CfgVehicles
 				killed = "params ['_vehicle']; [_vehicle, false] call RS_MH6V3_fnc_handleIZLIDPowerState";
 				controlsShifted = "params ['_vehicle', '_activeCopilot']; _vehicle setVariable ['RS_MH6V3_activeCopilot', _activeCopilot, true]; [_vehicle] call RS_MH6V3_fnc_syncPylonOwner";
 				handleDamage = "_this call RHS_MELB_fnc_fallDamage";
-				postInit = "_this call rhs_fnc_reapplyTextures";
+				postInit = "params ['_vehicle']; if (_vehicle isKindOf 'RHS_MELB_AH6M') then {_vehicle animate ['Addcrosshair', 1, true]}; _this call rhs_fnc_reapplyTextures";
 			};
 		};
 		class Components: Components

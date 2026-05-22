@@ -23,22 +23,6 @@ if (!local _vehicle) exitWith {
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_syncPylonOwner", _vehicle];
 };
 
-if !(_vehicle getVariable ["RS_MH6V3_pylonOwnerMonitor", false]) then {
-	_vehicle setVariable ["RS_MH6V3_pylonOwnerMonitor", true];
-	[_vehicle] spawn {
-		params ["_vehicle"];
-
-		while {!isNull _vehicle && {alive _vehicle}} do {
-			[_vehicle] call RS_MH6V3_fnc_syncPylonOwner;
-			sleep 1;
-		};
-
-		if (!isNull _vehicle) then {
-			_vehicle setVariable ["RS_MH6V3_pylonOwnerMonitor", false];
-		};
-	};
-};
-
 [_vehicle] spawn {
 	params ["_vehicle"];
 

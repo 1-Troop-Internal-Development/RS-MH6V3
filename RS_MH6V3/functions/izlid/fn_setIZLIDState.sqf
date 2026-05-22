@@ -17,4 +17,5 @@ if (!_enabled) then {
 };
 
 _vehicle setVariable ["RS_MH6V3_izlidEnabled", _enabled, true];
+[_vehicle, _enabled] remoteExecCall ["RS_MH6V3_fnc_trackIZLIDVehicle", 0];
 true

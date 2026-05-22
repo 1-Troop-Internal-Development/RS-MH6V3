@@ -92,12 +92,32 @@ private _findHydraWeaponFromMagazine = {
 		if ((_magazineLower find "m257") >= 0) then {
 			_weapon = "rhs_weap_FFARLauncher_M257";
 		};
+
+		if ((_magazineLower find "m282") >= 0) then {
+			_weapon = "rhs_weap_FFARLauncher_M282";
+		};
+
+		if ((_magazineLower find "m247") >= 0) then {
+			_weapon = "rhs_weap_FFARLauncher_M247";
+		};
+
+		if ((_magazineLower find "m156") >= 0) then {
+			_weapon = "rhs_weap_FFARLauncher_M156";
+		};
+
+		if ((_magazineLower find "m274") >= 0) then {
+			_weapon = "rhs_weap_FFARLauncher_M274";
+		};
+
+		if ((_magazineLower find "m278") >= 0) then {
+			_weapon = "rhs_weap_FFARLauncher_M278";
+		};
 	};
 
 	_weapon
 };
 
-private _hasHydraAmmo = false;
+private _hydraPylonWeapons = [];
 private _pylonMagazines = getPylonMagazines _vehicle;
 
 {
@@ -106,17 +126,26 @@ private _pylonMagazines = getPylonMagazines _vehicle;
 	if (_x != "" && {_vehicle ammoOnPylon _pylonIndex > 0}) then {
 		private _pylonWeapon = [_x, _hydraWeapons] call _findHydraWeaponFromMagazine;
 
-		if (_pylonWeapon != "" && {isClass (configFile >> "CfgWeapons" >> _pylonWeapon)}) exitWith {
-			_hasHydraAmmo = true;
-
-			if (_hydraWeapon == "") then {
-				_hydraWeapon = _pylonWeapon;
-			};
+		if (_pylonWeapon != "" && {isClass (configFile >> "CfgWeapons" >> _pylonWeapon)}) then {
+			_hydraPylonWeapons pushBack [_pylonIndex, _pylonWeapon];
 		};
 	};
 } forEach _pylonMagazines;
 
-if (!_hasHydraAmmo) exitWith {false};
+if (_hydraPylonWeapons isEqualTo []) exitWith {false};
+
+if (_hydraWeapon == "") then {
+	private _lastPylonIndex = _vehicle getVariable ["RS_MH6V3_quickHydraLastPylon", 0];
+	private _nextPylonWeapon = _hydraPylonWeapons findIf {(_x # 0) > _lastPylonIndex};
+
+	if (_nextPylonWeapon < 0) then {
+		_nextPylonWeapon = 0;
+	};
+
+	(_hydraPylonWeapons # _nextPylonWeapon) params ["_hydraPylonIndex", "_hydraPylonWeapon"];
+	_hydraWeapon = _hydraPylonWeapon;
+	_vehicle setVariable ["RS_MH6V3_quickHydraLastPylon", _hydraPylonIndex];
+};
 
 if (_hydraWeapon == "") then {
 	private _availableWeapons = (weapons _vehicle) + (_vehicle weaponsTurret [-1]) + (_vehicle weaponsTurret []) + (_vehicle weaponsTurret [0]);

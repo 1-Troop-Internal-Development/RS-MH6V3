@@ -45,8 +45,4 @@ switch (true) do {
 	};
 };
 
-_vehicle setVariable ["RS_MH6V3_izlidMode", _nextMode, true];
-_vehicle setVariable ["RS_MH6V3_izlidConeMode", _nextConeMode, true];
-playSound "ACE_Sound_Click";
-[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
-true
+[_vehicle, _nextMode, _nextConeMode] call RS_MH6V3_fnc_setIZLIDMode

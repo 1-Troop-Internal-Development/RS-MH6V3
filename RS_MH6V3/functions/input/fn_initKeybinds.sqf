@@ -164,19 +164,4 @@ missionNamespace setVariable [
 	}
 ];
 
-if (!isNil "RS_MH6V3_izlidIlluminatorEh") then {
-	removeMissionEventHandler ["EachFrame", RS_MH6V3_izlidIlluminatorEh];
-};
-
-RS_MH6V3_izlidIlluminatorEh = addMissionEventHandler ["EachFrame", {
-	call RS_MH6V3_fnc_updateIZLIDTriggerCone;
-	call RS_MH6V3_fnc_updateIZLIDIlluminators;
-}];
-
-if (!isNil "RS_MH6V3_izlidRenderEh") then {
-	removeMissionEventHandler ["Draw3D", RS_MH6V3_izlidRenderEh];
-};
-
-RS_MH6V3_izlidRenderEh = addMissionEventHandler ["Draw3D", {
-	call RS_MH6V3_fnc_renderIZLID;
-}];
+[objNull, false] call RS_MH6V3_fnc_trackIZLIDVehicle;

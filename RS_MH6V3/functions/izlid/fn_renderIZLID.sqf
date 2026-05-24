@@ -31,4 +31,8 @@ private _trackedVehicles = [];
 
 if !(_trackedVehicles isEqualTo _activeVehicles) then {
 	missionNamespace setVariable ["RS_MH6V3_activeIZLIDVehicles", _trackedVehicles];
+
+	if (_trackedVehicles isEqualTo []) then {
+		[objNull, false] call RS_MH6V3_fnc_trackIZLIDVehicle;
+	};
 };

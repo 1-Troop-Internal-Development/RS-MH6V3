@@ -5,7 +5,7 @@ params ["_vehicle", "_origin", "_direction", "_offset", ["_coneMode", 1, [0]]];
 private _illuminator = _vehicle getVariable ["RS_MH6V3_izlidIlluminator", objNull];
 private _illuminatorType = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorType", ""];
 private _dynamicNarrow = _coneMode == 3 && {_vehicle getVariable ["RS_MH6V3_izlidConeTriggerNarrow", false]};
-private _baseIlluminatorClass = if (_coneMode == 2 || {_dynamicNarrow}) then {
+private _illuminatorClass = if (_coneMode == 2 || {_dynamicNarrow}) then {
 	"RS_MH6V3_IZLID_Illuminator_Narrow"
 } else {
 	"RS_MH6V3_IZLID_Illuminator"
@@ -56,32 +56,10 @@ private _targetDistanceFactor = switch (true) do {
 };
 
 private _distanceFactor = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorDistanceFactor", _targetDistanceFactor];
-private _lastDistanceFactorChange = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorDistanceFactorTime", 0];
+_distanceFactor = _distanceFactor + ((_targetDistanceFactor - _distanceFactor) * 0.04);
+_vehicle setVariable ["RS_MH6V3_izlidIlluminatorDistanceFactor", _distanceFactor, false];
 
-if (!(_distanceFactor isEqualTo _targetDistanceFactor) && {(diag_tickTime - _lastDistanceFactorChange) > 1.25}) then {
-	_distanceFactor = _targetDistanceFactor;
-	_vehicle setVariable ["RS_MH6V3_izlidIlluminatorDistanceFactor", _distanceFactor, false];
-	_vehicle setVariable ["RS_MH6V3_izlidIlluminatorDistanceFactorTime", diag_tickTime, false];
-};
-
-private _desiredBrightnessBucket = round (((_brightness * _distanceFactor) / 4000000) * 10) * 10;
-_desiredBrightnessBucket = 0 max (_desiredBrightnessBucket min 100);
-
-private _brightnessBucket = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorBrightnessBucket", _desiredBrightnessBucket];
-private _lastBucketChange = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorBrightnessBucketTime", 0];
-private _bucketDelta = abs (_desiredBrightnessBucket - _brightnessBucket);
-
-if (_bucketDelta >= 30 || {_desiredBrightnessBucket in [0, 100] && {(diag_tickTime - _lastBucketChange) > 1}} || {(diag_tickTime - _lastBucketChange) > 1.25 && {_bucketDelta >= 10}}) then {
-	_brightnessBucket = _desiredBrightnessBucket;
-	_vehicle setVariable ["RS_MH6V3_izlidIlluminatorBrightnessBucket", _brightnessBucket, false];
-	_vehicle setVariable ["RS_MH6V3_izlidIlluminatorBrightnessBucketTime", diag_tickTime, false];
-};
-
-private _illuminatorClass = if (_brightnessBucket >= 100) then {
-	_baseIlluminatorClass
-} else {
-	format ["%1_B%2", _baseIlluminatorClass, _brightnessBucket]
-};
+private _effectiveBrightness = _brightness * _distanceFactor;
 
 if (_illuminatorType != _illuminatorClass) then {
 	deleteVehicle _illuminator;
@@ -100,5 +78,6 @@ if (isNull _illuminator) then {
 
 _illuminator setPosASL _illuminatorOrigin;
 _illuminator setVectorDirAndUp [_illuminatorDirection, [0, 1, 0]];
+_illuminator setLightIntensity _effectiveBrightness;
 
 _illuminator

@@ -9,6 +9,14 @@ if !(player isEqualTo driver _vehicle || {player isEqualTo (_vehicle turretUnit 
 	false
 };
 
+if (typeOf _vehicle != "RHS_MELB_AH6M") exitWith {
+	[_vehicle, false] call RS_MH6V3_fnc_setIZLIDState;
+	_vehicle setVariable ["RS_MH6V3_izlidUnavailableNotice", diag_tickTime, false];
+	playSound "ACE_Sound_Click";
+	[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
+	true
+};
+
 private _mode = _vehicle getVariable ["RS_MH6V3_izlidMode", 3];
 private _coneMode = _vehicle getVariable ["RS_MH6V3_izlidConeMode", 1];
 private _nextMode = _mode;

@@ -1,6 +1,8 @@
 if (!hasInterface) exitWith {false};
 
-params ["_vehicle"];
+params [
+	"_vehicle"
+];
 
 private _illuminator = _vehicle getVariable ["RS_MH6V3_izlidIlluminator", objNull];
 private _illuminatorBoost = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorBoost", objNull];

@@ -36,7 +36,10 @@ lbClear _otherRackList;
 lbClear _radioCombo;
 
 private _addRadioRow = {
-	params ["_list", "_radioId"];
+	params [
+		"_list",
+		"_radioId"
+	];
 
 	private _info = [_radioId, false] call RS_MH6V3_fnc_getACRERadioInfo;
 	private _channel = _info get "channel";
@@ -53,7 +56,10 @@ private _addRadioRow = {
 };
 
 private _addOtherRow = {
-	params ["_list", "_row"];
+	params [
+		"_list",
+		"_row"
+	];
 
 	private _text = if (_row isEqualType createHashMap) then {
 		_row getOrDefault ["text", "Unknown radio"]
@@ -69,7 +75,12 @@ private _addOtherRow = {
 };
 
 private _addOtherTuneRow = {
-	params ["_radioCombo", "_row", "_prefix", ["_owner", 1]];
+	params [
+		"_radioCombo",
+		"_row",
+		"_prefix",
+		["_owner", 1]
+	];
 
 	if !(_row isEqualType createHashMap) exitWith {};
 	private _radioId = _row getOrDefault ["id", ""];
@@ -96,7 +107,10 @@ private _getUnitInventoryRows = {
 	_items = _items arrayIntersect _items;
 
 	private _addRadio = {
-		params ["_radioId", "_baseRadio"];
+		params [
+			"_radioId",
+			"_baseRadio"
+		];
 
 		private _name = "";
 		if (!isNil "acre_api_fnc_getDisplayName") then {
@@ -239,7 +253,10 @@ if (!isNull _otherUnit && {isPlayer _otherUnit}) then {
 };
 
 private _filterOtherRows = {
-	params ["_rows", "_searchText"];
+	params [
+		"_rows",
+		"_searchText"
+	];
 	if (_searchText isEqualTo "") exitWith {_rows};
 
 	_rows select {

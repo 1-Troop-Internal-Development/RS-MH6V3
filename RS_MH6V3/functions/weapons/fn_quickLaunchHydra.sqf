@@ -39,7 +39,10 @@ private _hydraWeapons = [
 ];
 
 private _findHydraWeaponFromMagazine = {
-	params ["_magazine", "_fallbackWeapons"];
+	params [
+		"_magazine",
+		"_fallbackWeapons"
+	];
 
 	private _magazineLower = toLower _magazine;
 	private _weapon = getText (configFile >> "CfgMagazines" >> _magazine >> "pylonWeapon");
@@ -178,7 +181,11 @@ private _weaponState = weaponState [_vehicle, _turretPath];
 _operator forceWeaponFire [_hydraWeapon, _mode];
 
 [_vehicle, _turretPath, _weaponState] spawn {
-	params ["_vehicle", "_turretPath", "_weaponState"];
+	params [
+		"_vehicle",
+		"_turretPath",
+		"_weaponState"
+	];
 
 	sleep 0.01;
 

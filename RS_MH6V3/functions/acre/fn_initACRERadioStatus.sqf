@@ -35,7 +35,12 @@ if (!hasInterface) exitWith {};
 		RS_MH6V3_acreSpeakingHandlersAdded = true;
 
 		["acre_startedSpeaking", {
-			params ["_unit", ["_onRadio", false], ["_radioId", ""], ["_speakingType", ""]];
+			params [
+				"_unit",
+				["_onRadio", false],
+				["_radioId", ""],
+				["_speakingType", ""]
+			];
 			if (!(_unit isEqualTo player)) exitWith {};
 			if (!((_onRadio isEqualType true && {_onRadio}) || {_radioId isEqualType "" && {_radioId isNotEqualTo ""}})) exitWith {};
 
@@ -45,7 +50,10 @@ if (!hasInterface) exitWith {};
 		}] call CBA_fnc_addEventHandler;
 
 		["acre_stoppedSpeaking", {
-			params ["_unit", ["_onRadio", false]];
+			params [
+				"_unit",
+				["_onRadio", false]
+			];
 			if (!(_unit isEqualTo player)) exitWith {};
 
 			missionNamespace setVariable ["RS_MH6V3_acrePTTHeld", false];
@@ -56,7 +64,8 @@ if (!hasInterface) exitWith {};
 
 	RS_MH6V3_acreCanShowRadioStatus = {
 		private _vehicle = vehicle player;
-		!isNull _vehicle &&
+		(missionNamespace getVariable ["RS_MH6V3_acreStatusOverlayEnabled", true]) &&
+			{!isNull _vehicle} &&
 			{_vehicle isKindOf "RHS_MELB_AH6M"} &&
 			{player in [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]]}
 	};

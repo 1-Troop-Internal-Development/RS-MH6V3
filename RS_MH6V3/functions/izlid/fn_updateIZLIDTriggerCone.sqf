@@ -2,7 +2,7 @@ if (!hasInterface) exitWith {};
 
 private _previousVehicle = player getVariable ["RS_MH6V3_izlidTriggerConeVehicle", objNull];
 private _vehicle = vehicle player;
-private _validVehicle = !isNull _vehicle && {_vehicle isKindOf "RHS_MELB_AH6M"} && {player in _vehicle};
+private _validVehicle = !isNull _vehicle && {typeOf _vehicle == "RHS_MELB_AH6M"} && {player in _vehicle};
 
 if (!isNull _previousVehicle && {!(_previousVehicle isEqualTo _vehicle)}) then {
 	_previousVehicle setVariable ["RS_MH6V3_izlidConeTriggerNarrow", false, true];
@@ -44,7 +44,10 @@ if (player isEqualTo _brightnessOwner) then {
 
 if (isNil {_vehicle getVariable "RS_MH6V3_izlidFiredEh"}) then {
 	private _firedEh = _vehicle addEventHandler ["Fired", {
-		params ["_vehicle", "_weapon"];
+		params [
+			"_vehicle",
+			"_weapon"
+		];
 
 		if (_weapon isEqualTo "rhsusf_weap_LWIRCM") exitWith {};
 

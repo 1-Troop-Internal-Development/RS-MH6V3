@@ -1,6 +1,12 @@
 if (!hasInterface) exitWith {objNull};
 
-params ["_vehicle", "_origin", "_direction", "_offset", ["_coneMode", 1, [0]]];
+params [
+	"_vehicle",
+	"_origin",
+	"_direction",
+	"_offset",
+	["_coneMode", 1, [0]]
+];
 
 private _illuminator = _vehicle getVariable ["RS_MH6V3_izlidIlluminator", objNull];
 private _illuminatorType = _vehicle getVariable ["RS_MH6V3_izlidIlluminatorType", ""];
@@ -20,6 +26,7 @@ private _illuminatorAimModel = _illuminatorModel vectorAdd (_directionModel vect
 private _illuminatorOrigin = _vehicle modelToWorldVisualWorld _illuminatorModel;
 private _illuminatorAim = _vehicle modelToWorldVisualWorld _illuminatorAimModel;
 private _illuminatorDirection = _illuminatorOrigin vectorFromTo _illuminatorAim;
+private _illuminatorUp = _vehicle vectorModelToWorldVisual [0, 0, 1];
 
 private _brightnessPercent = _vehicle getVariable ["RS_MH6V3_irIlluminatorBrightnessActive", _vehicle getVariable ["RS_MH6V3_irIlluminatorBrightnessPercent", 100]];
 _brightnessPercent = 0 max (_brightnessPercent min 100);
@@ -77,7 +84,7 @@ if (isNull _illuminator) then {
 };
 
 _illuminator setPosASL _illuminatorOrigin;
-_illuminator setVectorDirAndUp [_illuminatorDirection, [0, 1, 0]];
+_illuminator setVectorDirAndUp [_illuminatorDirection, _illuminatorUp];
 _illuminator setLightIntensity _effectiveBrightness;
 
 _illuminator

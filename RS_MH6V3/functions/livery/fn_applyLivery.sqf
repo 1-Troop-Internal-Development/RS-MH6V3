@@ -1,4 +1,9 @@
-params [["_vehicle", objNull], ["_texture", ""], ["_name", "Livery"], ["_caller", objNull]];
+params [
+	["_vehicle", objNull],
+	["_texture", ""],
+	["_name", "Livery"],
+	["_caller", objNull]
+];
 
 if (!isServer) exitWith {
 	[_vehicle, _texture, _name, _caller] remoteExec ["RS_MH6V3_fnc_applyLivery", 2];

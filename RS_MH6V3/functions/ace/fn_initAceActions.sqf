@@ -22,7 +22,10 @@ RS_MH6V3_AH6_PACKAGE_DISTANCE = 3.25;
 RS_MH6V3_AMMO_SUPPORT_RADIUS = 25;
 
 RS_MH6V3_fnc_notifyAircrew = {
-	params ["_message", ["_vehicle", objNull]];
+	params [
+		"_message",
+		["_vehicle", objNull]
+	];
 
 	if (isNull _vehicle) exitWith {
 		diag_log _message;
@@ -51,7 +54,11 @@ RS_MH6V3_fnc_canService = {
 };
 
 RS_MH6V3_fnc_serviceFxLocalStart = {
-	params ["_unit", "_duration", "_fxId"];
+	params [
+		"_unit",
+		"_duration",
+		"_fxId"
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _unit || {!local _unit}) exitWith {};
@@ -62,7 +69,11 @@ RS_MH6V3_fnc_serviceFxLocalStart = {
 	_unit playMoveNow RS_MH6V3_SERVICE_ANIMATION;
 
 	[_unit, _duration, _fxId] spawn {
-		params ["_unit", "_duration", "_fxId"];
+		params [
+			"_unit",
+			"_duration",
+			"_fxId"
+		];
 
 		private _endTime = time + _duration;
 		private _serviceAnimation = toLower RS_MH6V3_SERVICE_ANIMATION;
@@ -96,7 +107,10 @@ RS_MH6V3_fnc_serviceFxLocalStart = {
 };
 
 RS_MH6V3_fnc_serviceFxLocalStop = {
-	params ["_unit", "_fxId"];
+	params [
+		"_unit",
+		"_fxId"
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _unit || {!local _unit}) exitWith {};
@@ -109,13 +123,23 @@ RS_MH6V3_fnc_serviceFxLocalStop = {
 };
 
 RS_MH6V3_fnc_serviceSoundLocalStart = {
-	params ["_vehicle", "_unit", "_duration", "_fxId"];
+	params [
+		"_vehicle",
+		"_unit",
+		"_duration",
+		"_fxId"
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _unit) exitWith {};
 
 	[_vehicle, _unit, _duration, _fxId] spawn {
-		params ["_vehicle", "_unit", "_duration", "_fxId"];
+		params [
+			"_vehicle",
+			"_unit",
+			"_duration",
+			"_fxId"
+		];
 
 		private _endTime = time + _duration;
 
@@ -138,7 +162,11 @@ RS_MH6V3_fnc_serviceSoundLocalStart = {
 };
 
 RS_MH6V3_fnc_startServiceFx = {
-	params ["_vehicle", "_unit", "_duration"];
+	params [
+		"_vehicle",
+		"_unit",
+		"_duration"
+	];
 
 	if (isNull _unit) exitWith {""};
 
@@ -150,7 +178,10 @@ RS_MH6V3_fnc_startServiceFx = {
 };
 
 RS_MH6V3_fnc_stopServiceFx = {
-	params ["_unit", "_fxId"];
+	params [
+		"_unit",
+		"_fxId"
+	];
 
 	if (_fxId == "") exitWith {};
 	_unit setVariable ["RS_MH6V3_serviceFxId", "", true];
@@ -245,7 +276,12 @@ RS_MH6V3_fnc_cancelFuelDrain = {
 };
 
 RS_MH6V3_fnc_drainFuel = {
-	params ["_vehicle", "_targetFuel", ["_caller", objNull], ["_duration", RS_MH6V3_DRAIN_FUEL_TIME]];
+	params [
+		"_vehicle",
+		"_targetFuel",
+		["_caller", objNull],
+		["_duration", RS_MH6V3_DRAIN_FUEL_TIME]
+	];
 
 	if (!isServer) exitWith {
 		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuel", 2];
@@ -262,7 +298,12 @@ RS_MH6V3_fnc_drainFuel = {
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundLocal", 0];
 
 	[_vehicle, _targetFuel, _caller, _duration] spawn {
-		params ["_vehicle", "_targetFuel", "_caller", "_duration"];
+		params [
+			"_vehicle",
+			"_targetFuel",
+			"_caller",
+			"_duration"
+		];
 
 		private _startFuel = fuel _vehicle;
 		private _steps = 50;
@@ -293,7 +334,11 @@ RS_MH6V3_fnc_drainFuel = {
 };
 
 RS_MH6V3_fnc_startDrainFuel = {
-	params ["_vehicle", "_targetFuel", ["_caller", player]];
+	params [
+		"_vehicle",
+		"_targetFuel",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
@@ -305,7 +350,10 @@ RS_MH6V3_fnc_startDrainFuel = {
 };
 
 RS_MH6V3_fnc_stopDrainFuel = {
-	params ["_vehicle", ["_caller", player]];
+	params [
+		"_vehicle",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -406,7 +454,10 @@ RS_MH6V3_fnc_openRearmMenu = {
 };
 
 RS_MH6V3_fnc_setRotorDamage = {
-	params ["_bird", "_damage"];
+	params [
+		"_bird",
+		"_damage"
+	];
 
 	{
 		_bird setHitIndex [_x, _damage, false, objNull, objNull, true];
@@ -414,7 +465,10 @@ RS_MH6V3_fnc_setRotorDamage = {
 };
 
 RS_MH6V3_fnc_applyRotorDamageGlobal = {
-	params ["_bird", "_damage"];
+	params [
+		"_bird",
+		"_damage"
+	];
 
 	[_bird, _damage] remoteExecCall ["RS_MH6V3_fnc_setRotorDamage", 0, _bird];
 	[_bird, _damage] call RS_MH6V3_fnc_setRotorDamage;
@@ -433,7 +487,10 @@ RS_MH6V3_fnc_breakRotorsForCargo = {
 };
 
 RS_MH6V3_fnc_disassembleRotors = {
-	params ["_vehicle", ["_caller", objNull]];
+	params [
+		"_vehicle",
+		["_caller", objNull]
+	];
 
 	if (!isServer) exitWith {
 		[_vehicle, _caller] remoteExec ["RS_MH6V3_fnc_disassembleRotors", 2];
@@ -447,7 +504,10 @@ RS_MH6V3_fnc_disassembleRotors = {
 };
 
 RS_MH6V3_fnc_assembleRotors = {
-	params ["_vehicle", ["_caller", objNull]];
+	params [
+		"_vehicle",
+		["_caller", objNull]
+	];
 
 	if (!isServer) exitWith {
 		[_vehicle, _caller] remoteExec ["RS_MH6V3_fnc_assembleRotors", 2];
@@ -498,7 +558,10 @@ RS_MH6V3_fnc_assembleRotors = {
 };
 
 RS_MH6V3_fnc_startAssembleRotors = {
-	params ["_vehicle", ["_caller", player]];
+	params [
+		"_vehicle",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -527,7 +590,10 @@ RS_MH6V3_fnc_startAssembleRotors = {
 };
 
 RS_MH6V3_fnc_startDisassembleRotors = {
-	params ["_vehicle", ["_caller", player]];
+	params [
+		"_vehicle",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -555,7 +621,11 @@ RS_MH6V3_fnc_startDisassembleRotors = {
 };
 
 RS_MH6V3_fnc_convertVariant = {
-	params ["_vehicle", "_newClass", ["_caller", objNull]];
+	params [
+		"_vehicle",
+		"_newClass",
+		["_caller", objNull]
+	];
 
 	if (!isServer) exitWith {
 		[_vehicle, _newClass, _caller] remoteExec ["RS_MH6V3_fnc_convertVariant", 2];
@@ -623,7 +693,13 @@ RS_MH6V3_fnc_convertVariant = {
 	};
 
 	[_newVehicle, _terrainPos, _dir, _terrainUp, _damageAllowed] spawn {
-		params ["_newVehicle", "_terrainPos", "_dir", "_terrainUp", "_damageAllowed"];
+		params [
+			"_newVehicle",
+			"_terrainPos",
+			"_dir",
+			"_terrainUp",
+			"_damageAllowed"
+		];
 
 		sleep 0.05;
 		if (!isNull _newVehicle && {alive _newVehicle}) then {
@@ -644,7 +720,11 @@ RS_MH6V3_fnc_convertVariant = {
 };
 
 RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
-	params ["_vehicle", ["_caller", objNull], ["_duration", RS_MH6V3_CONVERT_TIME]];
+	params [
+		"_vehicle",
+		["_caller", objNull],
+		["_duration", RS_MH6V3_CONVERT_TIME]
+	];
 
 	if (!isServer) exitWith {
 		[_vehicle, _caller, _duration] remoteExec ["RS_MH6V3_fnc_removeAh6ArmamentsForCargo", 2];
@@ -658,7 +738,11 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 	_vehicle setVehicleAmmo 0;
 
 	[_vehicle, _caller, _duration] spawn {
-		params ["_vehicle", "_caller", "_duration"];
+		params [
+			"_vehicle",
+			"_caller",
+			"_duration"
+		];
 
 		private _loadedPylonIndexes = [];
 		{
@@ -689,7 +773,11 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 };
 
 RS_MH6V3_fnc_startConvertVariant = {
-	params ["_vehicle", "_newClass", ["_caller", player]];
+	params [
+		"_vehicle",
+		"_newClass",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
@@ -722,7 +810,10 @@ RS_MH6V3_fnc_startConvertVariant = {
 };
 
 RS_MH6V3_fnc_startMh6CargoPrep = {
-	params ["_vehicle", ["_caller", player]];
+	params [
+		"_vehicle",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
@@ -751,7 +842,10 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 };
 
 RS_MH6V3_fnc_startAh6CargoPrep = {
-	params ["_vehicle", ["_caller", player]];
+	params [
+		"_vehicle",
+		["_caller", player]
+	];
 
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
@@ -869,7 +963,10 @@ private _cameraResetAction = [
 		[_target] call RS_MH6V3_fnc_resetCameras;
 	},
 	{
-		params ["_target", "_player"];
+		params [
+			"_target",
+			"_player"
+		];
 		alive _target
 		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
 		&& {_player in [driver _target, gunner _target]}
@@ -885,7 +982,10 @@ private _acreRadioProgrammerAction = [
 		[_target] call RS_MH6V3_fnc_openACRERadioProgrammer;
 	},
 	{
-		params ["_target", "_player"];
+		params [
+			"_target",
+			"_player"
+		];
 		alive _target
 		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
 		&& {_player in [driver _target, gunner _target, _target turretUnit [0]]}
@@ -919,7 +1019,10 @@ private _izlidModeActionRoot = [
 	"",
 	{},
 	{
-		params ["_target", "_player"];
+		params [
+			"_target",
+			"_player"
+		];
 
 		alive _target
 		&& {_target isKindOf "RHS_MELB_AH6M"}
@@ -936,7 +1039,11 @@ private _disassembleAction = [
 		[_target, player] call RS_MH6V3_fnc_startDisassembleRotors;
 	},
 	{
-		params ["_target", "_player", "_params"];
+		params [
+			"_target",
+			"_player",
+			"_params"
+		];
 		_params params ["_servicePos"];
 		[_target] call RS_MH6V3_fnc_canService
 		&& {_target getVariable ["RS_MH6V3_rotorsAssembled", true]}
@@ -957,7 +1064,11 @@ private _assembleAction = [
 		[_target, player] call RS_MH6V3_fnc_startAssembleRotors;
 	},
 	{
-		params ["_target", "_player", "_params"];
+		params [
+			"_target",
+			"_player",
+			"_params"
+		];
 		_params params ["_servicePos"];
 		[_target] call RS_MH6V3_fnc_canService
 		&& {_target getVariable ["RS_MH6V3_rotorsAssembled", true] isEqualTo false}
@@ -993,13 +1104,21 @@ private _assembleAction = [
 		_label,
 		"",
 		{
-			params ["_target", "_player", "_params"];
+			params [
+				"_target",
+				"_player",
+				"_params"
+			];
 			_params params ["_mode", "_coneMode"];
 
 			[_target, _mode, _coneMode] call RS_MH6V3_fnc_setIZLIDMode;
 		},
 		{
-			params ["_target", "_player", "_params"];
+			params [
+				"_target",
+				"_player",
+				"_params"
+			];
 			_params params ["_mode", "_coneMode"];
 
 			alive _target
@@ -1036,7 +1155,11 @@ private _assembleAction = [
 			[_target, player] call RS_MH6V3_fnc_startMh6CargoPrep;
 		},
 		{
-			params ["_target", "_player", "_params"];
+			params [
+				"_target",
+				"_player",
+				"_params"
+			];
 			_params params ["_servicePos"];
 			[_target] call RS_MH6V3_fnc_canService
 			&& {typeOf _target == RS_MH6V3_MH6_CLASS}
@@ -1062,7 +1185,11 @@ private _assembleAction = [
 			[_target, RS_MH6V3_MH6_CLASS, player] call RS_MH6V3_fnc_startConvertVariant;
 		},
 		{
-			params ["_target", "_player", "_params"];
+			params [
+				"_target",
+				"_player",
+				"_params"
+			];
 			_params params ["_servicePos"];
 			[_target] call RS_MH6V3_fnc_canService
 			&& {typeOf _target == RS_MH6V3_OH6_CLASS}
@@ -1086,7 +1213,11 @@ private _ah6PackageAction = [
 		[_target, player] call RS_MH6V3_fnc_startAh6CargoPrep;
 	},
 	{
-		params ["_target", "_player", "_params"];
+		params [
+			"_target",
+			"_player",
+			"_params"
+		];
 		_params params ["_servicePos"];
 		[_target] call RS_MH6V3_fnc_canService
 		&& {typeOf _target == RS_MH6V3_AH6_CLASS}
@@ -1108,7 +1239,11 @@ private _ah6InstallAction = [
 		[_target, RS_MH6V3_AH6_CLASS, player] call RS_MH6V3_fnc_startConvertVariant;
 	},
 	{
-		params ["_target", "_player", "_params"];
+		params [
+			"_target",
+			"_player",
+			"_params"
+		];
 		_params params ["_servicePos"];
 		[_target] call RS_MH6V3_fnc_canService
 		&& {typeOf _target == RS_MH6V3_OH6_CLASS}

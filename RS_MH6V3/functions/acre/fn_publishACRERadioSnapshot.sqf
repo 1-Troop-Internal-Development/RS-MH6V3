@@ -22,7 +22,10 @@ if (!isNil "acre_api_fnc_isInitialized") then {
 if (_acreReady) then {
 	private _lists = [_vehicle] call RS_MH6V3_fnc_getACRERadioLists;
 	private _pushRows = {
-		params ["_rows", "_radios"];
+		params [
+			"_rows",
+			"_radios"
+		];
 
 		{
 			private _info = [_x, false] call RS_MH6V3_fnc_getACRERadioInfo;

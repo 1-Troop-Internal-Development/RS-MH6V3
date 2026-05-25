@@ -1,4 +1,6 @@
-params [["_vehicle", objNull]];
+params [
+	["_vehicle", objNull]
+];
 
 private _vehicleClass = if (isNull _vehicle) then {
 	"RHS_MELB_AH6M"
@@ -8,7 +10,11 @@ private _vehicleClass = if (isNull _vehicle) then {
 
 private _liveries = [];
 private _addLivery = {
-	params ["_id", "_name", "_texture"];
+	params [
+		"_id",
+		"_name",
+		"_texture"
+	];
 
 	if (_texture == "") exitWith {};
 	if ((_liveries findIf {(_x # 2) == _texture}) >= 0) exitWith {};

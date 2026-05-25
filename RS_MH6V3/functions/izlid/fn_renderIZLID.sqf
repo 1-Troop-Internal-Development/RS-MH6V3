@@ -18,7 +18,7 @@ private _trackedVehicles = [];
 			if !(_laser isEqualTo [-1, -1]) then {
 				_laser params ["_origin", "_direction"];
 				private _laserMax = 3000;
-				private _laserStartOffset = -0.25;
+				private _laserStartOffset = 0.05;
 
 				if (_mode in [1, 3]) then {
 					private _begPos = _origin vectorAdd (_direction vectorMultiply _laserStartOffset);

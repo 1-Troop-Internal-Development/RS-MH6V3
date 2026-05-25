@@ -16,7 +16,10 @@ if (!hasInterface) exitWith {};
 	};
 
 	RS_MH6V3_mouseFireDownEh = _display displayAddEventHandler ["MouseButtonDown", {
-		params ["", "_button"];
+		params [
+			"",
+			"_button"
+		];
 
 		if (_button isEqualTo 0) then {
 			missionNamespace setVariable ["RS_MH6V3_fireInputHeld", true];
@@ -24,7 +27,10 @@ if (!hasInterface) exitWith {};
 	}];
 
 	RS_MH6V3_mouseFireUpEh = _display displayAddEventHandler ["MouseButtonUp", {
-		params ["", "_button"];
+		params [
+			"",
+			"_button"
+		];
 
 		if (_button isEqualTo 0) then {
 			missionNamespace setVariable ["RS_MH6V3_fireInputHeld", false];
@@ -34,7 +40,11 @@ if (!hasInterface) exitWith {};
 
 if (isNil "RS_MH6V3_controlsShiftedEh") then {
 	RS_MH6V3_controlsShiftedEh = addMissionEventHandler ["ControlsShifted", {
-		params ["_newController", "_oldController", "_vehicle"];
+		params [
+			"_newController",
+			"_oldController",
+			"_vehicle"
+		];
 
 		if (isNull _vehicle || {!(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"])}) exitWith {};
 

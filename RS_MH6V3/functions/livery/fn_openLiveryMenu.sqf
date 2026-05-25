@@ -1,4 +1,6 @@
-params [["_vehicle", objNull]];
+params [
+	["_vehicle", objNull]
+];
 
 if (!hasInterface) exitWith {};
 if (isNull _vehicle || {!alive _vehicle}) exitWith {};

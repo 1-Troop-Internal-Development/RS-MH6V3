@@ -10,6 +10,14 @@ if !(_vehicle isKindOf "RHS_MELB_AH6M") exitWith {false};
 if !(player in [driver _vehicle, _vehicle turretUnit [0]]) exitWith {false};
 if !(_mode in [1, 2, 3]) exitWith {false};
 
+if (typeOf _vehicle != "RHS_MELB_AH6M") exitWith {
+	[_vehicle, false] call RS_MH6V3_fnc_setIZLIDState;
+	_vehicle setVariable ["RS_MH6V3_izlidUnavailableNotice", diag_tickTime, false];
+	playSound "ACE_Sound_Click";
+	[_vehicle] call RS_MH6V3_fnc_showExternalWeaponControl;
+	true
+};
+
 if (_mode == 1) then {
 	_coneMode = 1;
 };

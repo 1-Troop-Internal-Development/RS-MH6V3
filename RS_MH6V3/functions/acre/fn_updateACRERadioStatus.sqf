@@ -7,9 +7,20 @@ if (!hasInterface) exitWith {};
 private _display = uiNamespace getVariable ["RS_MH6V3_acreRadioStatusDisplay", displayNull];
 if (isNull _display) exitWith {};
 
+if !(missionNamespace getVariable ["RS_MH6V3_acreStatusOverlayEnabled", true]) exitWith {
+	"RS_MH6V3_ACRERadioStatusLayer" cutText ["", "PLAIN"];
+	uiNamespace setVariable ["RS_MH6V3_acreRadioStatusRows", createHashMap];
+	uiNamespace setVariable ["RS_MH6V3_acreRadioStatusLayout", ""];
+	missionNamespace setVariable ["RS_MH6V3_acreRadioStatusVisible", false];
+};
+
 private _rowCache = uiNamespace getVariable ["RS_MH6V3_acreRadioStatusRows", createHashMap];
 private _setRow = {
-	params ["_idc", "_text", "_color"];
+	params [
+		"_idc",
+		"_text",
+		"_color"
+	];
 
 	private _ctrl = _display displayCtrl _idc;
 	if (isNull _ctrl) exitWith {};
@@ -27,7 +38,13 @@ private _setRow = {
 };
 
 private _setCtrlPos = {
-	params ["_idc", "_x", "_y", "_w", "_h"];
+	params [
+		"_idc",
+		"_x",
+		"_y",
+		"_w",
+		"_h"
+	];
 
 	private _ctrl = _display displayCtrl _idc;
 	if (isNull _ctrl) exitWith {};
@@ -74,7 +91,12 @@ if (isNil "_currentRadio" || {!(_currentRadio isEqualType "")}) then {
 };
 
 private _formatRadio = {
-	params ["_radioId", "_active", ["_isRack", false], ["_rackInUse", true]];
+	params [
+		"_radioId",
+		"_active",
+		["_isRack", false],
+		["_rackInUse", true]
+	];
 
 	private _info = [_radioId, _active] call RS_MH6V3_fnc_getACRERadioInfo;
 	private _channel = _info get "channel";
@@ -121,16 +143,18 @@ private _hearableRackRadios = if (isNil "ACRE_HEARABLE_RACK_RADIOS") then {[]} e
 private _inUseRackRadios = _accessibleRackRadios + _hearableRackRadios;
 private _inventoryCount = ((count _inventoryRadios) min 7) max 1;
 private _rackCount = (count _rackRadios) min 3;
-private _panelX = 0.034;
-private _panelY = 0.535;
+private _panelX = missionNamespace getVariable ["RS_MH6V3_acreStatusOverlayX", 0.034];
+private _panelY = missionNamespace getVariable ["RS_MH6V3_acreStatusOverlayY", 0.535];
 private _panelW = 0.178;
+_panelX = 0 max (_panelX min (1 - _panelW));
+_panelY = 0 max (_panelY min 0.94);
 private _padX = 0.005;
 private _titleH = 0.026;
 private _headerH = 0.020;
 private _rowH = 0.022;
 private _rowGap = 0.002;
 private _y = _panelY + 0.006;
-private _layoutKey = format ["%1:%2", _inventoryCount, _rackCount];
+private _layoutKey = format ["%1:%2:%3:%4", _inventoryCount, _rackCount, _panelX, _panelY];
 private _layoutChanged = _layoutKey isNotEqualTo (uiNamespace getVariable ["RS_MH6V3_acreRadioStatusLayout", ""]);
 
 if (_layoutChanged) then {

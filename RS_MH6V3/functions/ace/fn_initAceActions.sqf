@@ -53,6 +53,20 @@ RS_MH6V3_fnc_canService = {
 	&& {isNull attachedTo _vehicle}
 };
 
+RS_MH6V3_fnc_hasToolkit = {
+	params ["_unit"];
+
+	if (isNull _unit) exitWith {false};
+
+	"ToolKit" in (
+		items _unit
+		+ assignedItems _unit
+		+ uniformItems _unit
+		+ vestItems _unit
+		+ backpackItems _unit
+	)
+};
+
 RS_MH6V3_fnc_serviceFxLocalStart = {
 	params [
 		"_unit",
@@ -634,6 +648,7 @@ RS_MH6V3_fnc_convertVariant = {
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
 	if !(_newClass in RS_MH6V3_SERVICE_CLASSES) exitWith {};
+	if (!isNull _caller && {!([_caller] call RS_MH6V3_fnc_hasToolkit)}) exitWith {};
 
 	private _terrainPos = getPosATL _vehicle;
 	_terrainPos set [2, 0];
@@ -732,6 +747,7 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 
 	if (isNull _vehicle || {!alive _vehicle} || {typeOf _vehicle != RS_MH6V3_AH6_CLASS}) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
+	if (!isNull _caller && {!([_caller] call RS_MH6V3_fnc_hasToolkit)}) exitWith {};
 	if (_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false]) exitWith {};
 
 	_vehicle setVariable ["RS_MH6V3_removingAh6Armaments", true, true];
@@ -781,6 +797,9 @@ RS_MH6V3_fnc_startConvertVariant = {
 
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
+	if !([_caller] call RS_MH6V3_fnc_hasToolkit) exitWith {
+		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
+	};
 
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cancelFuelDrain", 2];
 
@@ -818,6 +837,9 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
 	if (typeOf _vehicle != RS_MH6V3_MH6_CLASS) exitWith {};
+	if !([_caller] call RS_MH6V3_fnc_hasToolkit) exitWith {
+		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
+	};
 
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cancelFuelDrain", 2];
 
@@ -850,6 +872,9 @@ RS_MH6V3_fnc_startAh6CargoPrep = {
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
 	if (typeOf _vehicle != RS_MH6V3_AH6_CLASS) exitWith {};
+	if !([_caller] call RS_MH6V3_fnc_hasToolkit) exitWith {
+		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
+	};
 	if (_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false]) exitWith {};
 
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cancelFuelDrain", 2];
@@ -1163,6 +1188,7 @@ private _assembleAction = [
 			_params params ["_servicePos"];
 			[_target] call RS_MH6V3_fnc_canService
 			&& {typeOf _target == RS_MH6V3_MH6_CLASS}
+			&& {[_player] call RS_MH6V3_fnc_hasToolkit}
 			&& {_player distance (_target modelToWorld _servicePos) <= 2.5}
 		},
 		{},
@@ -1193,6 +1219,7 @@ private _assembleAction = [
 			_params params ["_servicePos"];
 			[_target] call RS_MH6V3_fnc_canService
 			&& {typeOf _target == RS_MH6V3_OH6_CLASS}
+			&& {[_player] call RS_MH6V3_fnc_hasToolkit}
 			&& {_player distance (_target modelToWorld _servicePos) <= 2.5}
 		},
 		{},
@@ -1222,6 +1249,7 @@ private _ah6PackageAction = [
 		[_target] call RS_MH6V3_fnc_canService
 		&& {typeOf _target == RS_MH6V3_AH6_CLASS}
 		&& {!(_target getVariable ["RS_MH6V3_removingAh6Armaments", false])}
+		&& {[_player] call RS_MH6V3_fnc_hasToolkit}
 		&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_AH6_PACKAGE_DISTANCE}
 	},
 	{},
@@ -1247,6 +1275,7 @@ private _ah6InstallAction = [
 		_params params ["_servicePos"];
 		[_target] call RS_MH6V3_fnc_canService
 		&& {typeOf _target == RS_MH6V3_OH6_CLASS}
+		&& {[_player] call RS_MH6V3_fnc_hasToolkit}
 		&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_AH6_PACKAGE_DISTANCE}
 	},
 	{},

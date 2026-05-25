@@ -474,6 +474,11 @@ class CfgVehicles
 		hideWeaponsCargo = 1;
 		threat[] = {0,0,0};
 		radarType = 0;
+		laserScanner = 1;
+		nvScanner = 1;
+		allowTabLock = 1;
+		showAllTargets = 6;
+		showCrewAim = 4;
 		irTarget = 1;
 		irTargetSize = 0.7;
 		visualTarget = 1;
@@ -1815,7 +1820,7 @@ class CfgVehicles
 				gunnerHasFlares = 1;
 				usepip = 1;
 				canUseScanners = 1;
-				allowTabLock = 0;
+				allowTabLock = 1;
 				class ViewGunner
 				{
 					minAngleX = -65;
@@ -1844,8 +1849,8 @@ class CfgVehicles
 						maxFov = 0.9;
 						visionMode[] = {"Normal","NVG","Ti"};
 						thermalMode[] = {0,1};
-						directionStabilized = 0;
-						horizontallyStabilized = 0;
+						directionStabilized = 1;
+						horizontallyStabilized = 1;
 						gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_wf.p3d";
 						opticsPPEffects[] = {"OpticsCHAbera3","OpticsBlur3"};
 						gunnerOpticsEffect[] = {"TankCommanderOptics2"};
@@ -1883,14 +1888,14 @@ class CfgVehicles
 					{
 						class AirTarget
 						{
-							minRange = 500;
+							minRange = 50;
 							maxRange = 4000;
 							objectDistanceLimitCoef = -1;
 							viewDistanceLimitCoef = 1;
 						};
 						class GroundTarget
 						{
-							minRange = 500;
+							minRange = 50;
 							maxRange = 3000;
 							objectDistanceLimitCoef = 1;
 							viewDistanceLimitCoef = 1;
@@ -1904,14 +1909,14 @@ class CfgVehicles
 					{
 						class AirTarget
 						{
-							minRange = 500;
+							minRange = 50;
 							maxRange = 4000;
 							objectDistanceLimitCoef = -1;
 							viewDistanceLimitCoef = 1;
 						};
 						class GroundTarget
 						{
-							minRange = 500;
+							minRange = 50;
 							maxRange = 3000;
 							objectDistanceLimitCoef = 1;
 							viewDistanceLimitCoef = 1;

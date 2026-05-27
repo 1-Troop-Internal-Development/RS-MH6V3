@@ -121,6 +121,109 @@ class CfgFunctions
 	};
 };
 
+class CfgUserActions
+{
+	class RS_MH6V3_toggleIZLID
+	{
+		displayName = "Toggle IZLID";
+		tooltip = "Toggle the AH-6M IZLID marking laser.";
+		onActivate = "[] call RS_MH6V3_fnc_toggleIZLID";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_holdIZLID
+	{
+		displayName = "Hold IZLID";
+		tooltip = "Keep the AH-6M IZLID on while this key is held.";
+		onActivate = "[true] call RS_MH6V3_fnc_holdIZLID";
+		onDeactivate = "[false] call RS_MH6V3_fnc_holdIZLID";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_toggleIZLIDMode
+	{
+		displayName = "Cycle IZLID Mode";
+		tooltip = "Cycle between IZLID output and wide, narrow, or dynamic illuminator cone modes.";
+		onActivate = "[] call RS_MH6V3_fnc_toggleIZLIDMode";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_quickLaunchHydra
+	{
+		displayName = "Quick Launch Hydra";
+		tooltip = "Fire one AH-6M Hydra without selecting rockets.";
+		onActivate = "[] call RS_MH6V3_fnc_quickLaunchHydra";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_toggleQuickFireArm
+	{
+		displayName = "Toggle Quick Fire Master Arm";
+		tooltip = "Arm or safe the AH-6M quick-fire Hydra key.";
+		onActivate = "[] call RS_MH6V3_fnc_toggleQuickFireArm";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_cycleACRERadioSelection
+	{
+		displayName = "Cycle Selected ACRE Radio";
+		tooltip = "Select the next Little Bird ACRE radio for volume controls.";
+		onActivate = "[1] call RS_MH6V3_fnc_cycleACRERadioSelection";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_increaseSelectedACRERadioVolume
+	{
+		displayName = "Increase Selected ACRE Radio Volume";
+		tooltip = "Increase the selected Little Bird ACRE radio volume.";
+		onActivate = "[0.25] call RS_MH6V3_fnc_adjustACRERadioVolume";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_decreaseSelectedACRERadioVolume
+	{
+		displayName = "Decrease Selected ACRE Radio Volume";
+		tooltip = "Decrease the selected Little Bird ACRE radio volume.";
+		onActivate = "[-0.25] call RS_MH6V3_fnc_adjustACRERadioVolume";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+};
+
+class UserActionGroups
+{
+	class RS_MH6V3
+	{
+		name = "[RS] MH-6V3";
+		group[] =
+		{
+			"RS_MH6V3_toggleIZLID",
+			"RS_MH6V3_holdIZLID",
+			"RS_MH6V3_toggleIZLIDMode",
+			"RS_MH6V3_quickLaunchHydra",
+			"RS_MH6V3_toggleQuickFireArm",
+			"RS_MH6V3_cycleACRERadioSelection",
+			"RS_MH6V3_increaseSelectedACRERadioVolume",
+			"RS_MH6V3_decreaseSelectedACRERadioVolume"
+		};
+	};
+};
+
 #include "ui.hpp"
 
 class CfgSounds

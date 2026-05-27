@@ -91,7 +91,7 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 [
 	"[RS] MH-6V3",
 	"RS_MH6V3_toggleIZLIDMode",
-	["[RS] Cycle IZLID Mode", "Cycle between IZLID output and wide, narrow, or dynamic illuminator cone modes."],
+	["Cycle IZLID Mode", "Cycle between IZLID output and wide, narrow, or dynamic illuminator cone modes."],
 	{
 		[] call RS_MH6V3_fnc_toggleIZLIDMode
 	},

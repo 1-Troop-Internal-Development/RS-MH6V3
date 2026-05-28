@@ -1,5 +1,3 @@
-if (!hasInterface) exitWith {};
-
 [
 	"RS_MH6V3_irIlluminatorBrightness",
 	"SLIDER",
@@ -19,6 +17,8 @@ if (!hasInterface) exitWith {};
 	{
 		params ["_enabled"];
 
+		if (!hasInterface) exitWith {};
+
 		uiNamespace setVariable ["RS_MH6V3_acreRadioStatusLayout", ""];
 		if (!_enabled && {!isNil "RS_MH6V3_acreStopRadioStatus"}) then {
 			[] call RS_MH6V3_acreStopRadioStatus;
@@ -37,6 +37,8 @@ if (!hasInterface) exitWith {};
 	[0, 1, 0.034, 3, false],
 	0,
 	{
+		if (!hasInterface) exitWith {};
+
 		uiNamespace setVariable ["RS_MH6V3_acreRadioStatusLayout", ""];
 	}
 ] call CBA_fnc_addSetting;
@@ -49,6 +51,8 @@ if (!hasInterface) exitWith {};
 	[0, 1, 0.535, 3, false],
 	0,
 	{
+		if (!hasInterface) exitWith {};
+
 		uiNamespace setVariable ["RS_MH6V3_acreRadioStatusLayout", ""];
 	}
 ] call CBA_fnc_addSetting;

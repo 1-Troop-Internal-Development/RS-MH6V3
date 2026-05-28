@@ -1971,7 +1971,7 @@ class CfgVehicles
 		{
 			class RHS_MELB_EH
 			{
-				init = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				init = "_this call RS_MH6V3_fnc_syncPylonOwner; params ['_vehicle']; if (_vehicle isKindOf 'RHS_MELB_AH6M') then {_vehicle animate ['Addcrosshair', 1, true]}";
 				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
 				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
 				engine = "params ['_vehicle', '_engineOn']; [_vehicle, _engineOn] call RS_MH6V3_fnc_handleIZLIDPowerState";

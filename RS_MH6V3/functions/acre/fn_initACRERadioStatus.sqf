@@ -42,7 +42,8 @@ if (!hasInterface) exitWith {};
 				["_speakingType", ""]
 			];
 			if (!(_unit isEqualTo player)) exitWith {};
-			if (!((_onRadio isEqualType true && {_onRadio}) || {_radioId isEqualType "" && {_radioId isNotEqualTo ""}})) exitWith {};
+			private _radioSpeech = (_onRadio isEqualType true && {_onRadio}) && {_radioId isEqualType ""} && {_radioId isNotEqualTo ""};
+			if (!_radioSpeech) exitWith {};
 
 			missionNamespace setVariable ["RS_MH6V3_acrePTTHeld", true];
 			missionNamespace setVariable ["RS_MH6V3_acreForceStatus", true];

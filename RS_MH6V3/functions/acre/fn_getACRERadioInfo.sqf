@@ -80,6 +80,14 @@ if !(_on isEqualType true) then {
 _info set ["on", _on];
 _info set ["monitoring", _on && {(_info get "channel") isNotEqualTo ""}];
 
+private _broadcasting = false;
+if (!isNil "acre_api_fnc_isBroadcasting") then {
+	_broadcasting = [player] call acre_api_fnc_isBroadcasting;
+	if (isNil "_broadcasting" || {!(_broadcasting isEqualType true)}) then {
+		_broadcasting = false;
+	};
+};
+
 if (!isNil "acre_sys_data_fnc_getScratchData") then {
 	private _currentTransmissions = [_radioId, "currentTransmissions", []] call acre_sys_data_fnc_getScratchData;
 	if (!isNil "_currentTransmissions" && {_currentTransmissions isEqualType []}) then {
@@ -88,22 +96,12 @@ if (!isNil "acre_sys_data_fnc_getScratchData") then {
 
 	private _pttDown = [_radioId, "PTTDown", false] call acre_sys_data_fnc_getScratchData;
 	if (!isNil "_pttDown" && {_pttDown isEqualType true}) then {
-		_info set ["ptt", _pttDown];
+		_info set ["ptt", _pttDown && {_broadcasting}];
 	};
 };
 
-if (!(_info get "ptt") && {!isNil "acre_api_fnc_isSpeaking"}) then {
-	private _speaking = [player] call acre_api_fnc_isSpeaking;
-	if (!isNil "_speaking" && {_speaking isEqualType true}) then {
-		_info set ["ptt", _isActiveRadio && {_speaking}];
-	};
-};
-
-if (!(_info get "ptt") && {_isActiveRadio} && {!isNil "acre_api_fnc_isBroadcasting"}) then {
-	private _broadcasting = [player] call acre_api_fnc_isBroadcasting;
-	if (!isNil "_broadcasting" && {_broadcasting isEqualType true}) then {
-		_info set ["ptt", _broadcasting];
-	};
+if (!(_info get "ptt") && {_isActiveRadio} && {_broadcasting}) then {
+	_info set ["ptt", true];
 };
 
 if (!(_info get "ptt") && {_isActiveRadio} && {missionNamespace getVariable ["RS_MH6V3_acrePTTHeld", false]}) then {

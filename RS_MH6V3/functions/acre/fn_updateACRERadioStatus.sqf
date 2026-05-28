@@ -15,6 +15,7 @@ if !(missionNamespace getVariable ["RS_MH6V3_acreStatusOverlayEnabled", true]) e
 };
 
 private _rowCache = uiNamespace getVariable ["RS_MH6V3_acreRadioStatusRows", createHashMap];
+private _infoCache = uiNamespace getVariable ["RS_MH6V3_acreRadioStatusInfoCache", createHashMap];
 private _setRow = {
 	params [
 		"_idc",
@@ -98,7 +99,10 @@ private _formatRadio = {
 		["_rackInUse", true]
 	];
 
-	private _info = [_radioId, _active] call RS_MH6V3_fnc_getACRERadioInfo;
+	private _info = _infoCache getOrDefault [_radioId, objNull];
+	if !(_info isEqualType createHashMap) then {
+		_info = [_radioId, _active] call RS_MH6V3_fnc_getACRERadioInfo;
+	};
 	private _channel = _info get "channel";
 	private _channelName = _info get "channelName";
 	private _suffix = "";
@@ -135,9 +139,18 @@ private _formatRadio = {
 	[format ["%1%2  %3%4", _selectedMarker, _info get "name", _channelText, _suffix], _color]
 };
 
-private _lists = [_vehicle] call RS_MH6V3_fnc_getACRERadioLists;
+private _lists = uiNamespace getVariable ["RS_MH6V3_acreRadioStatusListCache", createHashMap];
+if !(_lists isEqualType createHashMap) then {
+	_lists = [_vehicle] call RS_MH6V3_fnc_getACRERadioLists;
+};
 private _inventoryRadios = _lists get "inventory";
 private _rackRadios = _lists get "racks";
+if (isNil "_inventoryRadios" || {!(_inventoryRadios isEqualType [])}) then {
+	_inventoryRadios = [];
+};
+if (isNil "_rackRadios" || {!(_rackRadios isEqualType [])}) then {
+	_rackRadios = [];
+};
 private _accessibleRackRadios = if (isNil "ACRE_ACCESSIBLE_RACK_RADIOS") then {[]} else {+ACRE_ACCESSIBLE_RACK_RADIOS};
 private _hearableRackRadios = if (isNil "ACRE_HEARABLE_RACK_RADIOS") then {[]} else {+ACRE_HEARABLE_RACK_RADIOS};
 private _inUseRackRadios = _accessibleRackRadios + _hearableRackRadios;

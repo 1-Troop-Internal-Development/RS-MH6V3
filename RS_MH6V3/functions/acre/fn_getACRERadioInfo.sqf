@@ -17,15 +17,21 @@ private _info = createHashMapFromArray [
 
 if (_radioId isEqualTo "") exitWith {_info};
 
-private _name = _radioId;
-if (!isNil "acre_api_fnc_getDisplayName") then {
-	_name = [_radioId] call acre_api_fnc_getDisplayName;
-};
-if (isNil "_name") then {
+private _displayNameCache = uiNamespace getVariable ["RS_MH6V3_acreDisplayNameCache", createHashMap];
+private _name = _displayNameCache getOrDefault [_radioId, ""];
+if (_name isEqualTo "") then {
 	_name = _radioId;
-};
-if !(_name isEqualType "") then {
-	_name = str _name;
+	if (!isNil "acre_api_fnc_getDisplayName") then {
+		_name = [_radioId] call acre_api_fnc_getDisplayName;
+	};
+	if (isNil "_name") then {
+		_name = _radioId;
+	};
+	if !(_name isEqualType "") then {
+		_name = str _name;
+	};
+	_displayNameCache set [_radioId, _name];
+	uiNamespace setVariable ["RS_MH6V3_acreDisplayNameCache", _displayNameCache];
 };
 _info set ["name", _name];
 
@@ -56,9 +62,18 @@ if (_channelNumber > 0 && {!isNil "acre_api_fnc_getBaseRadio"} && {!isNil "acre_
 	if (!isNil "_baseRadio" && {_baseRadio isEqualType ""} && {_baseRadio isNotEqualTo ""}) then {
 		private _preset = [_baseRadio] call acre_api_fnc_getPreset;
 		if (!isNil "_preset" && {_preset isEqualType ""} && {_preset isNotEqualTo ""}) then {
-			private _channelName = [_baseRadio, _preset, _channelNumber, "label"] call acre_api_fnc_getPresetChannelField;
-			if (isNil "_channelName" || {!(_channelName isEqualType "")} || {_channelName isEqualTo ""}) then {
-				_channelName = [_baseRadio, _preset, _channelNumber, "description"] call acre_api_fnc_getPresetChannelField;
+			private _channelNameCache = uiNamespace getVariable ["RS_MH6V3_acreChannelNameCache", createHashMap];
+			private _channelNameKey = format ["%1|%2|%3", _baseRadio, _preset, _channelNumber];
+			private _channelName = _channelNameCache getOrDefault [_channelNameKey, ""];
+			if (_channelName isEqualTo "") then {
+				_channelName = [_baseRadio, _preset, _channelNumber, "label"] call acre_api_fnc_getPresetChannelField;
+				if (isNil "_channelName" || {!(_channelName isEqualType "")} || {_channelName isEqualTo ""}) then {
+					_channelName = [_baseRadio, _preset, _channelNumber, "description"] call acre_api_fnc_getPresetChannelField;
+				};
+				if (!isNil "_channelName" && {_channelName isEqualType ""} && {_channelName isNotEqualTo ""}) then {
+					_channelNameCache set [_channelNameKey, _channelName];
+					uiNamespace setVariable ["RS_MH6V3_acreChannelNameCache", _channelNameCache];
+				};
 			};
 			if (!isNil "_channelName" && {_channelName isEqualType ""} && {_channelName isNotEqualTo ""}) then {
 				_info set ["channelName", _channelName];

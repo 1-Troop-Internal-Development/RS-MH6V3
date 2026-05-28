@@ -38,10 +38,13 @@ lbClear _radioCombo;
 private _addRadioRow = {
 	params [
 		"_list",
-		"_radioId"
+		"_radioId",
+		["_info", objNull]
 	];
 
-	private _info = [_radioId, false] call RS_MH6V3_fnc_getACRERadioInfo;
+	if !(_info isEqualType createHashMap) then {
+		_info = [_radioId, false] call RS_MH6V3_fnc_getACRERadioInfo;
+	};
 	private _channel = _info get "channel";
 	private _on = ["OFF", "ON"] select (_info get "on");
 	private _selectedMarker = ["", "* "] select (_radioId isEqualTo (missionNamespace getVariable ["RS_MH6V3_acreSelectedRadioId", ""]));
@@ -189,8 +192,8 @@ if !(_selectedRadioId in _radios) then {
 missionNamespace setVariable ["RS_MH6V3_acreSelectedRadioId", _selectedRadioId];
 
 {
-	[_myInventoryList, _x] call _addRadioRow;
 	private _info = [_x, false] call RS_MH6V3_fnc_getACRERadioInfo;
+	[_myInventoryList, _x, _info] call _addRadioRow;
 	private _selectedMarker = ["", "* "] select (_x isEqualTo _selectedRadioId);
 	private _idx = _radioCombo lbAdd format ["%1INV | %2 | %3", _selectedMarker, _info get "name", _info get "channel"];
 	_radioCombo lbSetData [_idx, _x];
@@ -198,8 +201,8 @@ missionNamespace setVariable ["RS_MH6V3_acreSelectedRadioId", _selectedRadioId];
 } forEach _inventory;
 
 {
-	[_myRackList, _x] call _addRadioRow;
 	private _info = [_x, false] call RS_MH6V3_fnc_getACRERadioInfo;
+	[_myRackList, _x, _info] call _addRadioRow;
 	private _selectedMarker = ["", "* "] select (_x isEqualTo _selectedRadioId);
 	private _idx = _radioCombo lbAdd format ["%1RACK | %2 | %3", _selectedMarker, _info get "name", _info get "channel"];
 	_radioCombo lbSetData [_idx, _x];
@@ -241,7 +244,12 @@ if (!isNull _otherUnit && {isPlayer _otherUnit}) then {
 		_otherRows = _snapshot;
 	};
 	if (_requestOtherSeat) then {
-		[player, _vehicle] remoteExecCall ["RS_MH6V3_fnc_publishACRERadioSnapshot", owner _otherUnit];
+		private _requestKey = format ["RS_MH6V3_acreSnapshotRequest_%1", getPlayerUID _otherUnit];
+		private _lastRequest = uiNamespace getVariable [_requestKey, 0];
+		if ((diag_tickTime - _lastRequest) > 1) then {
+			uiNamespace setVariable [_requestKey, diag_tickTime];
+			[player, _vehicle] remoteExecCall ["RS_MH6V3_fnc_publishACRERadioSnapshot", owner _otherUnit];
+		};
 	};
 } else {
 	_otherTuneOwner = 2;

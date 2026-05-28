@@ -6,7 +6,8 @@ params [
 if (!hasInterface) exitWith {};
 if (isNull _requester || {!isPlayer _requester}) exitWith {};
 if (isNull _vehicle || {!alive _vehicle}) exitWith {};
-if !(player in [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]]) exitWith {};
+private _crew = [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]];
+if (!(player in _crew) || {!(_requester in _crew)}) exitWith {};
 
 private _inventoryRows = [];
 private _rackRows = [];

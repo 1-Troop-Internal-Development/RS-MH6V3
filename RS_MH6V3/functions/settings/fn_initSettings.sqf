@@ -30,6 +30,22 @@
 ] call CBA_fnc_addSetting;
 
 [
+	"RS_MH6V3_acreStatusOverlayDelayedHide",
+	"CHECKBOX",
+	["[RS] ACRE Status UI Delayed Hide", "Keep the ACRE radio status overlay visible briefly after radio use stops. Disable for instant hide."],
+	["[RS] MH-6V3", "ACRE"],
+	true,
+	0,
+	{
+		if (!hasInterface) exitWith {};
+
+		if (!isNil "RS_MH6V3_acreStartRadioStatus") then {
+			[] call RS_MH6V3_acreStartRadioStatus;
+		};
+	}
+] call CBA_fnc_addSetting;
+
+[
 	"RS_MH6V3_acreStatusOverlayX",
 	"SLIDER",
 	["[RS] ACRE Status UI X", "Client-side horizontal position of the ACRE radio status overlay."],

@@ -32,8 +32,12 @@ if (_channel < 1) exitWith {
 if (_radioOwner isEqualTo 1) exitWith {
 	private _vehicle = uiNamespace getVariable ["RS_MH6V3_acreProgrammerVehicle", vehicle player];
 	private _otherUnit = uiNamespace getVariable ["RS_MH6V3_acreProgrammerOtherUnit", objNull];
+	private _crew = [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]];
 	if (isNull _otherUnit || {!isPlayer _otherUnit}) exitWith {
 		systemChat "RS MH-6V3: other seat radio owner is unavailable.";
+	};
+	if (isNull _vehicle || {!alive _vehicle} || {!(_vehicle isKindOf "RHS_MELB_AH6M")} || {!(player in _crew)} || {!(_otherUnit in _crew)}) exitWith {
+		systemChat "RS MH-6V3: other seat radio owner is no longer in this aircraft.";
 	};
 
 	[player, _vehicle, _radioId, _channel] remoteExecCall ["RS_MH6V3_fnc_applyACRERadioTune", owner _otherUnit];

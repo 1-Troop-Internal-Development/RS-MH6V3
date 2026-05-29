@@ -554,6 +554,7 @@ RS_MH6V3_fnc_breakRotorsForCargo = {
 	private _damageAllowed = isDamageAllowed _bird;
 	_bird allowDamage true;
 	_bird setVariable ["RS_MH6V3_rotorsAssembled", false, true];
+	_bird setVariable ["SOAR_LB_rotorsAssembled", false, true];
 	[_bird, 1] call RS_MH6V3_fnc_applyRotorDamageGlobal;
 	_bird allowDamage _damageAllowed;
 };
@@ -598,6 +599,7 @@ RS_MH6V3_fnc_assembleRotors = {
 	[_vehicle, 0] call RS_MH6V3_fnc_applyRotorDamageGlobal;
 	_vehicle allowDamage _damageAllowed;
 	_vehicle setVariable ["RS_MH6V3_rotorsAssembled", true, true];
+	_vehicle setVariable ["SOAR_LB_rotorsAssembled", true, true];
 	_vehicle setVariable ["RS_MH6V3_assemblingRotors", false, true];
 
 	[format ["RS MH-6V3: rotors assembled on %1.", typeOf _vehicle], _vehicle] call RS_MH6V3_fnc_notifyAircrew;
@@ -710,6 +712,7 @@ RS_MH6V3_fnc_convertVariant = {
 	_newVehicle setFuel _fuel;
 	_newVehicle setDamage _damage;
 	_newVehicle setVariable ["RS_MH6V3_rotorsAssembled", _rotorsAssembled, true];
+	_newVehicle setVariable ["SOAR_LB_rotorsAssembled", _rotorsAssembled, true];
 	_newVehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
 	_newVehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
 	_newVehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
@@ -1147,10 +1150,67 @@ private _assembleAction = [
 	2.5
 ] call ace_interact_menu_fnc_createAction;
 
+private _pushAwayAction = [
+	"RS_MH6V3_push_away_c130",
+	"Push Away from C-130",
+	"",
+	{
+		params ["_target"];
+		[_target, player] call SOAR_fnc_lbStartPushAway;
+	},
+	{
+		params ["_target"];
+		!isNil "SOAR_fnc_lbStartPushAway"
+		&& {!isNil "SOAR_fnc_lbNearestC130"}
+		&& {alive _target}
+		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
+		&& {crew _target isEqualTo []}
+		&& {isNull attachedTo _target}
+		&& {!(_target getVariable ["SOAR_LB_pushing", false])}
+		&& {!isNull ([_target] call SOAR_fnc_lbNearestC130)}
+	}
+] call ace_interact_menu_fnc_createAction;
+
+private _pushTowardAction = [
+	"RS_MH6V3_push_toward_c130",
+	"Push Toward C-130",
+	"",
+	{
+		params ["_target"];
+		[_target, player] call SOAR_fnc_lbStartPushToward;
+	},
+	{
+		params ["_target"];
+		if (
+			isNil "SOAR_fnc_lbStartPushToward"
+			|| {isNil "SOAR_fnc_lbNearestC130"}
+			|| {isNil "SOAR_LB_REAR_DETECT_OFFSET"}
+		) exitWith {false};
+
+		private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
+		private _c130 = [_target, _searchRadius] call SOAR_fnc_lbNearestC130;
+		private _vehicleModelPos = if (isNull _c130) then {[0, 999, 0]} else {_c130 worldToModel (getPosWorld _target)};
+
+		alive _target
+		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
+		&& {crew _target isEqualTo []}
+		&& {isNull attachedTo _target}
+		&& {isTouchingGround _target}
+		&& {abs speed _target < 1}
+		&& {!(_target getVariable ["SOAR_LB_pushing", false])}
+		&& {!isNull _c130}
+		&& {isTouchingGround _c130}
+		&& {abs speed _c130 < 1}
+		&& {(_vehicleModelPos # 1) <= (SOAR_LB_REAR_DETECT_OFFSET # 1)}
+	}
+] call ace_interact_menu_fnc_createAction;
+
 {
 	[_x, 0, ["ACE_MainActions"], _rootAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, [], _disassembleAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, [], _assembleAction, true] call ace_interact_menu_fnc_addActionToClass;
+	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _pushAwayAction, true] call ace_interact_menu_fnc_addActionToClass;
+	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _pushTowardAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _drainFuel25Action, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _drainFuelEmptyAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _stopDrainFuelAction, true] call ace_interact_menu_fnc_addActionToClass;

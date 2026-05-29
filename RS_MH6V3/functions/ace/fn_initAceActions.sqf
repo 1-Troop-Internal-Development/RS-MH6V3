@@ -20,6 +20,9 @@ RS_MH6V3_MH6_PACKAGE_POSITIONS = [
 RS_MH6V3_AH6_PACKAGE_POSITION = [-0.0869141, 0.72403, -0.607061];
 RS_MH6V3_AH6_PACKAGE_DISTANCE = 3.25;
 RS_MH6V3_AMMO_SUPPORT_RADIUS = 25;
+RS_MH6V3_C130_CLASS = "USAF_C130J_Cargo";
+RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS = 40;
+RS_MH6V3_SAFE_SPAWN_HEIGHT = 25;
 
 RS_MH6V3_fnc_notifyAircrew = {
 	params [
@@ -383,13 +386,14 @@ RS_MH6V3_fnc_isAmmoSupportVehicle = {
 	params ["_source"];
 
 	if (isNull _source || {!alive _source}) exitWith {false};
-	if !(_source isKindOf "LandVehicle") exitWith {false};
 
 	private _cfg = configFile >> "CfgVehicles" >> typeOf _source;
 	private _currentSupply = _source getVariable ["ace_rearm_currentSupply", 0];
 	private _supply = _source getVariable ["ace_rearm_supply", 0];
 
-	(getNumber (_cfg >> "transportAmmo")) > 0
+	_source isKindOf "LandVehicle"
+	&& {(getNumber (_cfg >> "transportAmmo")) > 0}
+	|| {_source isKindOf "ReammoBox_F"}
 	|| {(getNumber (_cfg >> "ace_rearm_defaultSupply")) > 0}
 	|| {_source getVariable ["ace_rearm_isSupplyVehicle", false]}
 	|| {_currentSupply isEqualType 0 && {_currentSupply > 0}}
@@ -401,11 +405,65 @@ RS_MH6V3_fnc_isNearAmmoSupport = {
 
 	if (isNull _vehicle) exitWith {false};
 
-	private _sources = (nearestObjects [_vehicle, ["LandVehicle"], RS_MH6V3_AMMO_SUPPORT_RADIUS]) select {
+	private _supportClasses = ["LandVehicle", "ReammoBox_F"];
+	if (isClass (configFile >> "CfgVehicles" >> "AmmoCrates_NoInteractive_Large")) then {
+		_supportClasses pushBackUnique "AmmoCrates_NoInteractive_Large";
+	};
+
+	private _sources = (nearestObjects [_vehicle, _supportClasses, RS_MH6V3_AMMO_SUPPORT_RADIUS]) select {
 		_x != _vehicle && {[_x] call RS_MH6V3_fnc_isAmmoSupportVehicle}
 	};
 
 	!(_sources isEqualTo [])
+};
+
+RS_MH6V3_fnc_nearestC130 = {
+	params [
+		"_vehicle",
+		["_radius", RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS]
+	];
+
+	private _c130s = vehicles select {
+		alive _x
+		&& {typeOf _x == RS_MH6V3_C130_CLASS}
+		&& {_x distance _vehicle <= _radius}
+	};
+
+	if (_c130s isEqualTo []) exitWith {objNull};
+
+	([_c130s, [], {_x distance _vehicle}, "ASCEND"] call BIS_fnc_sortBy) # 0
+};
+
+RS_MH6V3_fnc_protectC130ForModelChange = {
+	params ["_c130"];
+
+	if (isNull _c130 || {!alive _c130}) exitWith {};
+
+	private _count = _c130 getVariable ["RS_LB_C130ModelChangeProtectionCount", 0];
+	if (_count <= 0) then {
+		_c130 setVariable ["RS_LB_C130ModelChangeDamageAllowed", isDamageAllowed _c130, false];
+		_c130 setVariable ["RS_LB_C130ModelChangeSimulationEnabled", simulationEnabled _c130, false];
+		_c130 allowDamage false;
+		_c130 enableSimulationGlobal false;
+	};
+
+	_c130 setVariable ["RS_LB_C130ModelChangeProtectionCount", _count + 1, true];
+};
+
+RS_MH6V3_fnc_restoreC130AfterModelChange = {
+	params ["_c130"];
+
+	if (isNull _c130) exitWith {};
+
+	private _count = (_c130 getVariable ["RS_LB_C130ModelChangeProtectionCount", 0]) - 1;
+	_c130 setVariable ["RS_LB_C130ModelChangeProtectionCount", 0 max _count, true];
+
+	if (_count > 0) exitWith {};
+
+	_c130 enableSimulationGlobal (_c130 getVariable ["RS_LB_C130ModelChangeSimulationEnabled", true]);
+	_c130 allowDamage (_c130 getVariable ["RS_LB_C130ModelChangeDamageAllowed", true]);
+	_c130 setVariable ["RS_LB_C130ModelChangeSimulationEnabled", nil, false];
+	_c130 setVariable ["RS_LB_C130ModelChangeDamageAllowed", nil, false];
 };
 
 RS_MH6V3_fnc_clearPylonAmmo = {
@@ -533,42 +591,16 @@ RS_MH6V3_fnc_assembleRotors = {
 
 	_vehicle setVariable ["RS_MH6V3_assemblingRotors", true, true];
 
-	private _className = typeOf _vehicle;
-	private _pos = getPosWorld _vehicle;
-	private _dir = getDir _vehicle;
-	private _vectorUp = vectorUp _vehicle;
-	private _fuel = fuel _vehicle;
-	private _texture = (_vehicle getVariable ["RS_MH6V3_liveryTexture", ""]);
-
 	[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
-	deleteVehicle _vehicle;
 
-	private _newVehicle = createVehicle [_className, [0, 0, 1000], [], 0, "CAN_COLLIDE"];
-	_newVehicle setPosWorld _pos;
-	_newVehicle setDir _dir;
-	_newVehicle setVectorUp _vectorUp;
-	_newVehicle setFuel _fuel;
-	_newVehicle setDamage 0;
-	_newVehicle setVariable ["RS_MH6V3_rotorsAssembled", true, true];
-	_newVehicle setVariable ["RS_MH6V3_assemblingRotors", false, true];
-	_newVehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
-	_newVehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
-	_newVehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
-	_newVehicle setVariable ["RS_MH6V3_quickFireArmed", false, true];
-	_newVehicle setVariable ["RS_MH6V3_izlidEnabled", false, true];
-	_newVehicle setVariable ["RS_MH6V3_izlidMode", 3, true];
-	_newVehicle setVariable ["RS_MH6V3_izlidConeMode", 1, true];
-	_newVehicle setVariable ["RS_MH6V3_izlidConeTriggerNarrow", false, true];
-	_newVehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessPercent", 100, true];
-	_newVehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessActive", nil, true];
-	_newVehicle setVariable ["RS_MH6V3_activeCopilot", objNull, true];
+	private _damageAllowed = isDamageAllowed _vehicle;
+	_vehicle allowDamage true;
+	[_vehicle, 0] call RS_MH6V3_fnc_applyRotorDamageGlobal;
+	_vehicle allowDamage _damageAllowed;
+	_vehicle setVariable ["RS_MH6V3_rotorsAssembled", true, true];
+	_vehicle setVariable ["RS_MH6V3_assemblingRotors", false, true];
 
-	if (_texture != "") then {
-		_newVehicle setObjectTextureGlobal [0, _texture];
-		_newVehicle setVariable ["RS_MH6V3_liveryTexture", _texture, true];
-	};
-
-	[format ["RS MH-6V3: rotors assembled on %1.", _className], _newVehicle] call RS_MH6V3_fnc_notifyAircrew;
+	[format ["RS MH-6V3: rotors assembled on %1.", typeOf _vehicle], _vehicle] call RS_MH6V3_fnc_notifyAircrew;
 };
 
 RS_MH6V3_fnc_startAssembleRotors = {
@@ -653,7 +685,7 @@ RS_MH6V3_fnc_convertVariant = {
 	private _terrainPos = getPosATL _vehicle;
 	_terrainPos set [2, 0];
 	private _terrainLiftPos = +_terrainPos;
-	_terrainLiftPos set [2, 1];
+	_terrainLiftPos set [2, RS_MH6V3_SAFE_SPAWN_HEIGHT];
 	private _dir = getDir _vehicle;
 	private _terrainUp = surfaceNormal _terrainPos;
 	private _fuel = fuel _vehicle;
@@ -661,8 +693,12 @@ RS_MH6V3_fnc_convertVariant = {
 	private _damageAllowed = isDamageAllowed _vehicle;
 	private _rotorsAssembled = _vehicle getVariable ["RS_MH6V3_rotorsAssembled", true];
 	private _texture = _vehicle getVariable ["RS_MH6V3_liveryTexture", ""];
+	private _protectedC130 = [_vehicle] call RS_MH6V3_fnc_nearestC130;
 
 	[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
+	if (!isNull _protectedC130) then {
+		[_protectedC130] call RS_MH6V3_fnc_protectC130ForModelChange;
+	};
 	deleteVehicle _vehicle;
 
 	private _newVehicle = createVehicle [_newClass, [0, 0, 1000], [], 0, "CAN_COLLIDE"];
@@ -707,13 +743,14 @@ RS_MH6V3_fnc_convertVariant = {
 		[_newVehicle] call RS_MH6V3_fnc_breakRotorsForCargo;
 	};
 
-	[_newVehicle, _terrainPos, _dir, _terrainUp, _damageAllowed] spawn {
+	[_newVehicle, _terrainPos, _dir, _terrainUp, _damageAllowed, _protectedC130] spawn {
 		params [
 			"_newVehicle",
 			"_terrainPos",
 			"_dir",
 			"_terrainUp",
-			"_damageAllowed"
+			"_damageAllowed",
+			["_protectedC130", objNull]
 		];
 
 		sleep 0.05;
@@ -728,6 +765,10 @@ RS_MH6V3_fnc_convertVariant = {
 		if (!isNull _newVehicle && {alive _newVehicle}) then {
 			_newVehicle setVelocity [0, 0, 0];
 			_newVehicle allowDamage _damageAllowed;
+		};
+
+		if (!isNull _protectedC130) then {
+			[_protectedC130] call RS_MH6V3_fnc_restoreC130AfterModelChange;
 		};
 	};
 

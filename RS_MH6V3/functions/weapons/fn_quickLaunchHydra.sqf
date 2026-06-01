@@ -28,6 +28,7 @@ private _lastFire = _vehicle getVariable ["RS_MH6V3_quickHydraLastFire", -1];
 if (time - _lastFire < 0.15) exitWith {false};
 
 private _hydraWeapons = [
+	"RS_MH6V3_weap_FFARLauncher_HEAT",
 	"rhs_weap_FFARLauncher",
 	"rhs_weap_FFARLauncher_M229",
 	"rhs_weap_FFARLauncher_M257",
@@ -81,6 +82,10 @@ private _findHydraWeaponFromMagazine = {
 	};
 
 	if (_weapon == "") then {
+		if ((_magazineLower find "heat") >= 0) then {
+			_weapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
+		};
+
 		if (
 			(_magazineLower find "m151") >= 0
 			|| {(_magazineLower find "ffar") >= 0}

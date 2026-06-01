@@ -158,6 +158,10 @@ RS_MH6V3_fnc_serviceSoundLocalStart = {
 			"_fxId"
 		];
 
+		private _soundHost = if (isNull _vehicle) then {_unit} else {_vehicle};
+		if (_soundHost getVariable ["RS_LB_serviceSoundLoopLocal", false]) exitWith {};
+		_soundHost setVariable ["RS_LB_serviceSoundLoopLocal", true];
+
 		private _endTime = time + _duration;
 
 		while {
@@ -174,6 +178,10 @@ RS_MH6V3_fnc_serviceSoundLocalStart = {
 
 			playSound3D [RS_MH6V3_SERVICE_SOUND, objNull, false, _soundPos, 2, 1, 35];
 			sleep RS_MH6V3_SERVICE_SOUND_INTERVAL;
+		};
+
+		if (!isNull _soundHost) then {
+			_soundHost setVariable ["RS_LB_serviceSoundLoopLocal", false];
 		};
 	};
 };
@@ -224,21 +232,21 @@ RS_MH6V3_fnc_fuelDrainSoundLocal = {
 
 	if !(hasInterface) exitWith {};
 	if (isNull _vehicle) exitWith {};
-	if (_vehicle getVariable ["RS_MH6V3_fuelDrainSoundLoopLocal", false]) exitWith {};
+	if (_vehicle getVariable ["RS_LB_fuelDrainSoundLoopLocal", false]) exitWith {};
 
-	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundLoopLocal", true];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundLoopLocal", true];
 
 	[_vehicle] spawn {
 		params ["_vehicle"];
 
 		private _soundSource = "Land_HelipadEmpty_F" createVehicleLocal [0, 0, 0];
 		_soundSource attachTo [_vehicle, [0, 0, 0]];
-		_vehicle setVariable ["RS_MH6V3_fuelDrainSoundSourceLocal", _soundSource];
+		_vehicle setVariable ["RS_LB_fuelDrainSoundSourceLocal", _soundSource];
 
 		while {
 			!isNull _vehicle
 			&& {alive _vehicle}
-			&& {_vehicle getVariable ["RS_MH6V3_fuelDrainSoundActive", false]}
+			&& {_vehicle getVariable ["RS_LB_fuelDrainSoundActive", false]}
 			&& {!isNull _soundSource}
 		} do {
 			[_soundSource] call RS_MH6V3_fnc_playFuelDrainSound;
@@ -247,7 +255,7 @@ RS_MH6V3_fnc_fuelDrainSoundLocal = {
 			waitUntil {
 				sleep 0.1;
 				time >= _sleepUntil
-				|| {!(_vehicle getVariable ["RS_MH6V3_fuelDrainSoundActive", false])}
+				|| {!(_vehicle getVariable ["RS_LB_fuelDrainSoundActive", false])}
 				|| {isNull _vehicle}
 				|| {!alive _vehicle}
 				|| {isNull _soundSource}
@@ -260,8 +268,8 @@ RS_MH6V3_fnc_fuelDrainSoundLocal = {
 		};
 
 		if (!isNull _vehicle) then {
-			_vehicle setVariable ["RS_MH6V3_fuelDrainSoundSourceLocal", objNull];
-			_vehicle setVariable ["RS_MH6V3_fuelDrainSoundLoopLocal", false];
+			_vehicle setVariable ["RS_LB_fuelDrainSoundSourceLocal", objNull];
+			_vehicle setVariable ["RS_LB_fuelDrainSoundLoopLocal", false];
 		};
 	};
 };
@@ -273,8 +281,9 @@ RS_MH6V3_fnc_fuelDrainSoundStopLocal = {
 	if (isNull _vehicle) exitWith {};
 
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false];
 
-	private _soundSource = _vehicle getVariable ["RS_MH6V3_fuelDrainSoundSourceLocal", objNull];
+	private _soundSource = _vehicle getVariable ["RS_LB_fuelDrainSoundSourceLocal", objNull];
 	if (!isNull _soundSource) then {
 		detach _soundSource;
 		deleteVehicle _soundSource;
@@ -289,10 +298,11 @@ RS_MH6V3_fnc_cancelFuelDrain = {
 	_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", true, true];
 	_vehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundStopLocal", 0];
 };
 
-RS_MH6V3_fnc_drainFuel = {
+RS_MH6V3_fnc_drainFuelLocal = {
 	params [
 		"_vehicle",
 		"_targetFuel",
@@ -300,19 +310,10 @@ RS_MH6V3_fnc_drainFuel = {
 		["_duration", RS_MH6V3_DRAIN_FUEL_TIME]
 	];
 
-	if (!isServer) exitWith {
-		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuel", 2];
-	};
-
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
-	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
-	if (_vehicle getVariable ["RS_MH6V3_drainingFuel", false]) exitWith {};
-	if ((fuel _vehicle) <= _targetFuel) exitWith {};
-
-	_vehicle setVariable ["RS_MH6V3_drainingFuel", true, true];
-	_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
-	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", true, true];
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundLocal", 0];
+	if (!local _vehicle) exitWith {
+		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuelLocal", owner _vehicle];
+	};
 
 	[_vehicle, _targetFuel, _caller, _duration] spawn {
 		params [
@@ -345,8 +346,39 @@ RS_MH6V3_fnc_drainFuel = {
 			_vehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
 			_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
 			_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
+			_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
 			[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundStopLocal", 0];
 		};
+	};
+};
+
+RS_MH6V3_fnc_drainFuel = {
+	params [
+		"_vehicle",
+		"_targetFuel",
+		["_caller", objNull],
+		["_duration", RS_MH6V3_DRAIN_FUEL_TIME]
+	];
+
+	if (!isServer) exitWith {
+		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuel", 2];
+	};
+
+	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
+	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
+	if (_vehicle getVariable ["RS_MH6V3_drainingFuel", false]) exitWith {};
+	if ((fuel _vehicle) <= _targetFuel) exitWith {};
+
+	_vehicle setVariable ["RS_MH6V3_drainingFuel", true, true];
+	_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
+	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", true, true];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", true, true];
+	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundLocal", 0];
+
+	if (local _vehicle) then {
+		[_vehicle, _targetFuel, _caller, _duration] call RS_MH6V3_fnc_drainFuelLocal;
+	} else {
+		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuelLocal", owner _vehicle];
 	};
 };
 
@@ -378,6 +410,7 @@ RS_MH6V3_fnc_stopDrainFuel = {
 
 	_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", true, true];
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
 	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundStopLocal", 0];
 	["RS MH-6V3: fuel drain stopped.", _vehicle] call RS_MH6V3_fnc_notifyAircrew;
 };
@@ -716,6 +749,7 @@ RS_MH6V3_fnc_convertVariant = {
 	_newVehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
 	_newVehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
 	_newVehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
+	_newVehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
 	_newVehicle setVariable ["RS_MH6V3_quickFireArmed", false, true];
 	_newVehicle setVariable ["RS_MH6V3_izlidEnabled", false, true];
 	_newVehicle setVariable ["RS_MH6V3_izlidMode", 3, true];
@@ -1150,46 +1184,23 @@ private _assembleAction = [
 	2.5
 ] call ace_interact_menu_fnc_createAction;
 
-private _pushAwayAction = [
-	"RS_MH6V3_push_away_c130",
-	"Push Away from C-130",
+private _pushPlacementAction = [
+	"RS_MH6V3_push_place_c130",
+	"Position Near C-130",
 	"",
 	{
 		params ["_target"];
-		[_target, player] call SOAR_fnc_lbStartPushAway;
-	},
-	{
-		params ["_target"];
-		!isNil "SOAR_fnc_lbStartPushAway"
-		&& {!isNil "SOAR_fnc_lbNearestC130"}
-		&& {alive _target}
-		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
-		&& {crew _target isEqualTo []}
-		&& {isNull attachedTo _target}
-		&& {!(_target getVariable ["SOAR_LB_pushing", false])}
-		&& {!isNull ([_target] call SOAR_fnc_lbNearestC130)}
-	}
-] call ace_interact_menu_fnc_createAction;
-
-private _pushTowardAction = [
-	"RS_MH6V3_push_toward_c130",
-	"Push Toward C-130",
-	"",
-	{
-		params ["_target"];
-		[_target, player] call SOAR_fnc_lbStartPushToward;
+		[_target, player] call SOAR_fnc_lbStartPushPlacementPreview;
 	},
 	{
 		params ["_target"];
 		if (
-			isNil "SOAR_fnc_lbStartPushToward"
+			isNil "SOAR_fnc_lbStartPushPlacementPreview"
 			|| {isNil "SOAR_fnc_lbNearestC130"}
-			|| {isNil "SOAR_LB_REAR_DETECT_OFFSET"}
 		) exitWith {false};
 
 		private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
 		private _c130 = [_target, _searchRadius] call SOAR_fnc_lbNearestC130;
-		private _vehicleModelPos = if (isNull _c130) then {[0, 999, 0]} else {_c130 worldToModel (getPosWorld _target)};
 
 		alive _target
 		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
@@ -1201,7 +1212,6 @@ private _pushTowardAction = [
 		&& {!isNull _c130}
 		&& {isTouchingGround _c130}
 		&& {abs speed _c130 < 1}
-		&& {(_vehicleModelPos # 1) <= (SOAR_LB_REAR_DETECT_OFFSET # 1)}
 	}
 ] call ace_interact_menu_fnc_createAction;
 
@@ -1209,8 +1219,7 @@ private _pushTowardAction = [
 	[_x, 0, ["ACE_MainActions"], _rootAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, [], _disassembleAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, [], _assembleAction, true] call ace_interact_menu_fnc_addActionToClass;
-	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _pushAwayAction, true] call ace_interact_menu_fnc_addActionToClass;
-	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _pushTowardAction, true] call ace_interact_menu_fnc_addActionToClass;
+	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _pushPlacementAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _drainFuel25Action, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _drainFuelEmptyAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _stopDrainFuelAction, true] call ace_interact_menu_fnc_addActionToClass;

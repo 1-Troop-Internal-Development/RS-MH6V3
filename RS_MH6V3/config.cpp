@@ -270,6 +270,7 @@ class RHS_Effects_Helicopter_Hull_Destruction;
 class cfgAmmo
 {
 	class B_127x99_SLAP;
+	class rhs_ammo_Hydra_M151;
 	class rhs_ammo_127x99_SLAP: B_127x99_SLAP
 	{
 		hit = 15;
@@ -291,10 +292,22 @@ class cfgAmmo
 			distance = 1;
 		};
 	};
+	class RS_MH6V3_ammo_Hydra_HEAT: rhs_ammo_Hydra_M151
+	{
+		hit = 375;
+		indirectHit = 32;
+		indirectHitRange = 3;
+		caliber = 18;
+		explosive = 0.65;
+		warheadName = "HEAT";
+		typicalSpeed = 740;
+	};
 };
 class cfgMagazines
 {
 	class 5000Rnd_762x51_Belt;
+	class rhs_mag_M151_7;
+	class rhs_mag_M151_19;
 	class RHS_FakeMagazine_MELB: 5000Rnd_762x51_Belt
 	{
 		count = 0;
@@ -303,6 +316,24 @@ class cfgMagazines
 		descriptionShort = "-";
 		tracersEvery = 0;
 		weight = 0;
+	};
+	class RS_MH6V3_mag_Hydra_HEAT_7: rhs_mag_M151_7
+	{
+		displayName = "M247 HEAT Hydra (M260)";
+		displayNameShort = "M247 HEAT";
+		descriptionShort = "7-round M260 pod with RS MH-6V3 HEAT Hydra rockets. Reduced fragmentation radius with high direct-hit anti-armor damage.";
+		ammo = "RS_MH6V3_ammo_Hydra_HEAT";
+		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
+		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
+	};
+	class RS_MH6V3_mag_Hydra_HEAT_19: rhs_mag_M151_19
+	{
+		displayName = "M247 HEAT Hydra (M261)";
+		displayNameShort = "M247 HEAT";
+		descriptionShort = "19-round M261 pod with RS MH-6V3 HEAT Hydra rockets. Reduced fragmentation radius with high direct-hit anti-armor damage.";
+		ammo = "RS_MH6V3_ammo_Hydra_HEAT";
+		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
+		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
 	};
 };
 class cfgWeapons
@@ -378,6 +409,15 @@ class cfgWeapons
 			displayName = "2";
 			salvo = 2;
 			burst = 1;
+		};
+	};
+	class RS_MH6V3_weap_FFARLauncher_HEAT: rhs_weap_FFARLauncher
+	{
+		displayName = "Hydra (M247 HEAT)";
+		magazines[] =
+		{
+			"RS_MH6V3_mag_Hydra_HEAT_7",
+			"RS_MH6V3_mag_Hydra_HEAT_19"
 		};
 	};
 	class rhs_weap_FFARLauncher_M229: rhs_weap_FFARLauncher
@@ -2220,6 +2260,11 @@ class CfgVehicles
 					{
 						attachment[] = {"rhsusf_mag_gau19_melb_left","","","rhs_mag_M151_19"};
 						displayname = "Medium";
+					};
+					class HEAT
+					{
+						attachment[] = {"RS_MH6V3_mag_Hydra_HEAT_7","rhs_mag_m134_pylon_3000","rhs_mag_m134_pylon_3000","RS_MH6V3_mag_Hydra_HEAT_7"};
+						displayname = "HEAT";
 					};
 					class Heavy
 					{

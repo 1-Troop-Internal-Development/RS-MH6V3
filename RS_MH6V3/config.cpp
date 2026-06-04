@@ -308,6 +308,7 @@ class cfgMagazines
 	class 5000Rnd_762x51_Belt;
 	class rhs_mag_M151_7;
 	class rhs_mag_M151_19;
+	class rhs_mag_m134_pylon_3000;
 	class RHS_FakeMagazine_MELB: 5000Rnd_762x51_Belt
 	{
 		count = 0;
@@ -335,12 +336,50 @@ class cfgMagazines
 		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
 		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
 	};
+	class RS_MH6V3_mag_m134_pylon_3000: rhs_mag_m134_pylon_3000
+	{
+		displayName = "M134D-H (RS)";
+		displayNameShort = "RS M134";
+		pylonWeapon = "RS_MH6V3_weap_m134_pylon";
+		hardpoints[] = {"RHS_HP_MELB_M134","RHS_HP_MELB"};
+	};
 };
 class cfgWeapons
 {
 	class MGun;
 	class RocketPods;
 	class Laserdesignator_mounted;
+	class RHS_weap_m134_pylon: MGun
+	{
+		class LowROF;
+		class HighROF;
+		class close;
+		class short;
+		class medium;
+		class far;
+	};
+	class RS_MH6V3_weap_m134_pylon: RHS_weap_m134_pylon
+	{
+		displayName = "M134D-H (RS)";
+		magazines[] = {"RS_MH6V3_mag_m134_pylon_3000"};
+		modes[] = {"LowROF","HighROF","close","short","medium","far"};
+		class LowROF: LowROF
+		{
+			displayName = "LO";
+			reloadTime = 0.03;
+			multiplier = 1;
+		};
+		class HighROF: HighROF
+		{
+			displayName = "HI";
+			reloadTime = 0.02;
+			multiplier = 2;
+		};
+		class close: close {};
+		class short: short {};
+		class medium: medium {};
+		class far: far {};
+	};
 	class rhs_weap_FFARLauncher: RocketPods
 	{
 		magazines[] =
@@ -2228,7 +2267,7 @@ class CfgVehicles
 						hardpoints[] = {"RHS_HP_MELB_M134","RHS_HP_MELB"};
 						UIposition[] = {0.562,0.3};
 						priority = 1;
-						attachment = "rhs_mag_m134_pylon_3000";
+						attachment = "RS_MH6V3_mag_m134_pylon_3000";
 						turret[] = {};
 						hitpoint = "HitPylon2";
 					};
@@ -2236,7 +2275,7 @@ class CfgVehicles
 					{
 						UIposition[] = {0.103,0.3};
 						mirroredMissilePos = 2;
-						attachment = "rhs_mag_m134_pylon_3000";
+						attachment = "RS_MH6V3_mag_m134_pylon_3000";
 						turret[] = {};
 						hitpoint = "HitPylon3";
 					};
@@ -2253,7 +2292,7 @@ class CfgVehicles
 				{
 					class Light
 					{
-						attachment[] = {"rhs_mag_M151_7","rhs_mag_m134_pylon_3000","rhs_mag_m134_pylon_3000","rhs_mag_M151_7"};
+						attachment[] = {"rhs_mag_M151_7","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_m134_pylon_3000","rhs_mag_M151_7"};
 						displayname = "Light";
 					};
 					class Medium
@@ -2263,7 +2302,7 @@ class CfgVehicles
 					};
 					class HEAT
 					{
-						attachment[] = {"RS_MH6V3_mag_Hydra_HEAT_7","rhs_mag_m134_pylon_3000","rhs_mag_m134_pylon_3000","RS_MH6V3_mag_Hydra_HEAT_7"};
+						attachment[] = {"RS_MH6V3_mag_Hydra_HEAT_7","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_Hydra_HEAT_7"};
 						displayname = "HEAT";
 					};
 					class Heavy

@@ -1,7 +1,5 @@
 [h1]MH-6V3 Little Bird[/h1]
-[hr][/hr]
-[code]
-A gameplay-focused AH-6M Little Bird enhancement for Arma 3.
+[hr][/hr][code]A gameplay-focused AH-6M Little Bird enhancement for Arma 3.
 
 This mod expands the RHS MELB AH-6M with practical crew tools, aircraft controls,
 ACRE radio management, IZLID/IR illumination capability, improved weapon options,
@@ -17,7 +15,6 @@ is to provide a cleaner, more capable, and more crew-friendly aircraft for Arma 
 operations while keeping the systems usable in live missions.
 [/code]
 [hr][/hr]
-
 [h2]Based on Little Bird V2[/h2]
 Little Bird V3 is a re-scripted continuation of the Little Bird V2 mod. It keeps the same general gameplay purpose while expanding the aircraft with additional crew tools, weapon options, radio support, keybind support, and bug fixes for issues found in the older version.
 
@@ -177,19 +174,6 @@ The Hydra Rocket Ripple system allows the pilot to launch configured Hydra pylon
 The pilot can configure the pylon order from the seated AH-6M ACE interaction or through the dedicated keybind/UserAction.
 
 Ripple configuration features include:
-[list]
-[*]Quick Launch Hydra keybind.
-[*]Hydra Ripple Master Arm toggle.
-[*]Support for normal Hydra weapons.
-[*]Support for HEAT Hydra weapons.
-[*]Custom ordered pylon sequences.
-[*]Repeated pylon entries within cycling sequences.
-[*]Automatic skipping of empty or unavailable configured pylons.
-[*]Single Pylon Priority mode.
-[*]Cycling Sequence mode.
-[*]Previous weapon selection restoration after launch.
-[*]Joystick-friendly CfgUserActions.
-[/list]
 
 [h3]Single Pylon Priority[/h3]
 Single Pylon Priority uses the first available pylon in the configured sequence until that pylon is depleted. The system then advances to the next loaded configured pylon.
@@ -203,9 +187,6 @@ Each Quick Launch input advances one step.
 [/code]
 
 The system requires a saved sequence. If Quick Launch is attempted without one, no Hydra is fired and the occupied pilot/co-pilot crew seats receive a notification.
-
-[h2]Keybinds & Joystick Support[/h2]
-The mod supports both CBA keybinds and Arma CfgUserActions so keyboard, joystick, HOTAS, and controller users can bind the aircraft systems through the normal controls interface.
 
 Available UserActions include:
 [list]
@@ -238,18 +219,6 @@ ACE-supported systems include:
 
 [h2]Livery & Visual Customization[/h2]
 The mod retains and extends aircraft visual customization options for mission makers and crews.
-
-Supported customization includes:
-[list]
-[*]Tail number options.
-[*]Nose tail number option.
-[*]No Fear decal.
-[*]Six Guns decal.
-[*]Squad XML option.
-[*]Bobblehead option.
-[*]Extended left pylon option.
-[*]Extended right pylon option.
-[/list]
 
 [h2]Addon Options[/h2]
 The mod includes client-side addon options for systems where local presentation or preference matters.

@@ -157,35 +157,75 @@ class RS_MH6V3_ACRERadioProgrammer
 
 	class controlsBackground
 	{
+		class Border: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.17 * safezoneW + safezoneX;
+			y = 0.105 * safezoneH + safezoneY;
+			w = 0.66 * safezoneW;
+			h = 0.75 * safezoneH;
+			colorBackground[] = {0.18,0.18,0.18,1};
+		};
 		class Background: RS_MH6V3_RscText
 		{
 			idc = 86301;
-			x = 0.205 * safezoneW + safezoneX;
-			y = 0.13 * safezoneH + safezoneY;
-			w = 0.59 * safezoneW;
-			h = 0.69 * safezoneH;
-			colorBackground[] = {0.04,0.045,0.04,0.95};
+			x = 0.172 * safezoneW + safezoneX;
+			y = 0.107 * safezoneH + safezoneY;
+			w = 0.656 * safezoneW;
+			h = 0.746 * safezoneH;
+			colorBackground[] = {0.015,0.015,0.015,0.98};
 		};
 		class Header: RS_MH6V3_RscText
 		{
 			idc = 86302;
-			text = "ACRE RADIO PROGRAMMING";
-			x = 0.205 * safezoneW + safezoneX;
-			y = 0.13 * safezoneH + safezoneY;
-			w = 0.59 * safezoneW;
-			h = 0.045 * safezoneH;
-			style = 2;
-			sizeEx = 0.038;
-			colorBackground[] = {0.14,0.19,0.15,1};
+			text = "ACRE Radio Management";
+			x = 0.172 * safezoneW + safezoneX;
+			y = 0.107 * safezoneH + safezoneY;
+			w = 0.656 * safezoneW;
+			h = 0.055 * safezoneH;
+			style = 0;
+			sizeEx = 0.037;
+			colorBackground[] = {0.025,0.025,0.025,1};
+		};
+		class HeaderAccent: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.172 * safezoneW + safezoneX;
+			y = 0.162 * safezoneH + safezoneY;
+			w = 0.656 * safezoneW;
+			h = 0.002 * safezoneH;
+			colorBackground[] = {0.82,0.43,0.04,1};
+		};
+		class MyRadiosFrame: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.195 * safezoneW + safezoneX;
+			y = 0.235 * safezoneH + safezoneY;
+			w = 0.285 * safezoneW;
+			h = 0.17 * safezoneH;
+			colorBackground[] = {0.28,0.28,0.28,1};
+		};
+		class OtherRadiosFrame: MyRadiosFrame
+		{
+			x = 0.52 * safezoneW + safezoneX;
+		};
+		class MyRacksFrame: MyRadiosFrame
+		{
+			y = 0.47 * safezoneH + safezoneY;
+			h = 0.135 * safezoneH;
+		};
+		class OtherRacksFrame: MyRacksFrame
+		{
+			x = 0.52 * safezoneW + safezoneX;
 		};
 		class TunePanel: RS_MH6V3_RscText
 		{
 			idc = 86307;
-			x = 0.225 * safezoneW + safezoneX;
-			y = 0.635 * safezoneH + safezoneY;
-			w = 0.55 * safezoneW;
+			x = 0.195 * safezoneW + safezoneX;
+			y = 0.65 * safezoneH + safezoneY;
+			w = 0.61 * safezoneW;
 			h = 0.105 * safezoneH;
-			colorBackground[] = {0.025,0.03,0.027,0.9};
+			colorBackground[] = {0.035,0.035,0.035,1};
 		};
 	};
 
@@ -194,160 +234,178 @@ class RS_MH6V3_ACRERadioProgrammer
 		class MyHeader: RS_MH6V3_RscText
 		{
 			idc = 86303;
-			text = "YOUR INVENTORY RADIOS";
-			x = 0.225 * safezoneW + safezoneX;
-			y = 0.20 * safezoneH + safezoneY;
-			w = 0.255 * safezoneW;
+			text = "Your Inventory Radios";
+			x = 0.195 * safezoneW + safezoneX;
+			y = 0.195 * safezoneH + safezoneY;
+			w = 0.285 * safezoneW;
 			h = 0.03 * safezoneH;
 			sizeEx = 0.028;
-			colorText[] = {0.78,0.82,0.78,1};
+			colorText[] = {0.92,0.92,0.92,1};
 		};
 		class OtherHeader: MyHeader
 		{
 			idc = 86304;
-			text = "OTHER SEAT INVENTORY RADIOS";
+			text = "Other Seat Inventory Radios";
 			x = 0.52 * safezoneW + safezoneX;
-			w = 0.145 * safezoneW;
+			w = 0.17 * safezoneW;
 		};
 		class OtherSearch: RS_MH6V3_RscEdit
 		{
 			idc = 86328;
 			text = "";
-			x = 0.667 * safezoneW + safezoneX;
-			y = 0.20 * safezoneH + safezoneY;
-			w = 0.108 * safezoneW;
+			x = 0.692 * safezoneW + safezoneX;
+			y = 0.195 * safezoneH + safezoneY;
+			w = 0.113 * safezoneW;
 			h = 0.03 * safezoneH;
 			sizeEx = 0.026;
+			colorBackground[] = {0.04,0.04,0.04,1};
+			colorSelection[] = {0.36,0.22,0.08,1};
 			tooltip = "Filter other seat radios";
 			onKeyUp = "[false] call RS_MH6V3_fnc_populateACRERadioProgrammer";
 		};
 		class MyRadiosList: RS_MH6V3_RscListBox
 		{
 			idc = 86310;
-			x = 0.225 * safezoneW + safezoneX;
-			y = 0.235 * safezoneH + safezoneY;
-			w = 0.255 * safezoneW;
-			h = 0.165 * safezoneH;
+			x = 0.196 * safezoneW + safezoneX;
+			y = 0.237 * safezoneH + safezoneY;
+			w = 0.283 * safezoneW;
+			h = 0.166 * safezoneH;
+			colorBackground[] = {0.01,0.01,0.01,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
+			colorSelectBackground2[] = {0.36,0.22,0.08,1};
 		};
-		class OtherRadiosList: RS_MH6V3_RscListBox
+		class OtherRadiosList: MyRadiosList
 		{
 			idc = 86311;
 			onLBSelChanged = "uiNamespace setVariable ['RS_MH6V3_acreOtherRadioSource', ctrlIDC (_this # 0)]";
-			x = 0.52 * safezoneW + safezoneX;
-			y = 0.235 * safezoneH + safezoneY;
-			w = 0.255 * safezoneW;
-			h = 0.165 * safezoneH;
+			x = 0.521 * safezoneW + safezoneX;
 		};
 		class MyRackHeader: MyHeader
 		{
 			idc = 86305;
-			text = "YOUR RACKS";
-			y = 0.425 * safezoneH + safezoneY;
+			text = "Your Racks";
+			y = 0.43 * safezoneH + safezoneY;
 		};
 		class OtherRackHeader: MyRackHeader
 		{
 			idc = 86306;
-			text = "OTHER SEAT RACKS";
+			text = "Other Seat Racks";
 			x = 0.52 * safezoneW + safezoneX;
 		};
 		class MyRackList: RS_MH6V3_RscListBox
 		{
 			idc = 86312;
-			x = 0.225 * safezoneW + safezoneX;
-			y = 0.46 * safezoneH + safezoneY;
-			w = 0.255 * safezoneW;
-			h = 0.13 * safezoneH;
+			x = 0.196 * safezoneW + safezoneX;
+			y = 0.472 * safezoneH + safezoneY;
+			w = 0.283 * safezoneW;
+			h = 0.131 * safezoneH;
+			colorBackground[] = {0.01,0.01,0.01,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
+			colorSelectBackground2[] = {0.36,0.22,0.08,1};
 		};
-		class OtherRackList: RS_MH6V3_RscListBox
+		class OtherRackList: MyRackList
 		{
 			idc = 86313;
 			onLBSelChanged = "uiNamespace setVariable ['RS_MH6V3_acreOtherRadioSource', ctrlIDC (_this # 0)]";
-			x = 0.52 * safezoneW + safezoneX;
-			y = 0.46 * safezoneH + safezoneY;
-			w = 0.255 * safezoneW;
-			h = 0.13 * safezoneH;
+			x = 0.521 * safezoneW + safezoneX;
 		};
 		class CopyOtherChannelButton: RS_MH6V3_RscButton
 		{
 			idc = 86329;
 			text = "Copy Channel";
-			x = 0.657 * safezoneW + safezoneX;
-			y = 0.598 * safezoneH + safezoneY;
-			w = 0.118 * safezoneW;
-			h = 0.03 * safezoneH;
+			x = 0.675 * safezoneW + safezoneX;
+			y = 0.612 * safezoneH + safezoneY;
+			w = 0.13 * safezoneW;
+			h = 0.032 * safezoneH;
 			sizeEx = 0.028;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			tooltip = "Tune the selected target radio to the selected other seat radio channel";
 			action = "[] call RS_MH6V3_fnc_tuneACRERadioFromOther";
 		};
 		class TuneHeader: MyHeader
 		{
 			idc = 86320;
-			text = "PROGRAM SELECTED RADIO";
-			x = 0.24 * safezoneW + safezoneX;
-			y = 0.649 * safezoneH + safezoneY;
-			w = 0.51 * safezoneW;
+			text = "Program Selected Radio";
+			x = 0.21 * safezoneW + safezoneX;
+			y = 0.66 * safezoneH + safezoneY;
+			w = 0.56 * safezoneW;
 		};
 		class TargetLabel: MyHeader
 		{
 			idc = 86326;
-			text = "RADIO";
-			x = 0.24 * safezoneW + safezoneX;
-			y = 0.681 * safezoneH + safezoneY;
+			text = "Radio";
+			x = 0.21 * safezoneW + safezoneX;
+			y = 0.695 * safezoneH + safezoneY;
 			w = 0.04 * safezoneW;
 		};
 		class ChannelLabel: TargetLabel
 		{
 			idc = 86327;
-			text = "CHANNEL";
-			x = 0.62 * safezoneW + safezoneX;
+			text = "Channel";
+			x = 0.65 * safezoneW + safezoneX;
 			w = 0.07 * safezoneW;
 		};
 		class RadioCombo: RS_MH6V3_RscCombo
 		{
 			idc = 86321;
 			onLBSelChanged = "if (((_this # 0) lbValue (_this # 1)) isEqualTo 0) then {missionNamespace setVariable ['RS_MH6V3_acreSelectedRadioId', (_this # 0) lbData (_this # 1)]; missionNamespace setVariable ['RS_MH6V3_acreForceStatus', true]; missionNamespace setVariable ['RS_MH6V3_acreSelectionNonce', (missionNamespace getVariable ['RS_MH6V3_acreSelectionNonce', 0]) + 1]}";
-			x = 0.285 * safezoneW + safezoneX;
-			y = 0.678 * safezoneH + safezoneY;
-			w = 0.325 * safezoneW;
+			x = 0.255 * safezoneW + safezoneX;
+			y = 0.692 * safezoneH + safezoneY;
+			w = 0.385 * safezoneW;
 			h = 0.04 * safezoneH;
+			colorBackground[] = {0.04,0.04,0.04,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
 		};
 		class ChannelEdit: RS_MH6V3_RscEdit
 		{
 			idc = 86322;
 			text = "1";
-			x = 0.692 * safezoneW + safezoneX;
-			y = 0.678 * safezoneH + safezoneY;
-			w = 0.04 * safezoneW;
+			x = 0.7 * safezoneW + safezoneX;
+			y = 0.692 * safezoneH + safezoneY;
+			w = 0.045 * safezoneW;
 			h = 0.04 * safezoneH;
+			colorBackground[] = {0.04,0.04,0.04,1};
+			colorSelection[] = {0.36,0.22,0.08,1};
 		};
 		class TuneButton: RS_MH6V3_RscButton
 		{
 			idc = 86323;
 			text = "Tune";
-			x = 0.735 * safezoneW + safezoneX;
-			y = 0.678 * safezoneH + safezoneY;
-			w = 0.04 * safezoneW;
+			x = 0.75 * safezoneW + safezoneX;
+			y = 0.692 * safezoneH + safezoneY;
+			w = 0.055 * safezoneW;
 			h = 0.04 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			action = "[] call RS_MH6V3_fnc_tuneACRERadio";
 		};
 		class RefreshButton: RS_MH6V3_RscButton
 		{
 			idc = 86324;
 			text = "Refresh";
-			x = 0.225 * safezoneW + safezoneX;
-			y = 0.76 * safezoneH + safezoneY;
-			w = 0.07 * safezoneW;
-			h = 0.04 * safezoneH;
+			x = 0.195 * safezoneW + safezoneX;
+			y = 0.785 * safezoneH + safezoneY;
+			w = 0.285 * safezoneW;
+			h = 0.045 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			action = "[true] call RS_MH6V3_fnc_populateACRERadioProgrammer";
 		};
 		class CloseButton: RS_MH6V3_RscButton
 		{
 			idc = 86325;
 			text = "Close";
-			x = 0.705 * safezoneW + safezoneX;
-			y = 0.76 * safezoneH + safezoneY;
-			w = 0.07 * safezoneW;
-			h = 0.04 * safezoneH;
+			x = 0.52 * safezoneW + safezoneX;
+			y = 0.785 * safezoneH + safezoneY;
+			w = 0.285 * safezoneW;
+			h = 0.045 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			action = "closeDialog 0";
 		};
 	};
@@ -422,6 +480,228 @@ class RS_MH6V3_LiveryMenu
 			y = 0.50 * safezoneH + safezoneY;
 			w = 0.08 * safezoneW;
 			h = 0.04 * safezoneH;
+			action = "closeDialog 0";
+		};
+	};
+};
+
+class RS_MH6V3_QuickFirePylonMenu
+{
+	idd = 86400;
+	movingEnable = 1;
+	enableSimulation = 1;
+	onLoad = "uiNamespace setVariable ['RS_MH6V3_quickFireMenuDisplay', _this # 0]; [] call RS_MH6V3_fnc_populateQuickFirePylonMenu";
+	onUnload = "uiNamespace setVariable ['RS_MH6V3_quickFireMenuDisplay', displayNull]; uiNamespace setVariable ['RS_MH6V3_quickFireMenuVehicle', objNull]; uiNamespace setVariable ['RS_MH6V3_quickFireMenuSequence', nil]";
+
+	class controlsBackground
+	{
+		class Border: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.245 * safezoneW + safezoneX;
+			y = 0.195 * safezoneH + safezoneY;
+			w = 0.51 * safezoneW;
+			h = 0.61 * safezoneH;
+			colorBackground[] = {0.18,0.18,0.18,1};
+		};
+		class Background: RS_MH6V3_RscText
+		{
+			idc = 86401;
+			x = 0.247 * safezoneW + safezoneX;
+			y = 0.197 * safezoneH + safezoneY;
+			w = 0.506 * safezoneW;
+			h = 0.606 * safezoneH;
+			colorBackground[] = {0.015,0.015,0.015,0.98};
+		};
+		class Header: RS_MH6V3_RscText
+		{
+			idc = 86402;
+			text = "Hydra Rocket Ripple Configuration";
+			x = 0.247 * safezoneW + safezoneX;
+			y = 0.197 * safezoneH + safezoneY;
+			w = 0.43 * safezoneW;
+			h = 0.045 * safezoneH;
+			style = 0;
+			sizeEx = 0.033;
+			colorBackground[] = {0.025,0.025,0.025,1};
+		};
+		class HeaderAccent: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.247 * safezoneW + safezoneX;
+			y = 0.242 * safezoneH + safezoneY;
+			w = 0.506 * safezoneW;
+			h = 0.002 * safezoneH;
+			colorBackground[] = {0.82,0.43,0.04,1};
+		};
+		class AvailableFrame: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.267 * safezoneW + safezoneX;
+			y = 0.305 * safezoneH + safezoneY;
+			w = 0.202 * safezoneW;
+			h = 0.31 * safezoneH;
+			colorBackground[] = {0.28,0.28,0.28,1};
+		};
+		class SequenceFrame: AvailableFrame
+		{
+			x = 0.531 * safezoneW + safezoneX;
+		};
+	};
+
+	class controls
+	{
+		class CloseButton: RS_MH6V3_RscButton
+		{
+			idc = -1;
+			text = "x";
+			x = 0.717 * safezoneW + safezoneX;
+			y = 0.201 * safezoneH + safezoneY;
+			w = 0.028 * safezoneW;
+			h = 0.036 * safezoneH;
+			sizeEx = 0.029;
+			colorBackground[] = {0.65,0.05,0.04,1};
+			colorBackgroundActive[] = {0.85,0.08,0.06,1};
+			colorFocused[] = {0.65,0.05,0.04,1};
+			action = "closeDialog 0";
+		};
+		class AvailableLabel: RS_MH6V3_RscText
+		{
+			idc = 86404;
+			text = "Available Hydra Pylons";
+			x = 0.267 * safezoneW + safezoneX;
+			y = 0.265 * safezoneH + safezoneY;
+			w = 0.202 * safezoneW;
+			h = 0.03 * safezoneH;
+			sizeEx = 0.027;
+			colorText[] = {0.9,0.9,0.9,1};
+		};
+		class SequenceLabel: AvailableLabel
+		{
+			idc = 86405;
+			text = "Firing Steps";
+			x = 0.531 * safezoneW + safezoneX;
+		};
+		class AvailableList: RS_MH6V3_RscListBox
+		{
+			idc = 86410;
+			x = 0.268 * safezoneW + safezoneX;
+			y = 0.307 * safezoneH + safezoneY;
+			w = 0.2 * safezoneW;
+			h = 0.306 * safezoneH;
+			sizeEx = 0.027;
+			rowHeight = 0.038;
+			colorBackground[] = {0.01,0.01,0.01,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
+			colorSelectBackground2[] = {0.36,0.22,0.08,1};
+		};
+		class SequenceList: AvailableList
+		{
+			idc = 86411;
+			x = 0.532 * safezoneW + safezoneX;
+		};
+		class AddButton: RS_MH6V3_RscButton
+		{
+			idc = 86413;
+			text = "Add >";
+			x = 0.477 * safezoneW + safezoneX;
+			y = 0.335 * safezoneH + safezoneY;
+			w = 0.046 * safezoneW;
+			h = 0.038 * safezoneH;
+			sizeEx = 0.028;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "['add'] call RS_MH6V3_fnc_updateQuickFirePylonMenu";
+		};
+		class RemoveButton: AddButton
+		{
+			idc = 86414;
+			text = "< Remove";
+			y = 0.383 * safezoneH + safezoneY;
+			action = "['remove'] call RS_MH6V3_fnc_updateQuickFirePylonMenu";
+		};
+		class UpButton: AddButton
+		{
+			idc = 86415;
+			text = "Up";
+			y = 0.455 * safezoneH + safezoneY;
+			action = "['up'] call RS_MH6V3_fnc_updateQuickFirePylonMenu";
+		};
+		class DownButton: AddButton
+		{
+			idc = 86416;
+			text = "Down";
+			y = 0.503 * safezoneH + safezoneY;
+			action = "['down'] call RS_MH6V3_fnc_updateQuickFirePylonMenu";
+		};
+		class ClearButton: AddButton
+		{
+			idc = 86417;
+			text = "Clear";
+			y = 0.575 * safezoneH + safezoneY;
+			action = "['clear'] call RS_MH6V3_fnc_updateQuickFirePylonMenu";
+		};
+		class LoadedButton: RS_MH6V3_RscButton
+		{
+			idc = 86418;
+			text = "Use All Loaded";
+			x = 0.267 * safezoneW + safezoneX;
+			y = 0.64 * safezoneH + safezoneY;
+			w = 0.13 * safezoneW;
+			h = 0.038 * safezoneH;
+			sizeEx = 0.028;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "['loaded'] call RS_MH6V3_fnc_updateQuickFirePylonMenu";
+		};
+		class ModeLabel: RS_MH6V3_RscText
+		{
+			idc = 86406;
+			text = "Mode";
+			x = 0.531 * safezoneW + safezoneX;
+			y = 0.64 * safezoneH + safezoneY;
+			w = 0.05 * safezoneW;
+			h = 0.038 * safezoneH;
+			sizeEx = 0.027;
+		};
+		class ModeCombo: RS_MH6V3_RscCombo
+		{
+			idc = 86412;
+			onLBSelChanged = "uiNamespace setVariable ['RS_MH6V3_quickFireMenuMode', (_this # 0) lbData (_this # 1)]";
+			x = 0.579 * safezoneW + safezoneX;
+			y = 0.64 * safezoneH + safezoneY;
+			w = 0.154 * safezoneW;
+			h = 0.038 * safezoneH;
+			sizeEx = 0.028;
+			colorBackground[] = {0.04,0.04,0.04,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
+		};
+		class ApplyButton: RS_MH6V3_RscButton
+		{
+			idc = 86420;
+			text = "Apply";
+			x = 0.267 * safezoneW + safezoneX;
+			y = 0.725 * safezoneH + safezoneY;
+			w = 0.225 * safezoneW;
+			h = 0.045 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "[] call RS_MH6V3_fnc_applyQuickFirePylonMenu";
+		};
+		class CancelButton: RS_MH6V3_RscButton
+		{
+			idc = 86421;
+			text = "Cancel";
+			x = 0.508 * safezoneW + safezoneX;
+			y = 0.725 * safezoneH + safezoneY;
+			w = 0.225 * safezoneW;
+			h = 0.045 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			action = "closeDialog 0";
 		};
 	};
@@ -595,7 +875,7 @@ class RscTitles
 			class HydraLabel: RS_MH6V3_RscText
 			{
 				idc = 86105;
-				text = "HYDRA QUICK FIRE:";
+				text = "HYDRA RIPPLE:";
 				x = 0.826 * safezoneW + safezoneX;
 				y = 0.779 * safezoneH + safezoneY;
 				w = 0.06 * safezoneW;

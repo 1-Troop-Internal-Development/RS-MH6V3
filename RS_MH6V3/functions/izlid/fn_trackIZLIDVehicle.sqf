@@ -49,6 +49,7 @@ if (_activeVehicles isEqualTo []) then {
 } else {
 	if (isNil "RS_MH6V3_izlidIlluminatorEh") then {
 		RS_MH6V3_izlidIlluminatorEh = addMissionEventHandler ["EachFrame", {
+			call RS_MH6V3_fnc_updatePilotIZLIDDirection;
 			call RS_MH6V3_fnc_updateIZLIDTriggerCone;
 			call RS_MH6V3_fnc_updateIZLIDIlluminators;
 		}];

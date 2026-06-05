@@ -95,9 +95,11 @@ class CfgFunctions
 			class setIZLIDMode {};
 			class setIZLIDState {};
 			class trackIZLIDVehicle {};
+			class togglePilotIZLID {};
 			class toggleIZLIDMode {};
 			class toggleIZLID {};
 			class updateIZLIDIlluminators {};
+			class updatePilotIZLIDDirection {};
 			class updateIZLIDTriggerCone {};
 		};
 		class itn
@@ -114,9 +116,14 @@ class CfgFunctions
 		class weapons
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\weapons";
+			class applyQuickFirePylonMenu {};
+			class getHydraPylonData {};
+			class openQuickFirePylonMenu {};
+			class populateQuickFirePylonMenu {};
 			class quickLaunchHydra {};
 			class showExternalWeaponControl {};
 			class toggleQuickFireArm {};
+			class updateQuickFirePylonMenu {};
 		};
 	};
 };
@@ -163,10 +170,30 @@ class CfgUserActions
 		analogChangeThreshold = 0.01;
 		modifierBlocking = 1;
 	};
+	class RS_MH6V3_configureQuickFirePylons
+	{
+		displayName = "Hydra Rocket Ripple Configuration";
+		tooltip = "Open the AH-6M Hydra rocket ripple configuration.";
+		onActivate = "[] call RS_MH6V3_fnc_openQuickFirePylonMenu";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
+	class RS_MH6V3_togglePilotIZLID
+	{
+		displayName = "Toggle Pilot-Directed IZLID";
+		tooltip = "Toggle the additional IZLID laser directed by the pilot's head.";
+		onActivate = "[] call RS_MH6V3_fnc_togglePilotIZLID";
+		onDeactivate = "";
+		onAnalog = "";
+		analogChangeThreshold = 0.01;
+		modifierBlocking = 1;
+	};
 	class RS_MH6V3_toggleQuickFireArm
 	{
-		displayName = "Toggle Quick Fire Master Arm";
-		tooltip = "Arm or safe the AH-6M quick-fire Hydra key.";
+		displayName = "Toggle Hydra Ripple Master Arm";
+		tooltip = "Arm or safe the AH-6M Hydra rocket ripple key.";
 		onActivate = "[] call RS_MH6V3_fnc_toggleQuickFireArm";
 		onDeactivate = "";
 		onAnalog = "";
@@ -215,7 +242,9 @@ class UserActionGroups
 			"RS_MH6V3_toggleIZLID",
 			"RS_MH6V3_holdIZLID",
 			"RS_MH6V3_toggleIZLIDMode",
+			"RS_MH6V3_togglePilotIZLID",
 			"RS_MH6V3_quickLaunchHydra",
+			"RS_MH6V3_configureQuickFirePylons",
 			"RS_MH6V3_toggleQuickFireArm",
 			"RS_MH6V3_cycleACRERadioSelection",
 			"RS_MH6V3_increaseSelectedACRERadioVolume",
@@ -396,6 +425,7 @@ class cfgWeapons
 			"rhs_mag_FFAR_57_USAF_LAU61_3"
 		};
 		displayName = "Hydra (M151 HE)";
+		magazineReloadTime = 0;
 		modes[] = {"Far_AI","Single","Two"};
 		cursor = "rocket";
 		cursorAim = "EmptyCursor";
@@ -1712,6 +1742,17 @@ class CfgVehicles
 				statement = "[this] call RS_MH6V3_fnc_resetCameras";
 				showWindow = 0;
 				priority = 9.8;
+			};
+			class RS_MH6V3_ConfigureQuickFirePylons
+			{
+				displayName = "<t color='#7fd8ff'>Hydra Rocket Ripple Configuration</t>";
+				onlyforplayer = 1;
+				position = "doplnovani";
+				radius = 2;
+				condition = "typeOf this == 'RHS_MELB_AH6M' && {currentPilot this == (call rhsusf_fnc_findPlayer)}";
+				statement = "[this] call RS_MH6V3_fnc_openQuickFirePylonMenu";
+				showWindow = 0;
+				priority = 9.7;
 			};
 			class SAFEMODE
 			{

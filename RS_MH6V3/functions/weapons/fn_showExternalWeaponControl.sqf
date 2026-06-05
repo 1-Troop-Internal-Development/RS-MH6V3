@@ -72,6 +72,10 @@ private _modeText = if (_izlidMode == 1) then {
 	format ["%1 %2", _outputText, _coneText]
 };
 
+if (_izlidInstalled && {_vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false]}) then {
+	_modeText = format ["%1 + HEAD", _modeText];
+};
+
 if (!_izlidInstalled && {_izlidUnavailableNotice}) then {
 	_modeText = "AH-6 ONLY";
 };

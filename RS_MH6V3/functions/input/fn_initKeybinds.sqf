@@ -103,6 +103,19 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 
 [
 	"[RS] MH-6V3",
+	"RS_MH6V3_togglePilotIZLID",
+	["Toggle Pilot-Directed IZLID [BETA]", "Toggle the additional IZLID laser directed by the pilot's head."],
+	{
+		[] call RS_MH6V3_fnc_togglePilotIZLID
+	},
+	{false},
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
+[
+	"[RS] MH-6V3",
 	"RS_MH6V3_quickLaunchHydra",
 	["Quick Launch Hydra", "Fire one AH-6M Hydra without selecting rockets."],
 	{
@@ -116,8 +129,21 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 
 [
 	"[RS] MH-6V3",
+	"RS_MH6V3_configureQuickFirePylons",
+	["Hydra Rocket Ripple Configuration", "Open the AH-6M Hydra rocket ripple configuration."],
+	{
+		[] call RS_MH6V3_fnc_openQuickFirePylonMenu
+	},
+	{false},
+	[],
+	false,
+	0
+] call CBA_fnc_addKeybind;
+
+[
+	"[RS] MH-6V3",
 	"RS_MH6V3_toggleQuickFireArm",
-	["Toggle Quick Fire Master Arm", "Arm or safe the AH-6M quick-fire Hydra key."],
+	["Toggle Hydra Ripple Master Arm", "Arm or safe the AH-6M Hydra rocket ripple key."],
 	{
 		[] call RS_MH6V3_fnc_toggleQuickFireArm
 	},

@@ -90,12 +90,14 @@ ACRE features include:
 [*]Client-side delayed hide or instant hide option.
 [*]Radio selection cycling.
 [*]Selected radio volume increase/decrease controls.
-[*]ACE radio programming actions.
+[*]Seated ACE Radio Management action.
 [*]Remote crew radio tune support.
 [*]Radio change notifications only for valid crew/vehicle listeners.
+[*]Automatic removal of ACRE interactions when ACRE is not loaded.
 [/list]
 
 The ACRE Status UI is designed to respond to actual radio transmissions rather than aircraft intercom speech.
+ACRE Radio Management interactions are only registered when the required ACRE API is detected.
 
 [code]
 ACRE Status UI - Client Addon Option
@@ -117,7 +119,8 @@ Weapon and pylon features include:
 [*]M134 LO and HI fire-rate modes tuned for more realistic output.
 [*]HEAT Hydra pylon option.
 [*]Quick Launch Hydra keybind.
-[*]Quick Fire Master Arm toggle.
+[*]Hydra Rocket Ripple Configuration.
+[*]Hydra Ripple Master Arm toggle.
 [/list]
 
 [code]
@@ -125,7 +128,8 @@ RS M134 Pylon Title - M134D-H (RS)
 RS M134 Short Title - RS M134
 Default AH-6M Gun Pylons - RS M134
 Quick Launch Hydra - Keybind / UserAction
-Toggle Quick Fire Master Arm - Keybind / UserAction
+Hydra Rocket Ripple Configuration - Keybind / UserAction / ACE
+Toggle Hydra Ripple Master Arm - Keybind / UserAction
 [/code]
 
 [h2]M134D-H RS Variant[/h2]
@@ -167,17 +171,38 @@ M247 HEAT Hydra (M261) - 19-round pod
 Hydra (M247 HEAT) - Dedicated weapon selection
 [/code]
 
-[h2]Quick Fire Controls[/h2]
-Quick Fire controls allow the crew to launch a Hydra without manually selecting the rocket weapon first.
+[h2]Hydra Rocket Ripple Configuration[/h2]
+The Hydra Rocket Ripple system allows the pilot to launch configured Hydra pylons without manually selecting the rocket weapon first. The system temporarily fires the required Hydra launcher and restores the pilot's previously selected weapon.
 
-Quick Fire features include:
+The pilot can configure the pylon order from the seated AH-6M ACE interaction or through the dedicated keybind/UserAction.
+
+Ripple configuration features include:
 [list]
 [*]Quick Launch Hydra keybind.
-[*]Quick Fire Master Arm toggle.
+[*]Hydra Ripple Master Arm toggle.
 [*]Support for normal Hydra weapons.
 [*]Support for HEAT Hydra weapons.
+[*]Custom ordered pylon sequences.
+[*]Repeated pylon entries within cycling sequences.
+[*]Automatic skipping of empty or unavailable configured pylons.
+[*]Single Pylon Priority mode.
+[*]Cycling Sequence mode.
+[*]Previous weapon selection restoration after launch.
 [*]Joystick-friendly CfgUserActions.
 [/list]
+
+[h3]Single Pylon Priority[/h3]
+Single Pylon Priority uses the first available pylon in the configured sequence until that pylon is depleted. The system then advances to the next loaded configured pylon.
+
+[h3]Cycling Sequence[/h3]
+Cycling Sequence advances one configured step on every trigger pull. Pylons may be entered multiple times to create a custom firing pattern.
+
+[code]
+Example: Pylon 1 > Pylon 2 > Pylon 2 > Pylon 3
+Each Quick Launch input advances one step.
+[/code]
+
+The system requires a saved sequence. If Quick Launch is attempted without one, no Hydra is fired and the occupied pilot/co-pilot crew seats receive a notification.
 
 [h2]Keybinds & Joystick Support[/h2]
 The mod supports both CBA keybinds and Arma CfgUserActions so keyboard, joystick, HOTAS, and controller users can bind the aircraft systems through the normal controls interface.
@@ -188,7 +213,8 @@ Available UserActions include:
 [*]Hold IZLID.
 [*]Cycle IZLID Mode.
 [*]Quick Launch Hydra.
-[*]Toggle Quick Fire Master Arm.
+[*]Hydra Rocket Ripple Configuration.
+[*]Toggle Hydra Ripple Master Arm.
 [*]Cycle Selected ACRE Radio.
 [*]Increase Selected ACRE Radio Volume.
 [*]Decrease Selected ACRE Radio Volume.
@@ -204,7 +230,8 @@ ACE interaction is used where aircraft-side interaction makes sense.
 ACE-supported systems include:
 [list]
 [*]IZLID / IR illuminator controls.
-[*]ACRE radio programming actions.
+[*]Hydra Rocket Ripple Configuration for the active AH-6M pilot.
+[*]ACRE Radio Management for valid aircraft crew when ACRE is loaded.
 [*]Aircraft livery tools.
 [*]Pylon-related aircraft actions.
 [/list]
@@ -244,7 +271,9 @@ Mission maker considerations:
 [*]The default AH-6M pylon loadout uses the RS M134 variant.
 [*]The HEAT loadout preset uses RS M134 guns and HEAT Hydras.
 [*]ACRE actions validate vehicle and crew context before applying remote radio changes.
+[*]ACRE interactions do not appear when ACRE is not loaded.
 [*]Intercom speech should not trigger the radio status overlay.
+[*]Hydra Quick Launch cannot fire until the pilot saves a ripple sequence.
 [*]Joystick users can bind key systems through normal UserActions.
 [/list]
 

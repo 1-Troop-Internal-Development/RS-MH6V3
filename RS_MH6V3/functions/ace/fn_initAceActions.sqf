@@ -34,7 +34,7 @@ RS_MH6V3_fnc_notifyAircrew = {
 		diag_log _message;
 	};
 
-	private _recipients = [driver _vehicle, gunner _vehicle] select {
+	private _recipients = [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]] select {
 		!isNull _x && {isPlayer _x}
 	};
 
@@ -1099,7 +1099,7 @@ private _acreRadioProgrammerAction = [
 
 private _acreRadioProgrammerSelfAction = [
 	"RS_MH6V3_acre_radio_programmer_self",
-	"ACRE Radio Programming",
+	"ACRE Radio Management",
 	"",
 	{
 		[vehicle player] call RS_MH6V3_fnc_openACRERadioProgrammer;
@@ -1130,6 +1130,46 @@ private _izlidModeActionRoot = [
 		alive _target
 		&& {_target isKindOf "RHS_MELB_AH6M"}
 		&& {_player in [driver _target, _target turretUnit [0]]}
+	}
+] call ace_interact_menu_fnc_createAction;
+
+private _pilotIZLIDAction = [
+	"RS_MH6V3_pilot_directed_izlid",
+	"Toggle Pilot-Directed IZLID",
+	"",
+	{
+		[] call RS_MH6V3_fnc_togglePilotIZLID;
+	},
+	{
+		params [
+			"_target",
+			"_player"
+		];
+
+		alive _target
+		&& {typeOf _target == "RHS_MELB_AH6M"}
+		&& {_player isEqualTo currentPilot _target}
+		&& {isEngineOn _target}
+	}
+] call ace_interact_menu_fnc_createAction;
+
+private _quickFirePylonMenuAction = [
+	"RS_MH6V3_quick_fire_pylon_menu",
+	"Hydra Rocket Ripple Configuration",
+	"",
+	{
+		params ["_target", "_player"];
+		[vehicle _player] call RS_MH6V3_fnc_openQuickFirePylonMenu;
+	},
+	{
+		params ["_target", "_player"];
+		private _vehicle = vehicle _player;
+
+		_vehicle != _player
+		&& {alive _vehicle}
+		&& {typeOf _vehicle == RS_MH6V3_AH6_CLASS}
+		&& {currentPilot _vehicle isEqualTo _player}
+		&& {!(([_vehicle] call RS_MH6V3_fnc_getHydraPylonData) isEqualTo [])}
 	}
 ] call ace_interact_menu_fnc_createAction;
 
@@ -1225,11 +1265,22 @@ private _pushPlacementAction = [
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _stopDrainFuelAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _liveryAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _cameraResetAction, true] call ace_interact_menu_fnc_addActionToClass;
-	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _acreRadioProgrammerAction, true] call ace_interact_menu_fnc_addActionToClass;
 } forEach RS_MH6V3_SERVICE_CLASSES;
 
-["CAManBase", 1, ["ACE_SelfActions"], _acreRadioProgrammerSelfAction, true] call ace_interact_menu_fnc_addActionToClass;
 [RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions"], _izlidModeActionRoot, true] call ace_interact_menu_fnc_addActionToClass;
+[RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions", "RS_MH6V3_izlid_mode"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
+[RS_MH6V3_AH6_CLASS, 1, ["ACE_SelfActions"], _quickFirePylonMenuAction, true] call ace_interact_menu_fnc_addActionToClass;
+
+if (
+	!isNil "acre_api_fnc_isInitialized"
+	&& {!isNil "acre_api_fnc_getCurrentRadioList"}
+) then {
+	{
+		[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _acreRadioProgrammerAction, true] call ace_interact_menu_fnc_addActionToClass;
+	} forEach RS_MH6V3_SERVICE_CLASSES;
+
+	[RS_MH6V3_AH6_CLASS, 1, ["ACE_SelfActions"], _acreRadioProgrammerSelfAction, true] call ace_interact_menu_fnc_addActionToClass;
+};
 
 {
 	_x params ["_id", "_label", "_mode", "_coneMode"];

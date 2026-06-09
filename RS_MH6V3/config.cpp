@@ -1743,17 +1743,6 @@ class CfgVehicles
 				showWindow = 0;
 				priority = 9.8;
 			};
-			class RS_MH6V3_ConfigureQuickFirePylons
-			{
-				displayName = "<t color='#7fd8ff'>Hydra Rocket Ripple Configuration</t>";
-				onlyforplayer = 1;
-				position = "doplnovani";
-				radius = 2;
-				condition = "typeOf this == 'RHS_MELB_AH6M' && {currentPilot this == (call rhsusf_fnc_findPlayer)}";
-				statement = "[this] call RS_MH6V3_fnc_openQuickFirePylonMenu";
-				showWindow = 0;
-				priority = 9.7;
-			};
 			class SAFEMODE
 			{
 				displayName = "<t color='#00FF7F'>MASTERSAFE</t>";

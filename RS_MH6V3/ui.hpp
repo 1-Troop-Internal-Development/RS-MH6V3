@@ -421,6 +421,15 @@ class RS_MH6V3_LiveryMenu
 
 	class controlsBackground
 	{
+		class Border: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.338 * safezoneW + safezoneX;
+			y = 0.318 * safezoneH + safezoneY;
+			w = 0.324 * safezoneW;
+			h = 0.244 * safezoneH;
+			colorBackground[] = {0.18,0.18,0.18,1};
+		};
 		class Background: RS_MH6V3_RscText
 		{
 			idc = 86061;
@@ -428,18 +437,36 @@ class RS_MH6V3_LiveryMenu
 			y = 0.32 * safezoneH + safezoneY;
 			w = 0.32 * safezoneW;
 			h = 0.24 * safezoneH;
-			colorBackground[] = {0.04,0.045,0.04,0.94};
+			colorBackground[] = {0.015,0.015,0.015,0.98};
 		};
 		class Header: RS_MH6V3_RscText
 		{
 			idc = 86062;
-			text = "Little Bird Livery";
+			text = "Livery Change";
 			x = 0.34 * safezoneW + safezoneX;
 			y = 0.32 * safezoneH + safezoneY;
 			w = 0.32 * safezoneW;
 			h = 0.045 * safezoneH;
-			sizeEx = 0.04;
-			colorBackground[] = {0.14,0.19,0.15,1};
+			sizeEx = 0.037;
+			colorBackground[] = {0.025,0.025,0.025,1};
+		};
+		class HeaderAccent: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.34 * safezoneW + safezoneX;
+			y = 0.365 * safezoneH + safezoneY;
+			w = 0.32 * safezoneW;
+			h = 0.002 * safezoneH;
+			colorBackground[] = {0.82,0.43,0.04,1};
+		};
+		class LiveryPanel: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.355 * safezoneW + safezoneX;
+			y = 0.382 * safezoneH + safezoneY;
+			w = 0.29 * safezoneW;
+			h = 0.1 * safezoneH;
+			colorBackground[] = {0.035,0.035,0.035,1};
 		};
 	};
 
@@ -453,6 +480,8 @@ class RS_MH6V3_LiveryMenu
 			y = 0.39 * safezoneH + safezoneY;
 			w = 0.28 * safezoneW;
 			h = 0.035 * safezoneH;
+			sizeEx = 0.028;
+			colorText[] = {0.92,0.92,0.92,1};
 		};
 		class LiveryCombo: RS_MH6V3_RscCombo
 		{
@@ -461,6 +490,8 @@ class RS_MH6V3_LiveryMenu
 			y = 0.43 * safezoneH + safezoneY;
 			w = 0.28 * safezoneW;
 			h = 0.04 * safezoneH;
+			colorBackground[] = {0.04,0.04,0.04,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
 		};
 		class ApplyButton: RS_MH6V3_RscButton
 		{
@@ -470,6 +501,9 @@ class RS_MH6V3_LiveryMenu
 			y = 0.50 * safezoneH + safezoneY;
 			w = 0.08 * safezoneW;
 			h = 0.04 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			action = "[] call RS_MH6V3_fnc_applySelectedLivery";
 		};
 		class CloseButton: RS_MH6V3_RscButton
@@ -480,6 +514,9 @@ class RS_MH6V3_LiveryMenu
 			y = 0.50 * safezoneH + safezoneY;
 			w = 0.08 * safezoneW;
 			h = 0.04 * safezoneH;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
 			action = "closeDialog 0";
 		};
 	};

@@ -6,4 +6,7 @@ params [
 {typeOf _vehicle == "RHS_MELB_AH6M"} &&
 {alive _vehicle} &&
 {isEngineOn _vehicle} &&
-{_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]}
+{
+	_vehicle getVariable ["RS_MH6V3_izlidEnabled", false] ||
+	{_vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false]}
+}

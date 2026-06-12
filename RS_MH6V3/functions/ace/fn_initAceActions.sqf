@@ -1135,7 +1135,7 @@ private _izlidModeActionRoot = [
 
 private _pilotIZLIDAction = [
 	"RS_MH6V3_pilot_directed_izlid",
-	"Toggle Pilot-Directed IZLID",
+	"Toggle Handheld IZLID",
 	"",
 	{
 		[] call RS_MH6V3_fnc_togglePilotIZLID;

@@ -114,6 +114,9 @@ Weapon and pylon features include:
 [*]Clear pylon editor title difference between RHS and RS M134 variants.
 [*]RS M134 set as the default gun pylon option.
 [*]M134 LO and HI fire-rate modes tuned for more realistic output.
+[*]Interior aircraft vibration while the RS M134 miniguns are firing.
+[*]Stronger interior vibration while the GAU-19 is firing.
+[*]Heavy interior impact vibration when rockets or missiles launch.
 [*]HEAT Hydra pylon option.
 [*]Quick Launch Hydra keybind.
 [*]Hydra Rocket Ripple Configuration.
@@ -142,6 +145,7 @@ RS M134 features include:
 [*]LO fire mode.
 [*]HI fire mode.
 [*]More realistic fire-rate behavior for sustained minigun employment.
+[*]Crew-visible interior vibration while firing, with stronger feedback in HI mode.
 [/list]
 
 [code]

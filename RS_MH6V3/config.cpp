@@ -33,6 +33,11 @@ class CfgFunctions
 		class camera
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\camera";
+			class handleMinigunFired {};
+			class initMinigunShake
+			{
+				postInit = 1;
+			};
 			class resetCameras {};
 		};
 		class acre
@@ -182,8 +187,8 @@ class CfgUserActions
 	};
 	class RS_MH6V3_togglePilotIZLID
 	{
-		displayName = "Toggle Pilot-Directed IZLID";
-		tooltip = "Toggle the additional IZLID laser directed by the pilot's head.";
+		displayName = "Toggle Handheld IZLID";
+		tooltip = "Toggle the handheld IZLID directed by the active pilot's view.";
 		onActivate = "[] call RS_MH6V3_fnc_togglePilotIZLID";
 		onDeactivate = "";
 		onAnalog = "";
@@ -2084,6 +2089,7 @@ class CfgVehicles
 				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
 				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
 				engine = "params ['_vehicle', '_engineOn']; [_vehicle, _engineOn] call RS_MH6V3_fnc_handleIZLIDPowerState";
+				fired = "_this call RS_MH6V3_fnc_handleMinigunFired";
 				killed = "params ['_vehicle']; [_vehicle, false] call RS_MH6V3_fnc_handleIZLIDPowerState";
 				controlsShifted = "params ['_vehicle', '_activeCopilot']; _vehicle setVariable ['RS_MH6V3_activeCopilot', _activeCopilot, true]; [_vehicle] call RS_MH6V3_fnc_syncPylonOwner";
 				handleDamage = "_this call RHS_MELB_fnc_fallDamage";

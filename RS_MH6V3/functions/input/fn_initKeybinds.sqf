@@ -104,7 +104,7 @@ if (isNil "RS_MH6V3_controlsShiftedEh") then {
 [
 	"[RS] MH-6V3",
 	"RS_MH6V3_togglePilotIZLID",
-	["Toggle Pilot-Directed IZLID [BETA]", "Toggle the additional IZLID laser directed by the pilot's head."],
+	["Toggle Handheld IZLID [BETA]", "Toggle the handheld IZLID directed by the active pilot's view."],
 	{
 		[] call RS_MH6V3_fnc_togglePilotIZLID
 	},

@@ -7,8 +7,9 @@ private _trackedVehicles = [];
 	if ([_x] call RS_MH6V3_fnc_canUseIZLID) then {
 		_trackedVehicles pushBack _x;
 		private _mode = _x getVariable ["RS_MH6V3_izlidMode", 3];
+		private _fixedEnabled = _x getVariable ["RS_MH6V3_izlidEnabled", false];
 
-		if (_mode in [2, 3]) then {
+		if (_fixedEnabled && {_mode in [2, 3]}) then {
 			private _laser = [_x] call RS_MH6V3_fnc_findIZLIDLaserSource;
 
 			if !(_laser isEqualTo [-1, -1]) then {

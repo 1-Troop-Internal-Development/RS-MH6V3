@@ -10,7 +10,10 @@ _activeVehicles = _activeVehicles select {
 	!isNull _x &&
 	{alive _x} &&
 	{typeOf _x == "RHS_MELB_AH6M"} &&
-	{_x getVariable ["RS_MH6V3_izlidEnabled", false]}
+	{
+		_x getVariable ["RS_MH6V3_izlidEnabled", false] ||
+		{_x getVariable ["RS_MH6V3_pilotIZLIDEnabled", false]}
+	}
 };
 
 if (

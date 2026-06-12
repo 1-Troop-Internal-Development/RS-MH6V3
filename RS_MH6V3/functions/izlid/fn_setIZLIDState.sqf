@@ -24,10 +24,9 @@ if (isNil {_vehicle getVariable "RS_MH6V3_izlidConeMode"}) then {
 
 if (!_enabled) then {
 	_vehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessActive", nil, true];
-	_vehicle setVariable ["RS_MH6V3_pilotIZLIDEnabled", false, true];
-	_vehicle setVariable ["RS_MH6V3_pilotIZLIDDirection", nil, true];
 };
 
 _vehicle setVariable ["RS_MH6V3_izlidEnabled", _enabled, true];
-[_vehicle, _enabled] remoteExecCall ["RS_MH6V3_fnc_trackIZLIDVehicle", 0];
+private _systemActive = _enabled || {_vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false]};
+[_vehicle, _systemActive] remoteExecCall ["RS_MH6V3_fnc_trackIZLIDVehicle", 0];
 true

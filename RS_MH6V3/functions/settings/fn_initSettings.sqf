@@ -8,6 +8,29 @@
 ] call CBA_fnc_addSetting;
 
 [
+	"RS_MH6V3_weaponVibrationEnabled",
+	"CHECKBOX",
+	["[RS] Aircraft Weapon Vibration", "Enable interior vibration from guns, rockets, and missile launches."],
+	["[RS] MH-6V3", "Camera"],
+	true,
+	0,
+	{
+		params ["_enabled"];
+
+		if (!hasInterface || {_enabled}) exitWith {};
+
+		if (!isNil "RS_MH6V3_minigunShakePfh") then {
+			[RS_MH6V3_minigunShakePfh] call CBA_fnc_removePerFrameHandler;
+			RS_MH6V3_minigunShakePfh = nil;
+		};
+
+		setCamShakeParams [0, 1, 1, 1, true];
+		missionNamespace setVariable ["RS_MH6V3_gunShakeVehicle", objNull];
+		missionNamespace setVariable ["RS_MH6V3_gunShakeUntil", -1];
+	}
+] call CBA_fnc_addSetting;
+
+[
 	"RS_MH6V3_acreStatusOverlayEnabled",
 	"CHECKBOX",
 	["[RS] ACRE Status UI", "Show the ACRE radio status overlay while seated as pilot or co-pilot."],

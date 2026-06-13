@@ -8,10 +8,24 @@ params [
 
 if (isNull _vehicle || {!(_vehicle isKindOf "RHS_MELB_AH6M")}) exitWith {};
 
+private _sendShakeToCrew = {
+	params ["_vehicle", "_effect", "_strength"];
+
+	{
+		if (isPlayer _x) then {
+			[
+				"RS_MH6V3_cameraShake",
+				[_vehicle, _effect, _strength],
+				_x
+			] call CBA_fnc_targetEvent;
+		};
+	} forEach crew _vehicle;
+};
+
 private _simulation = toLower getText (configFile >> "CfgAmmo" >> _ammo >> "simulation");
 if (_simulation in ["shotrocket", "shotmissile"]) exitWith {
 	private _strength = if (_simulation == "shotmissile") then {1.25} else {1};
-	_vehicle setVariable ["RS_MH6V3_launchShakePulse", [serverTime, _strength], true];
+	[_vehicle, "launch", _strength] call _sendShakeToCrew;
 };
 
 private _isM134 = _weapon == "RS_MH6V3_weap_m134_pylon";
@@ -31,4 +45,4 @@ private _strength = if (_isGAU19) then {
 	if (_mode == "HighROF") then {1.4} else {1.15}
 };
 _vehicle setVariable ["RS_MH6V3_lastMinigunShakePublish", _now, false];
-_vehicle setVariable ["RS_MH6V3_minigunShakePulse", [_now, _strength], true];
+[_vehicle, "gun", _strength] call _sendShakeToCrew;

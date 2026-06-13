@@ -1,71 +1,106 @@
 if (!hasInterface) exitWith {};
 
-if (!isNil "RS_MH6V3_minigunShakePfh") then {
-	[RS_MH6V3_minigunShakePfh] call CBA_fnc_removePerFrameHandler;
+if (isNil "RS_MH6V3_minigunShakeEventEh") then {
+	RS_MH6V3_minigunShakeEventEh = [
+		"RS_MH6V3_cameraShake",
+		{
+			params [
+				["_vehicle", objNull],
+				["_effect", "", [""]],
+				["_strength", 1, [0]]
+			];
+
+			if !(missionNamespace getVariable ["RS_MH6V3_weaponVibrationEnabled", true]) exitWith {};
+
+			if (
+				isNull _vehicle ||
+				{vehicle player != _vehicle} ||
+				{cameraView != "INTERNAL"}
+			) exitWith {};
+
+			if (_effect == "launch") exitWith {
+				setCamShakeParams [0.016, 0.85, 0.85, 1.05, true];
+				addCamShake [2.4 * _strength, 0.42, 11];
+			};
+
+			if (_effect != "gun") exitWith {};
+
+			missionNamespace setVariable ["RS_MH6V3_gunShakeVehicle", _vehicle];
+			missionNamespace setVariable ["RS_MH6V3_gunShakeStrength", _strength];
+			missionNamespace setVariable ["RS_MH6V3_gunShakeUntil", diag_tickTime + 0.35];
+
+			if (!isNil "RS_MH6V3_minigunShakePfh") exitWith {};
+
+			missionNamespace setVariable [
+				"RS_MH6V3_gunShakeMotionSample",
+				[diag_tickTime, vectorDirVisual _vehicle, 0]
+			];
+
+			RS_MH6V3_minigunShakePfh = [{
+				private _vehicle = missionNamespace getVariable [
+					"RS_MH6V3_gunShakeVehicle",
+					objNull
+				];
+				private _shakeUntil = missionNamespace getVariable [
+					"RS_MH6V3_gunShakeUntil",
+					-1
+				];
+				private _validView =
+					(missionNamespace getVariable ["RS_MH6V3_weaponVibrationEnabled", true]) &&
+					!isNull _vehicle &&
+					{vehicle player == _vehicle} &&
+					{cameraView == "INTERNAL"} &&
+					{diag_tickTime <= _shakeUntil};
+
+				if (!_validView) exitWith {
+					setCamShakeParams [0, 1, 1, 1, true];
+					[RS_MH6V3_minigunShakePfh] call CBA_fnc_removePerFrameHandler;
+					RS_MH6V3_minigunShakePfh = nil;
+					missionNamespace setVariable ["RS_MH6V3_gunShakeVehicle", objNull];
+					missionNamespace setVariable ["RS_MH6V3_gunShakeMotionSample", nil];
+				};
+
+				private _strength = missionNamespace getVariable [
+					"RS_MH6V3_gunShakeStrength",
+					1
+				];
+				private _now = diag_tickTime;
+				private _currentDirection = vectorDirVisual _vehicle;
+				private _motionSample = missionNamespace getVariable [
+					"RS_MH6V3_gunShakeMotionSample",
+					[_now, _currentDirection, 0]
+				];
+				_motionSample params ["_sampleTime", "_sampleDirection", "_previousAngularRate"];
+
+				private _sampleDuration = 0.01 max (_now - _sampleTime);
+				private _angularRate =
+					(_currentDirection vectorDistance _sampleDirection) /
+					_sampleDuration;
+				private _angularRateChange =
+					(abs (_angularRate - _previousAngularRate)) /
+					_sampleDuration;
+				private _cameraShakeMultiplier = [1, 0.25] select (_angularRateChange > 1.5);
+
+				missionNamespace setVariable [
+					"RS_MH6V3_gunShakeMotionSample",
+					[_now, _currentDirection, _angularRate]
+				];
+
+				private _phase = diag_tickTime * 900;
+				private _horizontalBias = 0.585 + (abs (cos _phase)) * 0.91;
+				private _verticalBias = 0.585 + (abs (sin _phase)) * 0.91;
+				private _irregularity = 0.9 + (abs (sin (_phase * 0.37))) * 0.2;
+				private _bankBias = 0.585 + (abs (sin (_phase * 0.53))) * 0.91;
+
+				setCamShakeParams [
+					0.00715 * _strength * _irregularity * _cameraShakeMultiplier,
+					_verticalBias * _irregularity * _cameraShakeMultiplier,
+					_horizontalBias * _irregularity * _cameraShakeMultiplier,
+					_bankBias * _cameraShakeMultiplier,
+					false
+				];
+				addCamShake [0.416 * _strength * _cameraShakeMultiplier, 0.1, 31];
+			}, 0.04] call CBA_fnc_addPerFrameHandler;
+		}
+	] call CBA_fnc_addEventHandler;
 };
-
-RS_MH6V3_minigunShakePfh = [{
-	private _vehicle = vehicle player;
-
-	if (
-		_vehicle isEqualTo player ||
-		{!(_vehicle isKindOf "RHS_MELB_AH6M")} ||
-		{cameraView != "INTERNAL"}
-	) exitWith {
-		player setVariable ["RS_MH6V3_minigunShakeMotionSample", nil, false];
-	};
-
-	private _pulse = _vehicle getVariable ["RS_MH6V3_minigunShakePulse", [-1, 0]];
-	_pulse params ["_firedAt", "_strength"];
-
-	if ((serverTime - _firedAt) <= 0.18) then {
-		private _now = diag_tickTime;
-		private _airspeed = speed _vehicle;
-		private _airspeedMultiplier = if (_airspeed <= 70) then {
-			linearConversion [0, 40, _airspeed, 1, 1.4, true]
-		} else {
-			linearConversion [70, 220, _airspeed, 1.4, 1.8, true]
-		};
-
-		private _currentDirection = vectorDirVisual _vehicle;
-		private _currentUp = vectorUpVisual _vehicle;
-		private _previousMotionSample = player getVariable [
-			"RS_MH6V3_minigunShakeMotionSample",
-			[_now, _currentDirection, _currentUp]
-		];
-		_previousMotionSample params ["_previousTime", "_previousDirection", "_previousUp"];
-
-		private _sampleDuration = 0.01 max (_now - _previousTime);
-		private _angularMotion = (
-			(_currentDirection vectorDistance _previousDirection) +
-			(_currentUp vectorDistance _previousUp)
-		) / _sampleDuration;
-		private _maneuverMultiplier = linearConversion [0.08, 0.9, _angularMotion, 1, 1.45, true];
-
-		player setVariable [
-			"RS_MH6V3_minigunShakeMotionSample",
-			[_now, _currentDirection, _currentUp],
-			false
-		];
-
-		addCamShake [
-			0.48 * _strength * _airspeedMultiplier * _maneuverMultiplier,
-			0.12,
-			32
-		];
-	} else {
-		player setVariable ["RS_MH6V3_minigunShakeMotionSample", nil, false];
-	};
-
-	private _launchPulse = _vehicle getVariable ["RS_MH6V3_launchShakePulse", [-1, 0]];
-	_launchPulse params ["_launchedAt", "_launchStrength"];
-
-	private _lastLaunchHandled = player getVariable ["RS_MH6V3_lastLaunchShakeHandled", -1];
-	if (
-		_launchedAt > _lastLaunchHandled &&
-		{(serverTime - _launchedAt) <= 0.4}
-	) then {
-		addCamShake [5.5 * _launchStrength, 0.55, 12];
-		player setVariable ["RS_MH6V3_lastLaunchShakeHandled", _launchedAt, false];
-	};
-}, 0.08] call CBA_fnc_addPerFrameHandler;

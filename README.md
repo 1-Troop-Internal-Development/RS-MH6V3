@@ -1,278 +1,190 @@
-[h1]MH-6V3 Little Bird[/h1]
-[hr][/hr][code]A gameplay-focused AH-6M Little Bird enhancement for Arma 3.
+[h1]MH-6V3 Little Bird[/h1][hr][/hr]
+[code]A gameplay-focused AH-6M Little Bird enhancement for Arma 3.
 
-This mod expands the RHS MELB AH-6M with practical crew tools, aircraft controls,
-ACRE radio management, IZLID/IR illumination capability, improved weapon options,
-custom pylon defaults, joystick-friendly keybind support, and mission-maker/server
-configuration where local presentation makes sense.
+Little Bird V3 is a re-scripted continuation of Little Bird V2. It expands the RHS MELB AH-6M with improved crew controls, weapon options, IZLID/IR systems, ACRE radio tools, configurable Hydra ripple fire, and mission-friendly customization.
 
-Little Bird V3 is re-scripted from the Little Bird V2 mod to add more functionality,
-modernize the aircraft systems, and fix bugs or limitations that occurred in the
-older version.
+The goal is practical crew usability and immersion rather than a full avionics simulation.[/code]
 
-The goal is not to rebuild the Little Bird as a full avionics simulation. The goal
-is to provide a cleaner, more capable, and more crew-friendly aircraft for Arma 3
-operations while keeping the systems usable in live missions.
-[/code]
-[hr][/hr]
-[h2]Based on Little Bird V2[/h2]
-Little Bird V3 is a re-scripted continuation of the Little Bird V2 mod. It keeps the same general gameplay purpose while expanding the aircraft with additional crew tools, weapon options, radio support, keybind support, and bug fixes for issues found in the older version.
-
+[hr][/hr][h2]Based on Little Bird V2[/h2]
 [code]
 Little Bird V2 Workshop:
 https://steamcommunity.com/sharedfiles/filedetails/?id=2787531417
 [/code]
 
-[h2]Aircraft[/h2]
-This mod updates the RHS AH-6M Little Bird with expanded crew, weapon, and aircraft utility features.
-
-Primary aircraft changes include:
+[h2]Aircraft Features[/h2]
 [list]
 [*]Custom AH-6M Little Bird configuration.
-[*]Updated default pylon setup.
-[*]Extended pylon editor options.
-[*]ACE interaction support for aircraft systems.
-[*]Livery and aircraft visual customization support.
-[*]Improved pilot/co-pilot crew workflow.
-[/list]
-
-[h2]Pilot / Co-Pilot Pylon Ownership[/h2]
-The Little Bird V3 includes pilot and co-pilot pylon ownership synchronization so weapon control follows the active crew control state more reliably.
-
-This system helps keep pylon weapon ownership aligned when:
-[list]
-[*]Players enter or leave crew seats.
-[*]Aircraft controls are shifted between pilot and co-pilot.
-[*]The active co-pilot state changes.
-[*]Pylon weapon control needs to remain consistent during crewed flight.
+[*]Improved pilot and co-pilot workflow.
+[*]Pilot/co-pilot pylon ownership synchronization.
+[*]Updated default pylons and expanded editor options.
+[*]ACE interactions for aircraft systems.
+[*]Livery and visual customization.
+[*]Joystick-friendly CfgUserActions.
 [/list]
 
 [h2]IZLID & IR Illumination[/h2]
-The Little Bird V3 includes an aircraft-mounted IZLID and IR illuminator system for night operations, marking, crew coordination, and air-to-ground support.
-
-IZLID control options include:
 [list]
-[*]Toggle IZLID.
-[*]Hold IZLID.
-[*]Cycle IZLID mode.
-[*]ACE interaction controls.
-[*]CBA keybind controls.
-[*]CfgUserActions support for joystick and controller binding.
+[*]Fixed forward IZLID marking laser.
+[*]Handheld IZLID directed by the active pilot's view.
+[*]Seat-specific Handheld IZLID origins and horizontal limits.
+[*]Wide, narrow, and dynamic IR illuminator modes.
+[*]Adjustable client-side IR illuminator brightness.
+[*]Toggle, hold, and mode-cycle controls through keybinds, UserActions, and ACE.
 [/list]
 
-Available IZLID / illuminator modes include:
-[list]
-[*]IZLID laser marking.
-[*]Wide IR illuminator.
-[*]Narrow IR illuminator.
-[*]Dynamic illuminator behavior.
-[*]Combined mode options through ACE interaction.
-[/list]
+The fixed and Handheld IZLIDs operate independently. Activating the Handheld IZLID disables the fixed beam to prevent duplicate output.
 
 [code]
 IR Illuminator Brightness - Client Addon Option
 Toggle IZLID - Keybind / UserAction / ACE
 Hold IZLID - Keybind / UserAction
 Cycle IZLID Mode - Keybind / UserAction / ACE
+Toggle Handheld IZLID - Keybind / UserAction / ACE
 [/code]
 
 [h2]ACRE Radio Management[/h2]
-The mod adds Little Bird-focused ACRE radio tools for pilots and co-pilots.
-
-ACRE features include:
 [list]
-[*]ACRE Status UI for pilot and co-pilot positions.
-[*]Client-side ACRE Status UI visibility toggle.
-[*]Client-side ACRE Status UI X/Y positioning.
-[*]Client-side delayed hide or instant hide option.
-[*]Radio selection cycling.
-[*]Selected radio volume increase/decrease controls.
-[*]Seated ACE Radio Management action.
+[*]Pilot/co-pilot ACRE status overlay.
+[*]Configurable overlay visibility, position, and delayed hide.
+[*]Cycle selected aircraft radio.
+[*]Increase or decrease selected radio volume.
+[*]Seated ACE Radio Management interface.
+[*]View and tune crew inventory or rack radios.
 [*]Remote crew radio tune support.
-[*]Radio change notifications only for valid crew/vehicle listeners.
-[*]Automatic removal of ACRE interactions when ACRE is not loaded.
+[*]Automatic removal of ACRE actions when ACRE is unavailable.
 [/list]
 
-The ACRE Status UI is designed to respond to actual radio transmissions rather than aircraft intercom speech.
-ACRE Radio Management interactions are only registered when the required ACRE API is detected.
+The status overlay responds to radio transmissions rather than aircraft intercom speech.
 
 [code]
 ACRE Status UI - Client Addon Option
 ACRE Status UI Delayed Hide - Client Addon Option
 ACRE Status UI X/Y Position - Client Addon Options
 Cycle Selected ACRE Radio - Keybind / UserAction
-Increase Selected ACRE Radio Volume - Keybind / UserAction
-Decrease Selected ACRE Radio Volume - Keybind / UserAction
+Increase/Decrease Radio Volume - Keybind / UserAction
 [/code]
 
-[h2]Pylons & Weapons[/h2]
-The Little Bird V3 includes expanded pylon and weapon options while keeping the aircraft practical for repeated mission use.
-
-Weapon and pylon features include:
+[h2]M134D-H RS Variant[/h2]
 [list]
-[*]Custom RS M134 pylon weapon variant.
-[*]Clear pylon editor title difference between RHS and RS M134 variants.
-[*]RS M134 set as the default gun pylon option.
-[*]M134 LO and HI fire-rate modes tuned for more realistic output.
-[*]Interior aircraft vibration while the RS M134 miniguns are firing.
-[*]Stronger interior vibration while the GAU-19 is firing.
-[*]Heavy interior impact vibration when rockets or missiles launch.
-[*]HEAT Hydra pylon option.
-[*]Quick Launch Hydra keybind.
-[*]Hydra Rocket Ripple Configuration.
-[*]Hydra Ripple Master Arm toggle.
+[*]Dedicated RS pylon magazine and weapon class.
+[*]RS M134 used by the default AH-6M loadout.
+[*]Distinct LO and HI fire-rate modes.
+[*]Higher sustained output than the original configuration.
 [/list]
 
 [code]
 RS M134 Pylon Title - M134D-H (RS)
 RS M134 Short Title - RS M134
-Default AH-6M Gun Pylons - RS M134
+LO - Lower output fire-rate mode
+HI - Higher output fire-rate mode
+[/code]
+
+[h2]Aircraft Weapon Vibration[/h2]
+[list]
+[*]Interior vibration while the RS M134 or GAU-19 is firing.
+[*]GAU-19 vibration is stronger than M134 vibration.
+[*]Irregular circular camera movement slightly disrupts gun aim.
+[*]Reduced custom camera shake when abrupt aircraft motion is detected.
+[*]Heavy one-shot impact for rocket and missile launches.
+[*]Missile launch impact is stronger than rocket launch impact.
+[*]Client addon option to enable or disable all weapon vibration.
+[*]Event-driven implementation runs only while an effect is active.
+[/list]
+
+[h2]Hydras & Pylon Options[/h2]
+[list]
+[*]Expanded Hydra and weapon pylon options.
+[*]M247 HEAT Hydra for anti-vehicle use.
+[*]7-round M260 and 19-round M261 HEAT magazines.
+[*]Reduced HEAT fragmentation radius with higher direct-hit armor damage.
+[*]Default and HEAT pylon presets using the RS M134.
+[/list]
+
+[h2]Hydra Rocket Ripple[/h2]
+Quick Launch fires a configured Hydra pylon without requiring the pilot to manually select rockets. The previously selected weapon is restored afterward.
+
+[h3]Single Pylon Priority[/h3]
+Uses the first available configured pylon until empty, then advances to the next.
+
+[h3]Cycling Sequence[/h3]
+Advances one configured step per trigger pull. A pylon may appear multiple times to create a custom firing pattern.
+
+[code]
+Example: Pylon 1 > Pylon 2 > Pylon 2 > Pylon 3
+[/code]
+
+A saved sequence is required before Quick Launch can fire.
+
+[code]
 Quick Launch Hydra - Keybind / UserAction
 Hydra Rocket Ripple Configuration - Keybind / UserAction / ACE
 Toggle Hydra Ripple Master Arm - Keybind / UserAction
 [/code]
 
-[h2]M134D-H RS Variant[/h2]
-The RS M134 variant is separated from the RHS M134 in the pylon editor so mission makers can clearly identify which gun option is being used.
-
-The fire-rate behavior has been edited to better represent the real M134's high-output capability. LO and HI modes are tuned to feel meaningfully different, with HI providing a much higher volume of fire instead of only a minor change from LO.
-
-RS M134 features include:
+[h2]ACE Features[/h2]
 [list]
-[*]Dedicated RS pylon magazine.
-[*]Dedicated RS pylon weapon class.
-[*]Default AH-6M pylon placement.
-[*]LO fire mode.
-[*]HI fire mode.
-[*]More realistic fire-rate behavior for sustained minigun employment.
-[*]Crew-visible interior vibration while firing, with stronger feedback in HI mode.
+[*]IZLID and illuminator controls.
+[*]Handheld IZLID control.
+[*]Hydra ripple configuration.
+[*]ACRE Radio Management when ACRE is loaded.
+[*]Aircraft livery tools.
+[*]Pylon and aircraft service actions.
 [/list]
 
-[code]
-LO - Lower output fire-rate mode
-HI - Higher output fire-rate mode
-[/code]
-
-[h2]HEAT Hydras[/h2]
-The mod adds an M247 HEAT Hydra option intended for anti-vehicle use.
-
-The HEAT Hydra setup is designed to provide:
+[h2]Addon Options[/h2]
 [list]
-[*]Reduced fragmentation radius compared to standard HE Hydras.
-[*]Higher direct-hit anti-armor damage.
-[*]Dedicated 7-round M260 HEAT pylon magazine.
-[*]Dedicated 19-round M261 HEAT pylon magazine.
-[*]Separate HEAT Hydra weapon selection from normal Hydras.
-[*]HEAT preset support in the pylon editor.
+[*]IR Illuminator Brightness.
+[*]Aircraft Weapon Vibration enabled/disabled.
+[*]ACRE Status UI enabled/disabled.
+[*]ACRE Status UI delayed or instant hide.
+[*]ACRE Status UI horizontal and vertical position.
 [/list]
 
-[code]
-M247 HEAT Hydra (M260) - 7-round pod
-M247 HEAT Hydra (M261) - 19-round pod
-Hydra (M247 HEAT) - Dedicated weapon selection
-[/code]
-
-[h2]Hydra Rocket Ripple Configuration[/h2]
-The Hydra Rocket Ripple system allows the pilot to launch configured Hydra pylons without manually selecting the rocket weapon first. The system temporarily fires the required Hydra launcher and restores the pilot's previously selected weapon.
-
-The pilot can configure the pylon order from the seated AH-6M ACE interaction or through the dedicated keybind/UserAction.
-
-Ripple configuration features include:
-
-[h3]Single Pylon Priority[/h3]
-Single Pylon Priority uses the first available pylon in the configured sequence until that pylon is depleted. The system then advances to the next loaded configured pylon.
-
-[h3]Cycling Sequence[/h3]
-Cycling Sequence advances one configured step on every trigger pull. Pylons may be entered multiple times to create a custom firing pattern.
-
-[code]
-Example: Pylon 1 > Pylon 2 > Pylon 2 > Pylon 3
-Each Quick Launch input advances one step.
-[/code]
-
-The system requires a saved sequence. If Quick Launch is attempted without one, no Hydra is fired and the occupied pilot/co-pilot crew seats receive a notification.
-
-Available UserActions include:
+[h2]UserActions[/h2]
 [list]
 [*]Toggle IZLID.
 [*]Hold IZLID.
 [*]Cycle IZLID Mode.
+[*]Toggle Handheld IZLID.
 [*]Quick Launch Hydra.
 [*]Hydra Rocket Ripple Configuration.
 [*]Toggle Hydra Ripple Master Arm.
 [*]Cycle Selected ACRE Radio.
-[*]Increase Selected ACRE Radio Volume.
-[*]Decrease Selected ACRE Radio Volume.
+[*]Increase/Decrease Selected ACRE Radio Volume.
 [/list]
 
 [code]
 Addon / Keybind Group: [RS] MH-6V3
 [/code]
 
-[h2]ACE Interaction Features[/h2]
-ACE interaction is used where aircraft-side interaction makes sense.
-
-ACE-supported systems include:
-[list]
-[*]IZLID / IR illuminator controls.
-[*]Hydra Rocket Ripple Configuration for the active AH-6M pilot.
-[*]ACRE Radio Management for valid aircraft crew when ACRE is loaded.
-[*]Aircraft livery tools.
-[*]Pylon-related aircraft actions.
-[/list]
-
-[h2]Livery & Visual Customization[/h2]
-The mod retains and extends aircraft visual customization options for mission makers and crews.
-
-[h2]Addon Options[/h2]
-The mod includes client-side addon options for systems where local presentation or preference matters.
-
-Addon options include:
-[list]
-[*]IR Illuminator Brightness.
-[*]ACRE Status UI enabled/disabled.
-[*]ACRE Status UI delayed hide or instant hide.
-[*]ACRE Status UI horizontal position.
-[*]ACRE Status UI vertical position.
-[/list]
-
 [h2]Mission Maker Notes[/h2]
-The mod is intended to be mission-friendly and crew-safe.
-
-Mission maker considerations:
 [list]
-[*]The default AH-6M pylon loadout uses the RS M134 variant.
-[*]The HEAT loadout preset uses RS M134 guns and HEAT Hydras.
-[*]ACRE actions validate vehicle and crew context before applying remote radio changes.
-[*]ACRE interactions do not appear when ACRE is not loaded.
-[*]Intercom speech should not trigger the radio status overlay.
-[*]Hydra Quick Launch cannot fire until the pilot saves a ripple sequence.
-[*]Joystick users can bind key systems through normal UserActions.
+[*]The default AH-6M loadout uses the RS M134 variant.
+[*]The HEAT preset uses RS M134 guns and M247 HEAT Hydras.
+[*]Hydra Quick Launch requires a saved ripple sequence.
+[*]ACRE actions validate aircraft and crew context.
+[*]ACRE interactions are hidden when ACRE is not loaded.
+[*]Weapon vibration is a client-side preference.
 [/list]
 
 [h2]Dependencies[/h2]
-This mod is built for the RHS MELB AH-6M and uses common Arma 3 community systems.
-
-Required or expected systems include:
 [list]
 [*]CBA.
 [*]ACE for ACE interaction features.
 [*]ACRE for ACRE radio features.
-[*]RHS United States Forces / RHS MELB content.
+[*]RHS USAF / RHS MELB content.
 [/list]
 
 [h2]Disclaimer[/h2]
-This mod is designed around gameplay usability, crew workflow, and immersion first. While inspired by real-world aviation equipment and aircraft survivability practices, it is not intended to function as a fully realistic avionics or aircraft systems simulation.
-
-Feedback and suggestions are welcome as development continues.
+This mod prioritizes gameplay usability, crew workflow, and immersion. It is not intended to be a complete avionics simulation.
 
 [h1]Support Discord[/h1]
 https://discord.gg/HcwP6daZ9G
 
 [h1]License[/h1]
-Reupload in private packs if you wish. Just don't reupload as a copy for public use.
+Reupload in private packs if you wish. Do not publicly reupload the mod as a copy.
 
 [h1]Unit[/h1]
-If you are looking for a realism Arma unit, check out 1 Troop.
+Looking for a realism Arma unit? Visit 1 Troop:
 
 https://1troop.net

@@ -132,9 +132,18 @@ Toggle Hydra Ripple Master Arm - Keybind / UserAction
 [/list]
 
 [h2]Addon Options[/h2]
+[h3]Camera & Effects[/h3]
+[list]
+[*]Aircraft Weapon Vibration enabled/disabled.
+[/list]
+
+[h3]IZLID & Illumination[/h3]
 [list]
 [*]IR Illuminator Brightness.
-[*]Aircraft Weapon Vibration enabled/disabled.
+[/list]
+
+[h3]ACRE Status UI[/h3]
+[list]
 [*]ACRE Status UI enabled/disabled.
 [*]ACRE Status UI delayed or instant hide.
 [*]ACRE Status UI horizontal and vertical position.

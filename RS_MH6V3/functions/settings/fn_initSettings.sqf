@@ -1,17 +1,13 @@
-[
-	"RS_MH6V3_irIlluminatorBrightness",
-	"SLIDER",
-	["[RS] IR Illuminator Brightness", "Client-side brightness percentage for the MH-6V3 IR illuminator."],
-	["[RS] MH-6V3", "IZLID"],
-	[0, 100, 100, 0, false],
-	0
-] call CBA_fnc_addSetting;
+private _cameraCategory = ["[RS] MH-6V3", "Camera & Effects"];
+private _izlidCategory = ["[RS] MH-6V3", "IZLID & Illumination"];
+private _acreCategory = ["[RS] MH-6V3", "ACRE Status UI"];
 
+// Camera & Effects
 [
 	"RS_MH6V3_weaponVibrationEnabled",
 	"CHECKBOX",
-	["[RS] Aircraft Weapon Vibration", "Enable interior vibration from guns, rockets, and missile launches."],
-	["[RS] MH-6V3", "Camera"],
+	["Aircraft Weapon Vibration", "Enable interior camera vibration from guns, rockets, and missile launches."],
+	_cameraCategory,
 	true,
 	0,
 	{
@@ -30,12 +26,23 @@
 	}
 ] call CBA_fnc_addSetting;
 
+// IZLID & Illumination
+[
+	"RS_MH6V3_irIlluminatorBrightness",
+	"SLIDER",
+	["IR Illuminator Brightness", "Set the client-side brightness percentage for the aircraft IR illuminator."],
+	_izlidCategory,
+	[0, 100, 100, 0, false],
+	0
+] call CBA_fnc_addSetting;
+
+// ACRE Status UI
 [
 	"RS_MH6V3_acreStatusOverlayEnabled",
 	"CHECKBOX",
-	["[RS] ACRE Status UI", "Show the ACRE radio status overlay while seated as pilot or co-pilot."],
-	["[RS] MH-6V3", "ACRE"],
-	true,
+	["Enable Status UI", "Show the ACRE radio status overlay while seated as pilot or co-pilot."],
+	_acreCategory,
+	false,
 	0,
 	{
 		params ["_enabled"];
@@ -55,8 +62,8 @@
 [
 	"RS_MH6V3_acreStatusOverlayDelayedHide",
 	"CHECKBOX",
-	["[RS] ACRE Status UI Delayed Hide", "Keep the ACRE radio status overlay visible briefly after radio use stops. Disable for instant hide."],
-	["[RS] MH-6V3", "ACRE"],
+	["Delayed Hide", "Keep the status UI visible briefly after radio use stops. Disable for instant hide."],
+	_acreCategory,
 	true,
 	0,
 	{
@@ -71,8 +78,8 @@
 [
 	"RS_MH6V3_acreStatusOverlayX",
 	"SLIDER",
-	["[RS] ACRE Status UI X", "Client-side horizontal position of the ACRE radio status overlay."],
-	["[RS] MH-6V3", "ACRE"],
+	["Horizontal Position", "Set the client-side horizontal position of the ACRE status UI."],
+	_acreCategory,
 	[0, 1, 0.034, 3, false],
 	0,
 	{
@@ -85,8 +92,8 @@
 [
 	"RS_MH6V3_acreStatusOverlayY",
 	"SLIDER",
-	["[RS] ACRE Status UI Y", "Client-side vertical position of the ACRE radio status overlay."],
-	["[RS] MH-6V3", "ACRE"],
+	["Vertical Position", "Set the client-side vertical position of the ACRE status UI."],
+	_acreCategory,
 	[0, 1, 0.535, 3, false],
 	0,
 	{

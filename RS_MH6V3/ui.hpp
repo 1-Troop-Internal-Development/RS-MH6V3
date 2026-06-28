@@ -522,6 +522,246 @@ class RS_MH6V3_LiveryMenu
 	};
 };
 
+class RS_MH6V3_LogisticsManagement
+{
+	idd = 86500;
+	movingEnable = 1;
+	enableSimulation = 1;
+	onLoad = "uiNamespace setVariable ['RS_MH6V3_logisticsDisplay', _this # 0]; [] call RS_MH6V3_fnc_populateLogisticsManagement";
+	onUnload = "uiNamespace setVariable ['RS_MH6V3_logisticsDisplay', displayNull]; uiNamespace setVariable ['RS_MH6V3_logisticsVehicle', objNull]";
+
+	class controlsBackground
+	{
+		class Border: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.31 * safezoneW + safezoneX;
+			y = 0.185 * safezoneH + safezoneY;
+			w = 0.38 * safezoneW;
+			h = 0.63 * safezoneH;
+			colorBackground[] = {0.18,0.18,0.18,1};
+		};
+		class Background: RS_MH6V3_RscText
+		{
+			idc = 86501;
+			x = 0.312 * safezoneW + safezoneX;
+			y = 0.187 * safezoneH + safezoneY;
+			w = 0.376 * safezoneW;
+			h = 0.626 * safezoneH;
+			colorBackground[] = {0.015,0.015,0.015,0.98};
+		};
+		class Header: RS_MH6V3_RscText
+		{
+			idc = 86502;
+			text = "MH-6 Logistics Management";
+			x = 0.312 * safezoneW + safezoneX;
+			y = 0.187 * safezoneH + safezoneY;
+			w = 0.335 * safezoneW;
+			h = 0.045 * safezoneH;
+			sizeEx = 0.033;
+			colorBackground[] = {0.025,0.025,0.025,1};
+		};
+		class HeaderAccent: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.312 * safezoneW + safezoneX;
+			y = 0.232 * safezoneH + safezoneY;
+			w = 0.376 * safezoneW;
+			h = 0.002 * safezoneH;
+			colorBackground[] = {0.82,0.43,0.04,1};
+		};
+		class StatusPanel: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = 0.332 * safezoneW + safezoneX;
+			y = 0.255 * safezoneH + safezoneY;
+			w = 0.336 * safezoneW;
+			h = 0.055 * safezoneH;
+			colorBackground[] = {0.035,0.035,0.035,1};
+		};
+		class LeftPanel: StatusPanel
+		{
+			y = 0.335 * safezoneH + safezoneY;
+			w = 0.158 * safezoneW;
+			h = 0.36 * safezoneH;
+		};
+		class RightPanel: LeftPanel
+		{
+			x = 0.51 * safezoneW + safezoneX;
+		};
+	};
+
+	class controls
+	{
+		class CloseButton: RS_MH6V3_RscButton
+		{
+			idc = -1;
+			text = "x";
+			x = 0.654 * safezoneW + safezoneX;
+			y = 0.191 * safezoneH + safezoneY;
+			w = 0.026 * safezoneW;
+			h = 0.034 * safezoneH;
+			sizeEx = 0.028;
+			colorBackground[] = {0.65,0.05,0.04,1};
+			colorBackgroundActive[] = {0.85,0.08,0.06,1};
+			colorFocused[] = {0.65,0.05,0.04,1};
+			action = "closeDialog 0";
+		};
+		class Status: RS_MH6V3_RscText
+		{
+			idc = 86510;
+			text = "";
+			x = 0.342 * safezoneW + safezoneX;
+			y = 0.268 * safezoneH + safezoneY;
+			w = 0.316 * safezoneW;
+			h = 0.028 * safezoneH;
+			sizeEx = 0.027;
+			colorText[] = {0.92,0.92,0.92,1};
+		};
+		class ServiceLabel: RS_MH6V3_RscText
+		{
+			idc = -1;
+			text = "Service";
+			x = 0.342 * safezoneW + safezoneX;
+			y = 0.35 * safezoneH + safezoneY;
+			w = 0.138 * safezoneW;
+			h = 0.026 * safezoneH;
+			sizeEx = 0.027;
+			colorText[] = {0.9,0.9,0.9,1};
+		};
+		class PackageLabel: ServiceLabel
+		{
+			text = "Packages";
+			x = 0.52 * safezoneW + safezoneX;
+		};
+		class Drain25Button: RS_MH6V3_RscButton
+		{
+			idc = 86520;
+			text = "Drain Fuel to 25%";
+			x = 0.342 * safezoneW + safezoneX;
+			y = 0.39 * safezoneH + safezoneY;
+			w = 0.138 * safezoneW;
+			h = 0.038 * safezoneH;
+			sizeEx = 0.027;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "['drain25'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class DrainEmptyButton: Drain25Button
+		{
+			idc = 86521;
+			text = "Drain Fuel Empty";
+			y = 0.436 * safezoneH + safezoneY;
+			action = "['drainempty'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class StopDrainButton: Drain25Button
+		{
+			idc = 86522;
+			text = "Stop Fuel Drain";
+			y = 0.482 * safezoneH + safezoneY;
+			action = "['stopdrain'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class LiveryButton: Drain25Button
+		{
+			idc = 86523;
+			text = "Change Livery";
+			y = 0.528 * safezoneH + safezoneY;
+			action = "['livery'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class CameraButton: Drain25Button
+		{
+			idc = 86524;
+			text = "Reset Cameras";
+			y = 0.574 * safezoneH + safezoneY;
+			action = "['cameras'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class DisassembleButton: RS_MH6V3_RscButton
+		{
+			idc = 86526;
+			text = "Disassemble Rotors";
+			x = 0.52 * safezoneW + safezoneX;
+			y = 0.39 * safezoneH + safezoneY;
+			w = 0.138 * safezoneW;
+			h = 0.038 * safezoneH;
+			sizeEx = 0.027;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "['disassemble'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class AssembleButton: DisassembleButton
+		{
+			idc = 86527;
+			text = "Assemble Rotors";
+			y = 0.436 * safezoneH + safezoneY;
+			action = "['assemble'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class InstallMh6Button: DisassembleButton
+		{
+			idc = 86528;
+			text = "Install Assault Package";
+			y = 0.482 * safezoneH + safezoneY;
+			action = "['installmh6'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class InstallAh6Button: DisassembleButton
+		{
+			idc = 86529;
+			text = "Install Attack Package";
+			y = 0.528 * safezoneH + safezoneY;
+			action = "['installah6'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class RemoveMh6Button: DisassembleButton
+		{
+			idc = 86530;
+			text = "Remove Benches/FRIES";
+			y = 0.574 * safezoneH + safezoneY;
+			action = "['removemh6'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class RemoveAh6Button: DisassembleButton
+		{
+			idc = 86531;
+			text = "Remove Pylons/Armaments";
+			y = 0.62 * safezoneH + safezoneY;
+			action = "['removeah6'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class PushC130Button: RS_MH6V3_RscButton
+		{
+			idc = 86532;
+			text = "Position Near C-130";
+			x = 0.342 * safezoneW + safezoneX;
+			y = 0.72 * safezoneH + safezoneY;
+			w = 0.316 * safezoneW;
+			h = 0.04 * safezoneH;
+			sizeEx = 0.028;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "['pushc130'] call RS_MH6V3_fnc_runLogisticsManagementAction";
+		};
+		class RefreshButton: RS_MH6V3_RscButton
+		{
+			idc = -1;
+			text = "Refresh";
+			x = 0.342 * safezoneW + safezoneX;
+			y = 0.765 * safezoneH + safezoneY;
+			w = 0.15 * safezoneW;
+			h = 0.033 * safezoneH;
+			sizeEx = 0.026;
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "[] call RS_MH6V3_fnc_populateLogisticsManagement";
+		};
+		class CloseBottomButton: RefreshButton
+		{
+			text = "Close";
+			x = 0.508 * safezoneW + safezoneX;
+			action = "closeDialog 0";
+		};
+	};
+};
+
 class RS_MH6V3_QuickFirePylonMenu
 {
 	idd = 86400;

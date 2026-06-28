@@ -24,6 +24,103 @@ RS_MH6V3_C130_CLASS = "USAF_C130J_Cargo";
 RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS = 40;
 RS_MH6V3_SAFE_SPAWN_HEIGHT = 25;
 
+if (isNil "RS_MH6V3_cbaNetworkEventsRegistered") then {
+	RS_MH6V3_cbaNetworkEventsRegistered = true;
+
+	["RS_MH6V3_notify", {
+		params ["_message"];
+		systemChat _message;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_serviceFxStart", {
+		_this call RS_MH6V3_fnc_serviceFxLocalStart;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_serviceFxStop", {
+		_this call RS_MH6V3_fnc_serviceFxLocalStop;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_serviceSoundStart", {
+		_this call RS_MH6V3_fnc_serviceSoundLocalStart;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_fuelDrainSoundStart", {
+		_this call RS_MH6V3_fnc_fuelDrainSoundLocal;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_fuelDrainSoundStop", {
+		_this call RS_MH6V3_fnc_fuelDrainSoundStopLocal;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_setRotorDamage", {
+		_this call RS_MH6V3_fnc_setRotorDamage;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_openRearmMenu", {
+		_this call RS_MH6V3_fnc_openRearmMenu;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_resetCameras", {
+		_this call RS_MH6V3_fnc_resetCameras;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_trackIZLIDVehicle", {
+		_this call RS_MH6V3_fnc_trackIZLIDVehicle;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_cleanupIlluminator", {
+		_this call RS_MH6V3_fnc_cleanupIlluminator;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_receiveACRERadioSnapshot", {
+		_this call RS_MH6V3_fnc_receiveACRERadioSnapshot;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_publishACRERadioSnapshot", {
+		_this call RS_MH6V3_fnc_publishACRERadioSnapshot;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_applyACRERadioTune", {
+		_this call RS_MH6V3_fnc_applyACRERadioTune;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestDrainFuel", {
+		_this call RS_MH6V3_fnc_drainFuel;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestCancelFuelDrain", {
+		_this call RS_MH6V3_fnc_cancelFuelDrain;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestEnforceAmmoSource", {
+		_this call RS_MH6V3_fnc_enforceAttackPackageAmmoSource;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestDisassembleRotors", {
+		_this call RS_MH6V3_fnc_disassembleRotors;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestAssembleRotors", {
+		_this call RS_MH6V3_fnc_assembleRotors;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestConvertVariant", {
+		_this call RS_MH6V3_fnc_convertVariant;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestRemoveAh6ArmamentsForCargo", {
+		_this call RS_MH6V3_fnc_removeAh6ArmamentsForCargo;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestApplyLivery", {
+		_this call RS_MH6V3_fnc_applyLivery;
+	}] call CBA_fnc_addEventHandler;
+
+	["RS_MH6V3_requestQuickLaunchHydra", {
+		_this call RS_MH6V3_fnc_quickLaunchHydra;
+	}] call CBA_fnc_addEventHandler;
+};
+
 RS_MH6V3_fnc_notifyAircrew = {
 	params [
 		"_message",
@@ -42,7 +139,7 @@ RS_MH6V3_fnc_notifyAircrew = {
 		if (hasInterface && {player == _x}) then {
 			systemChat _message;
 		} else {
-			[_message] remoteExecCall ["systemChat", owner _x];
+			["RS_MH6V3_notify", [_message], _x] call CBA_fnc_targetEvent;
 		};
 	} forEach (_recipients arrayIntersect _recipients);
 };
@@ -197,8 +294,8 @@ RS_MH6V3_fnc_startServiceFx = {
 
 	private _fxId = format ["RS_MH6V3_service_%1_%2", round (diag_tickTime * 1000), floor random 10000];
 	_unit setVariable ["RS_MH6V3_serviceFxId", _fxId, true];
-	[_unit, _duration, _fxId] remoteExecCall ["RS_MH6V3_fnc_serviceFxLocalStart", owner _unit];
-	[_vehicle, _unit, _duration, _fxId] remoteExecCall ["RS_MH6V3_fnc_serviceSoundLocalStart", owner _unit];
+	["RS_MH6V3_serviceFxStart", [_unit, _duration, _fxId], _unit] call CBA_fnc_targetEvent;
+	["RS_MH6V3_serviceSoundStart", [_vehicle, _unit, _duration, _fxId], _unit] call CBA_fnc_targetEvent;
 	_fxId
 };
 
@@ -210,7 +307,72 @@ RS_MH6V3_fnc_stopServiceFx = {
 
 	if (_fxId == "") exitWith {};
 	_unit setVariable ["RS_MH6V3_serviceFxId", "", true];
-	[_unit, _fxId] remoteExecCall ["RS_MH6V3_fnc_serviceFxLocalStop", owner _unit];
+	["RS_MH6V3_serviceFxStop", [_unit, _fxId], _unit] call CBA_fnc_targetEvent;
+};
+
+RS_MH6V3_fnc_runServiceTask = {
+	params [
+		["_duration", 0],
+		["_args", []],
+		["_onComplete", {}],
+		["_onCancel", {}],
+		["_label", "Servicing aircraft"]
+	];
+
+	if !(hasInterface) exitWith {false};
+
+	if !(isNil "ace_common_fnc_progressBar") exitWith {
+		[
+			_duration,
+			_args,
+			_onComplete,
+			_onCancel,
+			_label
+		] call ace_common_fnc_progressBar;
+	};
+
+	[_duration, _args, _onComplete, _onCancel, _label] spawn {
+		params [
+			"_duration",
+			"_args",
+			"_onComplete",
+			"_onCancel",
+			"_label"
+		];
+
+		private _vehicle = if ((count _args) > 0 && {(_args # 0) isEqualType objNull}) then {_args # 0} else {objNull};
+		private _caller = player;
+		{
+			if (_x isEqualType objNull && {_x isKindOf "CAManBase"}) exitWith {
+				_caller = _x;
+			};
+		} forEach _args;
+
+		systemChat format ["RS MH-6V3: %1...", _label];
+
+		private _endTime = time + _duration;
+		private _cancelled = false;
+		waitUntil {
+			sleep 0.1;
+			_cancelled =
+				isNull _caller
+				|| {!alive _caller}
+				|| {vehicle _caller != _caller}
+				|| {isNull _vehicle}
+				|| {!alive _vehicle};
+
+			_cancelled || {time >= _endTime}
+		};
+
+		if (_cancelled) then {
+			_args call _onCancel;
+			systemChat format ["RS MH-6V3: %1 cancelled.", _label];
+		} else {
+			_args call _onComplete;
+		};
+	};
+
+	true
 };
 
 RS_MH6V3_fnc_playFuelDrainSound = {
@@ -228,16 +390,30 @@ RS_MH6V3_fnc_playFuelDrainSound = {
 };
 
 RS_MH6V3_fnc_fuelDrainSoundLocal = {
-	params ["_vehicle"];
+	params [
+		"_vehicle",
+		["_sessionId", "", [""]]
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _vehicle) exitWith {};
+	if (_sessionId != "" && {(_vehicle getVariable ["RS_LB_fuelDrainStoppedSessionLocal", ""]) == _sessionId}) exitWith {};
 	if (_vehicle getVariable ["RS_LB_fuelDrainSoundLoopLocal", false]) exitWith {};
 
+	if (_sessionId == "") then {
+		_sessionId = format [
+			"RS_MH6V3_fuelDrain_%1_%2",
+			round (diag_tickTime * 1000),
+			floor random 100000
+		];
+	};
+	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", true];
 	_vehicle setVariable ["RS_LB_fuelDrainSoundLoopLocal", true];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundSessionLocal", _sessionId];
+	_vehicle setVariable ["RS_LB_fuelDrainStoppedSessionLocal", nil];
 
-	[_vehicle] spawn {
-		params ["_vehicle"];
+	[_vehicle, _sessionId] spawn {
+		params ["_vehicle", "_sessionId"];
 
 		private _soundSource = "Land_HelipadEmpty_F" createVehicleLocal [0, 0, 0];
 		_soundSource attachTo [_vehicle, [0, 0, 0]];
@@ -247,6 +423,7 @@ RS_MH6V3_fnc_fuelDrainSoundLocal = {
 			!isNull _vehicle
 			&& {alive _vehicle}
 			&& {_vehicle getVariable ["RS_LB_fuelDrainSoundActive", false]}
+			&& {(_vehicle getVariable ["RS_LB_fuelDrainSoundSessionLocal", ""]) == _sessionId}
 			&& {!isNull _soundSource}
 		} do {
 			[_soundSource] call RS_MH6V3_fnc_playFuelDrainSound;
@@ -256,6 +433,7 @@ RS_MH6V3_fnc_fuelDrainSoundLocal = {
 				sleep 0.1;
 				time >= _sleepUntil
 				|| {!(_vehicle getVariable ["RS_LB_fuelDrainSoundActive", false])}
+				|| {(_vehicle getVariable ["RS_LB_fuelDrainSoundSessionLocal", ""]) != _sessionId}
 				|| {isNull _vehicle}
 				|| {!alive _vehicle}
 				|| {isNull _soundSource}
@@ -268,26 +446,41 @@ RS_MH6V3_fnc_fuelDrainSoundLocal = {
 		};
 
 		if (!isNull _vehicle) then {
-			_vehicle setVariable ["RS_LB_fuelDrainSoundSourceLocal", objNull];
-			_vehicle setVariable ["RS_LB_fuelDrainSoundLoopLocal", false];
+			if ((_vehicle getVariable ["RS_LB_fuelDrainSoundSessionLocal", ""]) == _sessionId) then {
+				_vehicle setVariable ["RS_LB_fuelDrainSoundSourceLocal", objNull];
+				_vehicle setVariable ["RS_LB_fuelDrainSoundLoopLocal", false];
+				_vehicle setVariable ["RS_LB_fuelDrainSoundSessionLocal", nil];
+			};
 		};
 	};
 };
 
 RS_MH6V3_fnc_fuelDrainSoundStopLocal = {
-	params ["_vehicle"];
+	params [
+		"_vehicle",
+		["_sessionId", "", [""]]
+	];
 
 	if !(hasInterface) exitWith {};
 	if (isNull _vehicle) exitWith {};
 
+	private _activeSession = _vehicle getVariable ["RS_LB_fuelDrainSoundSessionLocal", ""];
+	if (_sessionId != "") then {
+		_vehicle setVariable ["RS_LB_fuelDrainStoppedSessionLocal", _sessionId];
+		if (_activeSession != "" && {_activeSession != _sessionId}) exitWith {};
+	};
+
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false];
 	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundSessionLocal", nil];
+	_vehicle setVariable ["RS_LB_fuelDrainSoundLoopLocal", false];
 
 	private _soundSource = _vehicle getVariable ["RS_LB_fuelDrainSoundSourceLocal", objNull];
 	if (!isNull _soundSource) then {
 		detach _soundSource;
 		deleteVehicle _soundSource;
 	};
+	_vehicle setVariable ["RS_LB_fuelDrainSoundSourceLocal", objNull];
 };
 
 RS_MH6V3_fnc_cancelFuelDrain = {
@@ -299,7 +492,9 @@ RS_MH6V3_fnc_cancelFuelDrain = {
 	_vehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
 	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundStopLocal", 0];
+	private _soundSession = _vehicle getVariable ["RS_MH6V3_fuelDrainSoundSession", ""];
+	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundSession", nil, true];
+	["RS_MH6V3_fuelDrainSoundStop", [_vehicle, _soundSession]] call CBA_fnc_globalEvent;
 };
 
 RS_MH6V3_fnc_drainFuelLocal = {
@@ -312,7 +507,7 @@ RS_MH6V3_fnc_drainFuelLocal = {
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
 	if (!local _vehicle) exitWith {
-		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuelLocal", owner _vehicle];
+		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuelLocal", _vehicle];
 	};
 
 	[_vehicle, _targetFuel, _caller, _duration] spawn {
@@ -347,7 +542,9 @@ RS_MH6V3_fnc_drainFuelLocal = {
 			_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
 			_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
 			_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
-			[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundStopLocal", 0];
+			private _soundSession = _vehicle getVariable ["RS_MH6V3_fuelDrainSoundSession", ""];
+			_vehicle setVariable ["RS_MH6V3_fuelDrainSoundSession", nil, true];
+			["RS_MH6V3_fuelDrainSoundStop", [_vehicle, _soundSession]] call CBA_fnc_globalEvent;
 		};
 	};
 };
@@ -361,7 +558,7 @@ RS_MH6V3_fnc_drainFuel = {
 	];
 
 	if (!isServer) exitWith {
-		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuel", 2];
+		["RS_MH6V3_requestDrainFuel", [_vehicle, _targetFuel, _caller, _duration]] call CBA_fnc_serverEvent;
 	};
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -373,12 +570,18 @@ RS_MH6V3_fnc_drainFuel = {
 	_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", true, true];
 	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", true, true];
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundLocal", 0];
+	private _soundSession = format [
+		"RS_MH6V3_fuelDrain_%1_%2",
+		round (diag_tickTime * 1000),
+		floor random 100000
+	];
+	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundSession", _soundSession, true];
+	["RS_MH6V3_fuelDrainSoundStart", [_vehicle, _soundSession]] call CBA_fnc_globalEvent;
 
 	if (local _vehicle) then {
 		[_vehicle, _targetFuel, _caller, _duration] call RS_MH6V3_fnc_drainFuelLocal;
 	} else {
-		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuelLocal", owner _vehicle];
+		[_vehicle, _targetFuel, _caller, _duration] remoteExec ["RS_MH6V3_fnc_drainFuelLocal", _vehicle];
 	};
 };
 
@@ -394,7 +597,7 @@ RS_MH6V3_fnc_startDrainFuel = {
 	if (_vehicle getVariable ["RS_MH6V3_drainingFuel", false]) exitWith {};
 	if ((fuel _vehicle) <= _targetFuel) exitWith {};
 
-	[_vehicle, _targetFuel, _caller, RS_MH6V3_DRAIN_FUEL_TIME] remoteExec ["RS_MH6V3_fnc_drainFuel", 2];
+	["RS_MH6V3_requestDrainFuel", [_vehicle, _targetFuel, _caller, RS_MH6V3_DRAIN_FUEL_TIME]] call CBA_fnc_serverEvent;
 	[format ["RS MH-6V3: fuel drain started. Target: %1%2.", round (_targetFuel * 100), "%"], _vehicle] call RS_MH6V3_fnc_notifyAircrew;
 };
 
@@ -411,7 +614,9 @@ RS_MH6V3_fnc_stopDrainFuel = {
 	_vehicle setVariable ["RS_MH6V3_cancelDrainFuel", true, true];
 	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
 	_vehicle setVariable ["RS_LB_fuelDrainSoundActive", false, true];
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_fuelDrainSoundStopLocal", 0];
+	private _soundSession = _vehicle getVariable ["RS_MH6V3_fuelDrainSoundSession", ""];
+	_vehicle setVariable ["RS_MH6V3_fuelDrainSoundSession", nil, true];
+	["RS_MH6V3_fuelDrainSoundStop", [_vehicle, _soundSession]] call CBA_fnc_globalEvent;
 	["RS MH-6V3: fuel drain stopped.", _vehicle] call RS_MH6V3_fnc_notifyAircrew;
 };
 
@@ -515,7 +720,7 @@ RS_MH6V3_fnc_enforceAttackPackageAmmoSource = {
 	params ["_vehicle"];
 
 	if (!isServer) exitWith {
-		[_vehicle] remoteExec ["RS_MH6V3_fnc_enforceAttackPackageAmmoSource", 2];
+		["RS_MH6V3_requestEnforceAmmoSource", [_vehicle]] call CBA_fnc_serverEvent;
 	};
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -545,7 +750,7 @@ RS_MH6V3_fnc_openRearmMenu = {
 				sleep 0.5;
 				!dialog || {isNull _vehicle} || {!alive _vehicle}
 			};
-			[_vehicle] remoteExec ["RS_MH6V3_fnc_enforceAttackPackageAmmoSource", 2];
+			["RS_MH6V3_requestEnforceAmmoSource", [_vehicle]] call CBA_fnc_serverEvent;
 		};
 
 		[_vehicle] call ace_pylons_fnc_showDialog;
@@ -554,7 +759,7 @@ RS_MH6V3_fnc_openRearmMenu = {
 			sleep 0.5;
 			!dialog || {isNull _vehicle} || {!alive _vehicle}
 		};
-		[_vehicle] remoteExec ["RS_MH6V3_fnc_enforceAttackPackageAmmoSource", 2];
+		["RS_MH6V3_requestEnforceAmmoSource", [_vehicle]] call CBA_fnc_serverEvent;
 	};
 };
 
@@ -575,7 +780,7 @@ RS_MH6V3_fnc_applyRotorDamageGlobal = {
 		"_damage"
 	];
 
-	[_bird, _damage] remoteExecCall ["RS_MH6V3_fnc_setRotorDamage", 0, _bird];
+	["RS_MH6V3_setRotorDamage", [_bird, _damage]] call CBA_fnc_globalEvent;
 	[_bird, _damage] call RS_MH6V3_fnc_setRotorDamage;
 };
 
@@ -599,7 +804,7 @@ RS_MH6V3_fnc_disassembleRotors = {
 	];
 
 	if (!isServer) exitWith {
-		[_vehicle, _caller] remoteExec ["RS_MH6V3_fnc_disassembleRotors", 2];
+		["RS_MH6V3_requestDisassembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
 	};
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -616,7 +821,7 @@ RS_MH6V3_fnc_assembleRotors = {
 	];
 
 	if (!isServer) exitWith {
-		[_vehicle, _caller] remoteExec ["RS_MH6V3_fnc_assembleRotors", 2];
+		["RS_MH6V3_requestAssembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
 	};
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -659,7 +864,7 @@ RS_MH6V3_fnc_startAssembleRotors = {
 			params ["_args"];
 			_args params ["_vehicle", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			[_vehicle, _caller] remoteExec ["RS_MH6V3_fnc_assembleRotors", 2];
+			["RS_MH6V3_requestAssembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
 		},
 		{
 			params ["_args"];
@@ -667,7 +872,7 @@ RS_MH6V3_fnc_startAssembleRotors = {
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
 		},
 		"Assembling Little Bird rotors"
-	] call ace_common_fnc_progressBar;
+	] call RS_MH6V3_fnc_runServiceTask;
 };
 
 RS_MH6V3_fnc_startDisassembleRotors = {
@@ -690,7 +895,7 @@ RS_MH6V3_fnc_startDisassembleRotors = {
 			params ["_args"];
 			_args params ["_vehicle", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			[_vehicle, _caller] remoteExec ["RS_MH6V3_fnc_disassembleRotors", 2];
+			["RS_MH6V3_requestDisassembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
 		},
 		{
 			params ["_args"];
@@ -698,7 +903,7 @@ RS_MH6V3_fnc_startDisassembleRotors = {
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
 		},
 		"Disassembling Little Bird rotors"
-	] call ace_common_fnc_progressBar;
+	] call RS_MH6V3_fnc_runServiceTask;
 };
 
 RS_MH6V3_fnc_convertVariant = {
@@ -709,7 +914,7 @@ RS_MH6V3_fnc_convertVariant = {
 	];
 
 	if (!isServer) exitWith {
-		[_vehicle, _newClass, _caller] remoteExec ["RS_MH6V3_fnc_convertVariant", 2];
+		["RS_MH6V3_requestConvertVariant", [_vehicle, _newClass, _caller]] call CBA_fnc_serverEvent;
 	};
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -772,7 +977,7 @@ RS_MH6V3_fnc_convertVariant = {
 		_newVehicle setVehicleAmmo 0;
 
 		if (!isNull _caller) then {
-			[_newVehicle] remoteExecCall ["RS_MH6V3_fnc_openRearmMenu", owner _caller];
+			["RS_MH6V3_openRearmMenu", [_newVehicle], _caller] call CBA_fnc_targetEvent;
 		};
 	};
 
@@ -820,7 +1025,7 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 	];
 
 	if (!isServer) exitWith {
-		[_vehicle, _caller, _duration] remoteExec ["RS_MH6V3_fnc_removeAh6ArmamentsForCargo", 2];
+		["RS_MH6V3_requestRemoveAh6ArmamentsForCargo", [_vehicle, _caller, _duration]] call CBA_fnc_serverEvent;
 	};
 
 	if (isNull _vehicle || {!alive _vehicle} || {typeOf _vehicle != RS_MH6V3_AH6_CLASS}) exitWith {};
@@ -879,7 +1084,7 @@ RS_MH6V3_fnc_startConvertVariant = {
 		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
 	};
 
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cancelFuelDrain", 2];
+	["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
 
 	private _label = if (_newClass == RS_MH6V3_AH6_CLASS) then {
 		"Installing AH-6 attack package"
@@ -895,7 +1100,7 @@ RS_MH6V3_fnc_startConvertVariant = {
 			params ["_args"];
 			_args params ["_vehicle", "_newClass", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			[_vehicle, _newClass, _caller] remoteExec ["RS_MH6V3_fnc_convertVariant", 2];
+			["RS_MH6V3_requestConvertVariant", [_vehicle, _newClass, _caller]] call CBA_fnc_serverEvent;
 		},
 		{
 			params ["_args"];
@@ -903,7 +1108,7 @@ RS_MH6V3_fnc_startConvertVariant = {
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
 		},
 		_label
-	] call ace_common_fnc_progressBar;
+	] call RS_MH6V3_fnc_runServiceTask;
 };
 
 RS_MH6V3_fnc_startMh6CargoPrep = {
@@ -919,7 +1124,7 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
 	};
 
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cancelFuelDrain", 2];
+	["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
 
 	private _fxId = [_vehicle, _caller, RS_MH6V3_CONVERT_TIME] call RS_MH6V3_fnc_startServiceFx;
 
@@ -930,7 +1135,7 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 			params ["_args"];
 			_args params ["_vehicle", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			[_vehicle, RS_MH6V3_OH6_CLASS, _caller] remoteExec ["RS_MH6V3_fnc_convertVariant", 2];
+			["RS_MH6V3_requestConvertVariant", [_vehicle, RS_MH6V3_OH6_CLASS, _caller]] call CBA_fnc_serverEvent;
 		},
 		{
 			params ["_args"];
@@ -938,7 +1143,7 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
 		},
 		"Removing benches and FRIES bar"
-	] call ace_common_fnc_progressBar;
+	] call RS_MH6V3_fnc_runServiceTask;
 };
 
 RS_MH6V3_fnc_startAh6CargoPrep = {
@@ -955,8 +1160,8 @@ RS_MH6V3_fnc_startAh6CargoPrep = {
 	};
 	if (_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false]) exitWith {};
 
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cancelFuelDrain", 2];
-	[_vehicle, _caller, RS_MH6V3_CONVERT_TIME] remoteExec ["RS_MH6V3_fnc_removeAh6ArmamentsForCargo", 2];
+	["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
+	["RS_MH6V3_requestRemoveAh6ArmamentsForCargo", [_vehicle, _caller, RS_MH6V3_CONVERT_TIME]] call CBA_fnc_serverEvent;
 
 	private _fxId = [_vehicle, _caller, RS_MH6V3_CONVERT_TIME] call RS_MH6V3_fnc_startServiceFx;
 
@@ -974,11 +1179,212 @@ RS_MH6V3_fnc_startAh6CargoPrep = {
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
 		},
 		"Removing AH-6 pylons and armaments"
-	] call ace_common_fnc_progressBar;
+	] call RS_MH6V3_fnc_runServiceTask;
+};
+
+RS_MH6V3_fnc_populateLogisticsManagement = {
+	disableSerialization;
+
+	private _display = uiNamespace getVariable ["RS_MH6V3_logisticsDisplay", displayNull];
+	private _vehicle = uiNamespace getVariable ["RS_MH6V3_logisticsVehicle", objNull];
+	if (isNull _display) exitWith {};
+
+	private _aliveService =
+		!isNull _vehicle
+		&& {alive _vehicle}
+		&& {typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES};
+	private _canService = _aliveService && {[_vehicle] call RS_MH6V3_fnc_canService};
+	private _hasToolkit = [player] call RS_MH6V3_fnc_hasToolkit;
+	private _vehicleType = if (_aliveService) then {typeOf _vehicle} else {""};
+
+	(_display displayCtrl 86510) ctrlSetText (if (_aliveService) then {
+		format [
+			"%1 | Fuel %2%3 | Toolkit %4",
+			_vehicleType,
+			round ((fuel _vehicle) * 100),
+			"%",
+			if (_hasToolkit) then {"YES"} else {"NO"}
+		]
+	} else {
+		"No supported MH/AH/OH-6 selected"
+	});
+
+	(_display displayCtrl 86520) ctrlEnable (_canService && {!(_vehicle getVariable ["RS_MH6V3_drainingFuel", false])} && {fuel _vehicle > 0.25});
+	(_display displayCtrl 86521) ctrlEnable (_canService && {!(_vehicle getVariable ["RS_MH6V3_drainingFuel", false])} && {fuel _vehicle > 0});
+	(_display displayCtrl 86522) ctrlEnable (_aliveService && {_vehicle getVariable ["RS_MH6V3_drainingFuel", false]});
+	(_display displayCtrl 86523) ctrlEnable _aliveService;
+	(_display displayCtrl 86524) ctrlEnable _aliveService;
+	(_display displayCtrl 86526) ctrlEnable (_canService && {_vehicle getVariable ["RS_MH6V3_rotorsAssembled", true]});
+	(_display displayCtrl 86527) ctrlEnable (_canService && {(_vehicle getVariable ["RS_MH6V3_rotorsAssembled", true]) isEqualTo false} && {!(_vehicle getVariable ["RS_MH6V3_assemblingRotors", false])});
+	(_display displayCtrl 86528) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_OH6_CLASS} && {_hasToolkit});
+	(_display displayCtrl 86529) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_OH6_CLASS} && {_hasToolkit});
+	(_display displayCtrl 86530) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_MH6_CLASS} && {_hasToolkit});
+	(_display displayCtrl 86531) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_AH6_CLASS} && {!(_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false])} && {_hasToolkit});
+
+	private _canPushToC130 = false;
+	if (
+		_aliveService
+		&& {!isNil "SOAR_fnc_lbStartPushPlacementPreview"}
+		&& {!isNil "SOAR_fnc_lbNearestC130"}
+	) then {
+		private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
+		private _c130 = [_vehicle, _searchRadius] call SOAR_fnc_lbNearestC130;
+		_canPushToC130 =
+			_canService
+			&& {isTouchingGround _vehicle}
+			&& {abs speed _vehicle < 1}
+			&& {!(_vehicle getVariable ["SOAR_LB_pushing", false])}
+			&& {!isNull _c130}
+			&& {isTouchingGround _c130}
+			&& {abs speed _c130 < 1};
+	};
+	(_display displayCtrl 86532) ctrlEnable _canPushToC130;
+};
+
+RS_MH6V3_fnc_openLogisticsManagement = {
+	params [
+		["_vehicle", objNull]
+	];
+
+	if !(hasInterface) exitWith {};
+	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
+	if !(typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES) exitWith {};
+
+	uiNamespace setVariable ["RS_MH6V3_logisticsVehicle", _vehicle];
+	createDialog "RS_MH6V3_LogisticsManagement";
+};
+
+RS_MH6V3_fnc_runLogisticsManagementAction = {
+	params [
+		["_action", ""]
+	];
+
+	private _vehicle = uiNamespace getVariable ["RS_MH6V3_logisticsVehicle", objNull];
+	if (isNull _vehicle || {!alive _vehicle}) exitWith {
+		closeDialog 0;
+	};
+
+	switch (toLower _action) do {
+		case "drain25": {
+			[_vehicle, 0.25, player] call RS_MH6V3_fnc_startDrainFuel;
+		};
+		case "drainempty": {
+			[_vehicle, 0, player] call RS_MH6V3_fnc_startDrainFuel;
+		};
+		case "stopdrain": {
+			[_vehicle, player] call RS_MH6V3_fnc_stopDrainFuel;
+		};
+		case "livery": {
+			closeDialog 0;
+			[_vehicle] call RS_MH6V3_fnc_openLiveryMenu;
+		};
+		case "cameras": {
+			[_vehicle] call RS_MH6V3_fnc_resetCameras;
+		};
+		case "disassemble": {
+			[_vehicle, player] call RS_MH6V3_fnc_startDisassembleRotors;
+		};
+		case "assemble": {
+			[_vehicle, player] call RS_MH6V3_fnc_startAssembleRotors;
+		};
+		case "installmh6": {
+			[_vehicle, RS_MH6V3_MH6_CLASS, player] call RS_MH6V3_fnc_startConvertVariant;
+		};
+		case "installah6": {
+			[_vehicle, RS_MH6V3_AH6_CLASS, player] call RS_MH6V3_fnc_startConvertVariant;
+		};
+		case "removemh6": {
+			[_vehicle, player] call RS_MH6V3_fnc_startMh6CargoPrep;
+		};
+		case "removeah6": {
+			[_vehicle, player] call RS_MH6V3_fnc_startAh6CargoPrep;
+		};
+		case "pushc130": {
+			if !(isNil "SOAR_fnc_lbStartPushPlacementPreview") then {
+				[_vehicle, player] call SOAR_fnc_lbStartPushPlacementPreview;
+			};
+		};
+	};
+
+	if !(toLower _action in ["livery", "cameras", "stopdrain", "pushc130"]) then {
+		closeDialog 0;
+	} else {
+		[] call RS_MH6V3_fnc_populateLogisticsManagement;
+	};
+};
+
+RS_MH6V3_fnc_initVanillaActions = {
+	if !(hasInterface) exitWith {};
+	if (missionNamespace getVariable ["RS_MH6V3_vanillaActionsStarted", false]) exitWith {};
+	missionNamespace setVariable ["RS_MH6V3_vanillaActionsStarted", true];
+
+	RS_MH6V3_fnc_addVanillaActionsToVehicle = {
+		params ["_vehicle"];
+
+		if (isNull _vehicle || {!alive _vehicle}) exitWith {};
+		if !(typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES) exitWith {};
+
+		if (isNil {_vehicle getVariable "RS_MH6V3_vanillaLogisticsActionId"}) then {
+			private _logisticsId = _vehicle addAction [
+				"MH-6 Logistics Management",
+				{
+					params ["_target"];
+					[_target] call RS_MH6V3_fnc_openLogisticsManagement;
+				},
+				nil,
+				1.5,
+				true,
+				true,
+				"",
+				"alive _target && {typeOf _target in RS_MH6V3_SERVICE_CLASSES} && {vehicle _this == _this} && {_this distance _target <= 6}",
+				6,
+				false,
+				"",
+				""
+			];
+			_vehicle setVariable ["RS_MH6V3_vanillaLogisticsActionId", _logisticsId];
+		};
+
+		if (typeOf _vehicle == RS_MH6V3_AH6_CLASS && {isNil {_vehicle getVariable "RS_MH6V3_vanillaHydraActionId"}}) then {
+			private _hydraId = _vehicle addAction [
+				"Hydra Sequence UI",
+				{
+					params ["_target"];
+					[_target] call RS_MH6V3_fnc_openQuickFirePylonMenu;
+				},
+				nil,
+				1.5,
+				false,
+				true,
+				"",
+				"alive _target && {typeOf _target == RS_MH6V3_AH6_CLASS} && {vehicle _this == _target} && {currentPilot _target isEqualTo _this} && {!(([_target] call RS_MH6V3_fnc_getHydraPylonData) isEqualTo [])}",
+				-1,
+				false,
+				"",
+				""
+			];
+			_vehicle setVariable ["RS_MH6V3_vanillaHydraActionId", _hydraId];
+		};
+	};
+
+	{
+		[_x, "init", {
+			params ["_vehicle"];
+			[_vehicle] call RS_MH6V3_fnc_addVanillaActionsToVehicle;
+		}, false] call CBA_fnc_addClassEventHandler;
+	} forEach RS_MH6V3_SERVICE_CLASSES;
+
+	{
+		[_x] call RS_MH6V3_fnc_addVanillaActionsToVehicle;
+	} forEach (vehicles select {
+		alive _x && {typeOf _x in RS_MH6V3_SERVICE_CLASSES}
+	});
 };
 
 if (!hasInterface) exitWith {};
-if !(isClass (configFile >> "CfgPatches" >> "ace_interact_menu")) exitWith {};
+if !(isClass (configFile >> "CfgPatches" >> "ace_interact_menu")) exitWith {
+	[] call RS_MH6V3_fnc_initVanillaActions;
+};
 if (missionNamespace getVariable ["RS_MH6V3_aceActionsAdded", false]) exitWith {};
 missionNamespace setVariable ["RS_MH6V3_aceActionsAdded", true];
 
@@ -1092,8 +1498,7 @@ private _acreRadioProgrammerAction = [
 		alive _target
 		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
 		&& {_player in [driver _target, gunner _target, _target turretUnit [0]]}
-		&& {!isNil "acre_api_fnc_isInitialized"}
-		&& {!isNil "acre_api_fnc_getCurrentRadioList"}
+		&& {[] call RS_MH6V3_fnc_isACREAvailable}
 	}
 ] call ace_interact_menu_fnc_createAction;
 
@@ -1111,8 +1516,7 @@ private _acreRadioProgrammerSelfAction = [
 		&& {alive _vehicle}
 		&& {typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES}
 		&& {player in [driver _vehicle, gunner _vehicle, _vehicle turretUnit [0]]}
-		&& {!isNil "acre_api_fnc_isInitialized"}
-		&& {!isNil "acre_api_fnc_getCurrentRadioList"}
+		&& {[] call RS_MH6V3_fnc_isACREAvailable}
 	}
 ] call ace_interact_menu_fnc_createAction;
 
@@ -1271,10 +1675,7 @@ private _pushPlacementAction = [
 [RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions", "RS_MH6V3_izlid_mode"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
 [RS_MH6V3_AH6_CLASS, 1, ["ACE_SelfActions"], _quickFirePylonMenuAction, true] call ace_interact_menu_fnc_addActionToClass;
 
-if (
-	!isNil "acre_api_fnc_isInitialized"
-	&& {!isNil "acre_api_fnc_getCurrentRadioList"}
-) then {
+if ([] call RS_MH6V3_fnc_isACREAvailable) then {
 	{
 		[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _acreRadioProgrammerAction, true] call ace_interact_menu_fnc_addActionToClass;
 	} forEach RS_MH6V3_SERVICE_CLASSES;

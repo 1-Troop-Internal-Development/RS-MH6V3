@@ -23,7 +23,7 @@ if (!_executeLocal) exitWith {
 			if (player == _x) then {
 				[_vehicle, true] call RS_MH6V3_fnc_resetCameras;
 			} else {
-				[_vehicle, true] remoteExecCall ["RS_MH6V3_fnc_resetCameras", owner _x];
+				["RS_MH6V3_resetCameras", [_vehicle, true], _x] call CBA_fnc_targetEvent;
 			};
 		} forEach _recipients;
 	};

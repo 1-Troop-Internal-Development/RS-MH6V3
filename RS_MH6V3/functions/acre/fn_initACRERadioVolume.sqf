@@ -1,7 +1,12 @@
 if (!hasInterface) exitWith {};
+if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {};
 
 [] spawn {
+	if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {};
+
 	RS_MH6V3_acreGetVolumeCrewVehicle = {
+		if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {objNull};
+
 		private _vehicle = vehicle player;
 		if (
 			isNull _vehicle ||

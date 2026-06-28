@@ -15,7 +15,7 @@ if (_enabled && {_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]}) then {
 };
 
 private _systemActive = _enabled || {_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]};
-[_vehicle, _systemActive] remoteExecCall ["RS_MH6V3_fnc_trackIZLIDVehicle", 0];
+["RS_MH6V3_trackIZLIDVehicle", [_vehicle, _systemActive]] call CBA_fnc_globalEvent;
 
 if (!_enabled) then {
 	_vehicle setVariable ["RS_MH6V3_pilotIZLIDDirection", nil, true];

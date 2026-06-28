@@ -6,7 +6,7 @@ params [
 ];
 
 if (!isServer) exitWith {
-	[_vehicle, _texture, _name, _caller] remoteExec ["RS_MH6V3_fnc_applyLivery", 2];
+	["RS_MH6V3_requestApplyLivery", [_vehicle, _texture, _name, _caller]] call CBA_fnc_serverEvent;
 };
 
 if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -25,6 +25,6 @@ private _recipients = [driver _vehicle, gunner _vehicle] select {
 	if (hasInterface && {player == _x}) then {
 		systemChat _message;
 	} else {
-		[_message] remoteExecCall ["systemChat", owner _x];
+		["RS_MH6V3_notify", [_message], _x] call CBA_fnc_targetEvent;
 	};
 } forEach (_recipients arrayIntersect _recipients);

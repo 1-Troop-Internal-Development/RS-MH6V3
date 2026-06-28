@@ -248,7 +248,7 @@ if (!isNull _otherUnit && {isPlayer _otherUnit}) then {
 		private _lastRequest = uiNamespace getVariable [_requestKey, 0];
 		if ((diag_tickTime - _lastRequest) > 1) then {
 			uiNamespace setVariable [_requestKey, diag_tickTime];
-			[player, _vehicle] remoteExecCall ["RS_MH6V3_fnc_publishACRERadioSnapshot", owner _otherUnit];
+			["RS_MH6V3_publishACRERadioSnapshot", [player, _vehicle], _otherUnit] call CBA_fnc_targetEvent;
 		};
 	};
 } else {

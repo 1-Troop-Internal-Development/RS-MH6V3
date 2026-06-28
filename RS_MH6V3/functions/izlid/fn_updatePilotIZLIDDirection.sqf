@@ -2,9 +2,9 @@ if (!hasInterface || {!isNull curatorCamera}) exitWith {};
 
 private _vehicle = vehicle player;
 if (
-	typeOf _vehicle != "RHS_MELB_AH6M"
-	|| {!(player isEqualTo currentPilot _vehicle)}
-	|| {!(_vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false])}
+	typeOf _vehicle != "RHS_MELB_AH6M" ||
+	{!(player isEqualTo currentPilot _vehicle)} ||
+	{!(_vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false])}
 ) exitWith {};
 
 private _now = diag_tickTime;

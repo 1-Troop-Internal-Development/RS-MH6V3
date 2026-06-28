@@ -18,5 +18,5 @@ private _livery = parseSimpleArray _data;
 if ((count _livery) < 3) exitWith {};
 
 _livery params ["_id", "_name", "_texture"];
-[_vehicle, _texture, _name, player] remoteExec ["RS_MH6V3_fnc_applyLivery", 2];
+["RS_MH6V3_requestApplyLivery", [_vehicle, _texture, _name, player]] call CBA_fnc_serverEvent;
 closeDialog 0;

@@ -40,7 +40,7 @@ if (_radioOwner isEqualTo 1) exitWith {
 		systemChat "RS MH-6V3: other seat radio owner is no longer in this aircraft.";
 	};
 
-	[player, _vehicle, _radioId, _channel] remoteExecCall ["RS_MH6V3_fnc_applyACRERadioTune", owner _otherUnit];
+	["RS_MH6V3_applyACRERadioTune", [player, _vehicle, _radioId, _channel], _otherUnit] call CBA_fnc_targetEvent;
 	systemChat format ["RS MH-6V3: requested other seat radio channel %1.", _channel];
 	[true] call RS_MH6V3_fnc_populateACRERadioProgrammer;
 };

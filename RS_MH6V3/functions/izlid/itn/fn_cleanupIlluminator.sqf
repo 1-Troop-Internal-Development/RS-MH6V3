@@ -14,5 +14,9 @@ _vehicle setVariable ["RS_MH6V3_izlidIlluminator", objNull];
 _vehicle setVariable ["RS_MH6V3_izlidIlluminatorBoost", objNull];
 _vehicle setVariable ["RS_MH6V3_izlidIlluminatorType", ""];
 _vehicle setVariable ["RS_MH6V3_izlidIlluminatorSettings", -1];
+_vehicle setVariable ["RS_MH6V3_izlidIlluminatorTraceDistance", nil];
+_vehicle setVariable ["RS_MH6V3_izlidIlluminatorTraceTime", nil];
+_vehicle setVariable ["RS_MH6V3_izlidIlluminatorImpactDistance", nil];
+_vehicle setVariable ["RS_MH6V3_izlidIlluminatorDistanceFactor", nil];
 
 true

@@ -9,7 +9,7 @@ if (typeOf _vehicle != "RHS_MELB_AH6M" || {!_engineOn} || {!alive _vehicle}) the
 	_vehicle setVariable ["RS_MH6V3_pilotIZLIDEnabled", false, true];
 	_vehicle setVariable ["RS_MH6V3_pilotIZLIDDirection", nil, true];
 	[_vehicle, false] call RS_MH6V3_fnc_setIZLIDState;
-	[_vehicle] remoteExecCall ["RS_MH6V3_fnc_cleanupIlluminator", 0];
+	["RS_MH6V3_cleanupIlluminator", [_vehicle]] call CBA_fnc_globalEvent;
 };
 
 true

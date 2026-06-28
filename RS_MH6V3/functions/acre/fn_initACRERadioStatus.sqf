@@ -1,6 +1,9 @@
 if (!hasInterface) exitWith {};
+if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {};
 
 [] spawn {
+	if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {};
+
 	waitUntil {!isNull findDisplay 46};
 
 	private _display = findDisplay 46;
@@ -75,6 +78,8 @@ if (!hasInterface) exitWith {};
 	};
 
 	RS_MH6V3_acreCanShowRadioStatus = {
+		if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {false};
+
 		private _vehicle = vehicle player;
 		(missionNamespace getVariable ["RS_MH6V3_acreStatusOverlayEnabled", true]) &&
 			{!isNull _vehicle} &&
@@ -152,6 +157,7 @@ if (!hasInterface) exitWith {};
 	};
 
 	RS_MH6V3_acreStartRadioStatus = {
+		if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {};
 		if !(call RS_MH6V3_acreCanShowRadioStatus) exitWith {};
 		if (missionNamespace getVariable ["RS_MH6V3_acreRadioStatusRunning", false]) exitWith {};
 

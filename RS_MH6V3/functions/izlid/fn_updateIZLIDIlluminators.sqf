@@ -14,10 +14,9 @@ private _trackedVehicles = [];
 
 			if !(_laser isEqualTo [-1, -1]) then {
 				_laser params ["_origin", "_direction"];
-				private _illuminatorOffset = 2;
 				private _coneMode = _x getVariable ["RS_MH6V3_izlidConeMode", 1];
 
-				[_x, _origin, _direction, _illuminatorOffset, _coneMode] call RS_MH6V3_fnc_updateIlluminator;
+				[_x, _origin, _direction, 0, _coneMode] call RS_MH6V3_fnc_updateIlluminator;
 			};
 		} else {
 			[_x] call RS_MH6V3_fnc_cleanupIlluminator;

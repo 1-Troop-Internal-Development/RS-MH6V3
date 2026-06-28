@@ -43,6 +43,7 @@ class CfgFunctions
 		class acre
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\acre";
+			class isACREAvailable {};
 			class getACRERadioInfo {};
 			class getACRERadioLists {};
 			class initACRERadioStatus
@@ -205,36 +206,6 @@ class CfgUserActions
 		analogChangeThreshold = 0.01;
 		modifierBlocking = 1;
 	};
-	class RS_MH6V3_cycleACRERadioSelection
-	{
-		displayName = "Cycle Selected ACRE Radio";
-		tooltip = "Select the next Little Bird ACRE radio for volume controls.";
-		onActivate = "[1] call RS_MH6V3_fnc_cycleACRERadioSelection";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_increaseSelectedACRERadioVolume
-	{
-		displayName = "Increase Selected ACRE Radio Volume";
-		tooltip = "Increase the selected Little Bird ACRE radio volume.";
-		onActivate = "[0.25] call RS_MH6V3_fnc_adjustACRERadioVolume";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_decreaseSelectedACRERadioVolume
-	{
-		displayName = "Decrease Selected ACRE Radio Volume";
-		tooltip = "Decrease the selected Little Bird ACRE radio volume.";
-		onActivate = "[-0.25] call RS_MH6V3_fnc_adjustACRERadioVolume";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
 };
 
 class UserActionGroups
@@ -250,10 +221,7 @@ class UserActionGroups
 			"RS_MH6V3_togglePilotIZLID",
 			"RS_MH6V3_quickLaunchHydra",
 			"RS_MH6V3_configureQuickFirePylons",
-			"RS_MH6V3_toggleQuickFireArm",
-			"RS_MH6V3_cycleACRERadioSelection",
-			"RS_MH6V3_increaseSelectedACRERadioVolume",
-			"RS_MH6V3_decreaseSelectedACRERadioVolume"
+			"RS_MH6V3_toggleQuickFireArm"
 		};
 	};
 };
@@ -568,7 +536,7 @@ class CfgVehicles
 				selection = "";
 				useFlare = 1;
 				flareSize = 0.2;
-				flareMaxDistance = 20000;
+				flareMaxDistance = 3000;
 				class Attenuation
 				{
 					start = 1;
@@ -576,7 +544,7 @@ class CfgVehicles
 					linear = 0;
 					quadratic = 1;
 					hardLimitStart = 3000;
-					hardLimitEnd = 4000;
+					hardLimitEnd = 3000;
 				};
 			};
 		};

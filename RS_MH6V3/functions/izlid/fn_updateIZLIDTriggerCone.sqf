@@ -1,12 +1,7 @@
 if (!hasInterface) exitWith {};
 
-private _previousVehicle = player getVariable ["RS_MH6V3_izlidTriggerConeVehicle", objNull];
 private _vehicle = vehicle player;
 private _validVehicle = !isNull _vehicle && {typeOf _vehicle == "RHS_MELB_AH6M"} && {player in _vehicle};
-
-if (!isNull _previousVehicle && {!(_previousVehicle isEqualTo _vehicle)}) then {
-	_previousVehicle setVariable ["RS_MH6V3_izlidConeTriggerNarrow", false, true];
-};
 
 if (!_validVehicle) exitWith {
 	player setVariable ["RS_MH6V3_izlidTriggerConeVehicle", objNull, false];
@@ -42,35 +37,19 @@ if (player isEqualTo _brightnessOwner) then {
 	};
 };
 
-if (isNil {_vehicle getVariable "RS_MH6V3_izlidFiredEh"}) then {
-	private _firedEh = _vehicle addEventHandler ["Fired", {
-		params [
-			"_vehicle",
-			"_weapon"
-		];
-
-		if (_weapon isEqualTo "rhsusf_weap_LWIRCM") exitWith {};
-
-		_vehicle setVariable ["RS_MH6V3_izlidLastFiredTime", diag_tickTime, true];
-	}];
-
-	_vehicle setVariable ["RS_MH6V3_izlidFiredEh", _firedEh, false];
-};
-
 private _mode = _vehicle getVariable ["RS_MH6V3_izlidMode", 3];
 private _coneMode = _vehicle getVariable ["RS_MH6V3_izlidConeMode", 1];
 private _fireInputHeld =
 	(inputAction "Fire") > 0 ||
 	{(inputAction "DefaultAction") > 0} ||
 	{missionNamespace getVariable ["RS_MH6V3_fireInputHeld", false]};
-private _recentFire = (diag_tickTime - (_vehicle getVariable ["RS_MH6V3_izlidLastFiredTime", -10])) < 0.2;
 private _shouldNarrow =
 	alive _vehicle &&
 	{isEngineOn _vehicle} &&
 	{_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]} &&
 	{_mode in [2, 3]} &&
 	{_coneMode == 3} &&
-	{_fireInputHeld || {_recentFire}};
+	{_fireInputHeld};
 
 if ((_vehicle getVariable ["RS_MH6V3_izlidConeTriggerNarrow", false]) isEqualTo _shouldNarrow) exitWith {};
 

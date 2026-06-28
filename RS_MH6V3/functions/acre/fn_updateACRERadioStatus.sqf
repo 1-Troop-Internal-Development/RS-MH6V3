@@ -3,6 +3,12 @@ params [
 ];
 
 if (!hasInterface) exitWith {};
+if !([] call RS_MH6V3_fnc_isACREAvailable) exitWith {
+	"RS_MH6V3_ACRERadioStatusLayer" cutText ["", "PLAIN"];
+	uiNamespace setVariable ["RS_MH6V3_acreRadioStatusRows", createHashMap];
+	uiNamespace setVariable ["RS_MH6V3_acreRadioStatusLayout", ""];
+	missionNamespace setVariable ["RS_MH6V3_acreRadioStatusVisible", false];
+};
 
 private _display = uiNamespace getVariable ["RS_MH6V3_acreRadioStatusDisplay", displayNull];
 if (isNull _display) exitWith {};

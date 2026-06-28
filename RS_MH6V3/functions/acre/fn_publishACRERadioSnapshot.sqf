@@ -47,4 +47,8 @@ if (_inventoryRows isEqualTo []) then {
 	_inventoryRows = ["No inventory radios detected."];
 };
 
-[player, createHashMapFromArray [["inventory", _inventoryRows], ["racks", _rackRows]]] remoteExecCall ["RS_MH6V3_fnc_receiveACRERadioSnapshot", owner _requester];
+[
+	"RS_MH6V3_receiveACRERadioSnapshot",
+	[player, createHashMapFromArray [["inventory", _inventoryRows], ["racks", _rackRows]]],
+	_requester
+] call CBA_fnc_targetEvent;

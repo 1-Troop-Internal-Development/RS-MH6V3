@@ -26,6 +26,7 @@ if (
 } else {
 	if (!isNull _vehicle) then {
 		[_vehicle] call RS_MH6V3_fnc_cleanupIlluminator;
+		_vehicle setVariable ["RS_MH6V3_izlidConeTriggerNarrow", false, true];
 	};
 
 	_activeVehicles = _activeVehicles - [_vehicle];
@@ -35,7 +36,7 @@ missionNamespace setVariable ["RS_MH6V3_activeIZLIDVehicles", _activeVehicles];
 
 if (_activeVehicles isEqualTo []) then {
 	if (!isNil "RS_MH6V3_izlidIlluminatorEh") then {
-		removeMissionEventHandler ["EachFrame", RS_MH6V3_izlidIlluminatorEh];
+		[RS_MH6V3_izlidIlluminatorEh] call CBA_fnc_removePerFrameHandler;
 		RS_MH6V3_izlidIlluminatorEh = nil;
 	};
 
@@ -51,11 +52,11 @@ if (_activeVehicles isEqualTo []) then {
 	};
 } else {
 	if (isNil "RS_MH6V3_izlidIlluminatorEh") then {
-		RS_MH6V3_izlidIlluminatorEh = addMissionEventHandler ["EachFrame", {
+		RS_MH6V3_izlidIlluminatorEh = [{
 			call RS_MH6V3_fnc_updatePilotIZLIDDirection;
 			call RS_MH6V3_fnc_updateIZLIDTriggerCone;
 			call RS_MH6V3_fnc_updateIZLIDIlluminators;
-		}];
+		}, 0.03] call CBA_fnc_addPerFrameHandler;
 	};
 
 	if (isNil "RS_MH6V3_izlidRenderEh") then {

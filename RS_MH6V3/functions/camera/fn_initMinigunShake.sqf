@@ -32,8 +32,8 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 			if (!isNil "RS_MH6V3_minigunShakePfh") exitWith {};
 
 			missionNamespace setVariable [
-				"RS_MH6V3_gunShakeMotionSample",
-				[diag_tickTime, vectorDirVisual _vehicle, 0]
+				"RS_MH6V3_gunShakeManeuverSample",
+				[diag_tickTime, vectorDirVisual _vehicle]
 			];
 
 			RS_MH6V3_minigunShakePfh = [{
@@ -57,7 +57,7 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 					[RS_MH6V3_minigunShakePfh] call CBA_fnc_removePerFrameHandler;
 					RS_MH6V3_minigunShakePfh = nil;
 					missionNamespace setVariable ["RS_MH6V3_gunShakeVehicle", objNull];
-					missionNamespace setVariable ["RS_MH6V3_gunShakeMotionSample", nil];
+					missionNamespace setVariable ["RS_MH6V3_gunShakeManeuverSample", nil];
 				};
 
 				private _strength = missionNamespace getVariable [
@@ -66,24 +66,27 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 				];
 				private _now = diag_tickTime;
 				private _currentDirection = vectorDirVisual _vehicle;
-				private _motionSample = missionNamespace getVariable [
-					"RS_MH6V3_gunShakeMotionSample",
-					[_now, _currentDirection, 0]
+				private _maneuverSample = missionNamespace getVariable [
+					"RS_MH6V3_gunShakeManeuverSample",
+					[_now, _currentDirection]
 				];
-				_motionSample params ["_sampleTime", "_sampleDirection", "_previousAngularRate"];
+				_maneuverSample params ["_sampleTime", "_sampleDirection"];
 
 				private _sampleDuration = 0.01 max (_now - _sampleTime);
-				private _angularRate =
-					(_currentDirection vectorDistance _sampleDirection) /
-					_sampleDuration;
-				private _angularRateChange =
-					(abs (_angularRate - _previousAngularRate)) /
-					_sampleDuration;
-				private _cameraShakeMultiplier = [1, 0.25] select (_angularRateChange > 1.5);
+				private _turnRate = (_currentDirection vectorDistance _sampleDirection) / _sampleDuration;
+				private _upVector = vectorUpVisual _vehicle;
+				private _bankAmount = 1 - (abs (_upVector select 2));
+				private _verticalSpeed = abs ((velocity _vehicle) select 2);
+				private _maneuverBoost =
+					1 +
+					((_bankAmount min 0.7) * 0.65) +
+					((_turnRate min 3.5) * 0.16) +
+					(((_verticalSpeed min 22) / 22) * 0.16);
+				_maneuverBoost = _maneuverBoost min 1.85;
 
 				missionNamespace setVariable [
-					"RS_MH6V3_gunShakeMotionSample",
-					[_now, _currentDirection, _angularRate]
+					"RS_MH6V3_gunShakeManeuverSample",
+					[_now, _currentDirection]
 				];
 
 				private _phase = diag_tickTime * 900;
@@ -93,14 +96,14 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 				private _bankBias = 0.585 + (abs (sin (_phase * 0.53))) * 0.91;
 
 				setCamShakeParams [
-					0.00715 * _strength * _irregularity * _cameraShakeMultiplier,
-					_verticalBias * _irregularity * _cameraShakeMultiplier,
-					_horizontalBias * _irregularity * _cameraShakeMultiplier,
-					_bankBias * _cameraShakeMultiplier,
+					0.00715 * _strength * _irregularity * _maneuverBoost,
+					_verticalBias * _irregularity * _maneuverBoost,
+					_horizontalBias * _irregularity * _maneuverBoost,
+					_bankBias * _maneuverBoost,
 					false
 				];
-				addCamShake [0.416 * _strength * _cameraShakeMultiplier, 0.1, 31];
-			}, 0.04] call CBA_fnc_addPerFrameHandler;
+				addCamShake [0.416 * _strength * _maneuverBoost, 0.1, 31];
+			}, 0.025] call CBA_fnc_addPerFrameHandler;
 		}
 	] call CBA_fnc_addEventHandler;
 };

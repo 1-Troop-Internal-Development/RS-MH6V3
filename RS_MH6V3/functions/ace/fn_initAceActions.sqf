@@ -1326,13 +1326,13 @@ RS_MH6V3_fnc_initVanillaActions = {
 
 		if (isNil {_vehicle getVariable "RS_MH6V3_vanillaLogisticsActionId"}) then {
 			private _logisticsId = _vehicle addAction [
-				"MH-6 Logistics Management",
+				"<t color='#8B0000'>MH-6 Logistics Management</t>",
 				{
 					params ["_target"];
 					[_target] call RS_MH6V3_fnc_openLogisticsManagement;
 				},
 				nil,
-				1.5,
+				50,
 				true,
 				true,
 				"",
@@ -1345,15 +1345,36 @@ RS_MH6V3_fnc_initVanillaActions = {
 			_vehicle setVariable ["RS_MH6V3_vanillaLogisticsActionId", _logisticsId];
 		};
 
+		if (isNil {_vehicle getVariable "RS_MH6V3_vanillaResetCameraActionId"}) then {
+			private _resetCameraId = _vehicle addAction [
+				"<t color='#8B0000'>Reset Cameras</t>",
+				{
+					params ["_target"];
+					[_target] call RS_MH6V3_fnc_resetCameras;
+				},
+				nil,
+				49,
+				false,
+				true,
+				"",
+				"alive _target && {typeOf _target in RS_MH6V3_SERVICE_CLASSES} && {vehicle _this == _target} && {_this in [driver _target, gunner _target, _target turretUnit [0]]}",
+				-1,
+				false,
+				"",
+				""
+			];
+			_vehicle setVariable ["RS_MH6V3_vanillaResetCameraActionId", _resetCameraId];
+		};
+
 		if (typeOf _vehicle == RS_MH6V3_AH6_CLASS && {isNil {_vehicle getVariable "RS_MH6V3_vanillaHydraActionId"}}) then {
 			private _hydraId = _vehicle addAction [
-				"Hydra Sequence UI",
+				"<t color='#8B0000'>Hydra Sequence UI</t>",
 				{
 					params ["_target"];
 					[_target] call RS_MH6V3_fnc_openQuickFirePylonMenu;
 				},
 				nil,
-				1.5,
+				48,
 				false,
 				true,
 				"",

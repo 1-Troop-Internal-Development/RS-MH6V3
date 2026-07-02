@@ -27,7 +27,7 @@ if (player isEqualTo _brightnessOwner) then {
 	_brightnessPercent = 0 max (_brightnessPercent min 100);
 
 	if (_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]) then {
-		if (isNil {_vehicle getVariable "RS_MH6V3_irIlluminatorBrightnessActive"}) then {
+		if !((_vehicle getVariable ["RS_MH6V3_irIlluminatorBrightnessActive", -1]) isEqualTo _brightnessPercent) then {
 			_vehicle setVariable ["RS_MH6V3_irIlluminatorBrightnessActive", _brightnessPercent, true];
 		};
 	} else {

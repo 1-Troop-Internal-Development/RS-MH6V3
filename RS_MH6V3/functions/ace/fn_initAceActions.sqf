@@ -24,6 +24,11 @@ RS_MH6V3_C130_CLASS = "USAF_C130J_Cargo";
 RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS = 40;
 RS_MH6V3_SAFE_SPAWN_HEIGHT = 25;
 
+if (isServer) then {
+	missionNamespace setVariable ["RS_MH6V3_serverModActive", true, true];
+};
+missionNamespace setVariable ["RS_MH6V3_useServerPackageEvents", isServer || {missionNamespace getVariable ["RS_MH6V3_serverModActive", false]}];
+
 if (isNil "RS_MH6V3_cbaNetworkEventsRegistered") then {
 	RS_MH6V3_cbaNetworkEventsRegistered = true;
 
@@ -121,6 +126,12 @@ if (isNil "RS_MH6V3_cbaNetworkEventsRegistered") then {
 	}] call CBA_fnc_addEventHandler;
 };
 
+if (hasInterface && {!isServer}) then {
+	[{
+		missionNamespace setVariable ["RS_MH6V3_useServerPackageEvents", missionNamespace getVariable ["RS_MH6V3_serverModActive", false]];
+	}, [], 3] call CBA_fnc_waitAndExecute;
+};
+
 RS_MH6V3_fnc_notifyAircrew = {
 	params [
 		"_message",
@@ -142,6 +153,10 @@ RS_MH6V3_fnc_notifyAircrew = {
 			["RS_MH6V3_notify", [_message], _x] call CBA_fnc_targetEvent;
 		};
 	} forEach (_recipients arrayIntersect _recipients);
+};
+
+RS_MH6V3_fnc_useServerPackageEvents = {
+	missionNamespace getVariable ["RS_MH6V3_useServerPackageEvents", isServer || {missionNamespace getVariable ["RS_MH6V3_serverModActive", false]}]
 };
 
 RS_MH6V3_fnc_canService = {
@@ -913,7 +928,7 @@ RS_MH6V3_fnc_convertVariant = {
 		["_caller", objNull]
 	];
 
-	if (!isServer) exitWith {
+	if (!isServer && {[] call RS_MH6V3_fnc_useServerPackageEvents}) exitWith {
 		["RS_MH6V3_requestConvertVariant", [_vehicle, _newClass, _caller]] call CBA_fnc_serverEvent;
 	};
 
@@ -1024,7 +1039,7 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 		["_duration", RS_MH6V3_CONVERT_TIME]
 	];
 
-	if (!isServer) exitWith {
+	if (!isServer && {[] call RS_MH6V3_fnc_useServerPackageEvents}) exitWith {
 		["RS_MH6V3_requestRemoveAh6ArmamentsForCargo", [_vehicle, _caller, _duration]] call CBA_fnc_serverEvent;
 	};
 
@@ -1084,7 +1099,11 @@ RS_MH6V3_fnc_startConvertVariant = {
 		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
 	};
 
-	["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
+	if ([] call RS_MH6V3_fnc_useServerPackageEvents) then {
+		["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
+	} else {
+		[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
+	};
 
 	private _label = if (_newClass == RS_MH6V3_AH6_CLASS) then {
 		"Installing AH-6 attack package"
@@ -1100,7 +1119,7 @@ RS_MH6V3_fnc_startConvertVariant = {
 			params ["_args"];
 			_args params ["_vehicle", "_newClass", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			["RS_MH6V3_requestConvertVariant", [_vehicle, _newClass, _caller]] call CBA_fnc_serverEvent;
+			[_vehicle, _newClass, _caller] call RS_MH6V3_fnc_convertVariant;
 		},
 		{
 			params ["_args"];
@@ -1124,7 +1143,11 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
 	};
 
-	["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
+	if ([] call RS_MH6V3_fnc_useServerPackageEvents) then {
+		["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
+	} else {
+		[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
+	};
 
 	private _fxId = [_vehicle, _caller, RS_MH6V3_CONVERT_TIME] call RS_MH6V3_fnc_startServiceFx;
 
@@ -1135,7 +1158,7 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 			params ["_args"];
 			_args params ["_vehicle", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			["RS_MH6V3_requestConvertVariant", [_vehicle, RS_MH6V3_OH6_CLASS, _caller]] call CBA_fnc_serverEvent;
+			[_vehicle, RS_MH6V3_OH6_CLASS, _caller] call RS_MH6V3_fnc_convertVariant;
 		},
 		{
 			params ["_args"];
@@ -1160,8 +1183,12 @@ RS_MH6V3_fnc_startAh6CargoPrep = {
 	};
 	if (_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false]) exitWith {};
 
-	["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
-	["RS_MH6V3_requestRemoveAh6ArmamentsForCargo", [_vehicle, _caller, RS_MH6V3_CONVERT_TIME]] call CBA_fnc_serverEvent;
+	if ([] call RS_MH6V3_fnc_useServerPackageEvents) then {
+		["RS_MH6V3_requestCancelFuelDrain", [_vehicle]] call CBA_fnc_serverEvent;
+	} else {
+		[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
+	};
+	[_vehicle, _caller, RS_MH6V3_CONVERT_TIME] call RS_MH6V3_fnc_removeAh6ArmamentsForCargo;
 
 	private _fxId = [_vehicle, _caller, RS_MH6V3_CONVERT_TIME] call RS_MH6V3_fnc_startServiceFx;
 

@@ -29,14 +29,54 @@ if (!_executeLocal) exitWith {
 	};
 };
 
-_vehicle setPilotCameraTarget objNull;
-_vehicle setPilotCameraDirection [0, 1, 0];
-_vehicle setPilotCameraRotation [0, 0];
-_vehicle setPilotCameraOpticsMode 0;
+private _resetVehicleCameras = {
+	params ["_vehicle"];
 
-_vehicle lockCameraTo [objNull, []];
-_vehicle lockCameraTo [objNull, [0]];
-_vehicle setTurretOpticsMode [[0], 0];
+	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
+
+	cameraEffect ["terminate", "back"];
+	(cameraOn) switchCamera "INTERNAL";
+
+	_vehicle setPilotCameraTarget objNull;
+	_vehicle setPilotCameraDirection [0, 1, 0];
+	_vehicle setPilotCameraRotation [0, 0];
+	_vehicle setPilotCameraOpticsMode 0;
+
+	_vehicle lockCameraTo [objNull, []];
+	_vehicle lockCameraTo [objNull, [0]];
+	_vehicle setTurretOpticsMode [[0], 0];
+
+	if (vehicle player isEqualTo _vehicle) then {
+		_vehicle switchCamera "INTERNAL";
+	};
+};
+
+[_vehicle] call _resetVehicleCameras;
+[
+	{
+		params ["_vehicle"];
+
+		if (isNull _vehicle || {!alive _vehicle}) exitWith {};
+
+		cameraEffect ["terminate", "back"];
+		(cameraOn) switchCamera "INTERNAL";
+
+		_vehicle setPilotCameraTarget objNull;
+		_vehicle setPilotCameraDirection [0, 1, 0];
+		_vehicle setPilotCameraRotation [0, 0];
+		_vehicle setPilotCameraOpticsMode 0;
+
+		_vehicle lockCameraTo [objNull, []];
+		_vehicle lockCameraTo [objNull, [0]];
+		_vehicle setTurretOpticsMode [[0], 0];
+
+		if (vehicle player isEqualTo _vehicle) then {
+			_vehicle switchCamera "INTERNAL";
+		};
+	},
+	[_vehicle],
+	0.1
+] call CBA_fnc_waitAndExecute;
 
 private _message = "RS MH-6V3: pilot and copilot cameras reset.";
 private _recipients = [driver _vehicle, gunner _vehicle] select {

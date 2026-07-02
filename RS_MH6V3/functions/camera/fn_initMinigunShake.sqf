@@ -18,9 +18,15 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 				{cameraView != "INTERNAL"}
 			) exitWith {};
 
-			if (_effect == "launch") exitWith {
+			if (_effect in ["rocket", "missile"]) exitWith {
+				private _intensityVariable = if (_effect == "missile") then {
+					"RS_MH6V3_missileVibrationIntensity"
+				} else {
+					"RS_MH6V3_rocketVibrationIntensity"
+				};
+				private _intensity = missionNamespace getVariable [_intensityVariable, 1];
 				setCamShakeParams [0.016, 0.85, 0.85, 1.05, true];
-				addCamShake [2.4 * _strength, 0.42, 11];
+				addCamShake [2.4 * _strength * _intensity, 0.42, 11];
 			};
 
 			if (_effect != "gun") exitWith {};
@@ -64,6 +70,7 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 					"RS_MH6V3_gunShakeStrength",
 					1
 				];
+				private _intensity = missionNamespace getVariable ["RS_MH6V3_gunVibrationIntensity", 1];
 				private _now = diag_tickTime;
 				private _currentDirection = vectorDirVisual _vehicle;
 				private _maneuverSample = missionNamespace getVariable [
@@ -96,13 +103,13 @@ if (isNil "RS_MH6V3_minigunShakeEventEh") then {
 				private _bankBias = 0.585 + (abs (sin (_phase * 0.53))) * 0.91;
 
 				setCamShakeParams [
-					0.00715 * _strength * _irregularity * _maneuverBoost,
+					0.00715 * _strength * _intensity * _irregularity * _maneuverBoost,
 					_verticalBias * _irregularity * _maneuverBoost,
 					_horizontalBias * _irregularity * _maneuverBoost,
 					_bankBias * _maneuverBoost,
 					false
 				];
-				addCamShake [0.416 * _strength * _maneuverBoost, 0.1, 31];
+				addCamShake [0.416 * _strength * _intensity * _maneuverBoost, 0.1, 31];
 			}, 0.025] call CBA_fnc_addPerFrameHandler;
 		}
 	] call CBA_fnc_addEventHandler;

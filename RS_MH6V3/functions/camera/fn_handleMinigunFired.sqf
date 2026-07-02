@@ -3,7 +3,9 @@ params [
 	["_weapon", "", [""]],
 	["_muzzle", "", [""]],
 	["_mode", "", [""]],
-	["_ammo", "", [""]]
+	["_ammo", "", [""]],
+	["_magazine", "", [""]],
+	["_projectile", objNull]
 ];
 
 if (isNull _vehicle || {!(_vehicle isKindOf "RHS_MELB_AH6M")}) exitWith {};
@@ -22,10 +24,34 @@ private _sendShakeToCrew = {
 	} forEach crew _vehicle;
 };
 
+private _applyLaunchTorque = {
+	params [
+		["_vehicle", objNull],
+		["_projectile", objNull],
+		["_effect", "", [""]]
+	];
+
+	if (isNull _vehicle || {!local _vehicle} || {isNull _projectile}) exitWith {};
+
+	private _projectileModelPos = _vehicle worldToModelVisual (getPosASL _projectile);
+	private _sideOffset = _projectileModelPos select 0;
+	if ((abs _sideOffset) < 0.2) exitWith {};
+
+	private _sideSign = if (_sideOffset < 0) then {-1} else {1};
+	private _baseTorque = if (_effect == "missile") then {725} else {500};
+	private _yawAxis = vectorUpVisual _vehicle;
+	private _rollAxis = vectorDirVisual _vehicle;
+
+	_vehicle addTorque (_yawAxis vectorMultiply (_sideSign * _baseTorque));
+	_vehicle addTorque (_rollAxis vectorMultiply (_sideSign * _baseTorque * 0.15));
+};
+
 private _simulation = toLower getText (configFile >> "CfgAmmo" >> _ammo >> "simulation");
 if (_simulation in ["shotrocket", "shotmissile"]) exitWith {
 	private _strength = if (_simulation == "shotmissile") then {1.25} else {1};
-	[_vehicle, "launch", _strength] call _sendShakeToCrew;
+	private _effect = if (_simulation == "shotmissile") then {"missile"} else {"rocket"};
+	[_vehicle, _projectile, _effect] call _applyLaunchTorque;
+	[_vehicle, _effect, _strength] call _sendShakeToCrew;
 };
 
 private _isM134 = _weapon == "RS_MH6V3_weap_m134_pylon";
@@ -42,7 +68,7 @@ if ((_now - _lastPublished) < 0.08) exitWith {};
 private _strength = if (_isGAU19) then {
 	1.75
 } else {
-	if (_mode == "HighROF") then {1.4} else {1.15}
+	if (_mode == "HighROF") then {1.28} else {1.05}
 };
 _vehicle setVariable ["RS_MH6V3_lastMinigunShakePublish", _now, false];
 [_vehicle, "gun", _strength] call _sendShakeToCrew;

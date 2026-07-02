@@ -25,6 +25,11 @@ private _brightnessPercent = _vehicle getVariable [
 ];
 _brightnessPercent = 0 max (_brightnessPercent min 100);
 
+if (_brightnessPercent <= 0) exitWith {
+	[_vehicle] call RS_MH6V3_fnc_cleanupIlluminator;
+	objNull
+};
+
 if (_illuminatorType != _illuminatorClass) then {
 	deleteVehicle _illuminator;
 	_illuminator = objNull;

@@ -40,6 +40,28 @@ class CfgFunctions
 			};
 			class resetCameras {};
 		};
+		class fastrope
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\fastrope";
+			class canDeployRopes {};
+			class canFastRope {};
+			class canPrepareFRIES {};
+			class canShowDeployRopes {};
+			class canShowFastRope {};
+			class deployRopes {};
+			class drawFastRopePrompts {};
+			class fastRope {};
+			class getFastRopePoints {};
+			class initFastRope
+			{
+				postInit = 1;
+			};
+			class isACEFastRopingAvailable {};
+			class isFastRopeConfigured {};
+			class isHatchetFrameworkAvailable {};
+			class onRopesCut {};
+			class prepareFRIES {};
+		};
 		class acre
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\acre";
@@ -2155,6 +2177,109 @@ class CfgVehicles
 			};
 			class VehicleSystemsDisplayManagerComponentLeft: VehicleSystemsTemplateLeftPilot{};
 			class VehicleSystemsDisplayManagerComponentRight: VehicleSystemsTemplateRightPilot{};
+		};
+	};
+	class RHS_MELB_MH6M: RHS_MELB_base
+	{
+		ace_fastroping_enabled = 2;
+		ace_fastroping_friesType = "ACE_friesAnchorBar";
+		ace_fastroping_friesAttachmentPoint[] = {0.026611, 0.821605, -0.107002};
+		ace_fastroping_onCut = "RS_MH6V3_fnc_onRopesCut";
+		ace_fastroping_onPrepare = "ace_fastroping_fnc_onPrepareCommon";
+		ace_fastroping_ropeOrigins[] =
+		{
+			{-1.23242, 0.794033, -0.0076561},
+			{1.26709, 0.794001, -0.00635719}
+		};
+		class hct_cargo
+		{
+			class interaction
+			{
+				class RS_MH6V3_friesNotPrepared
+				{
+					condition = "_this call RS_MH6V3_fnc_canPrepareFRIES";
+					class prepareFRIESLeft
+					{
+						positionType = "coordinates";
+						position[] = {-1.1665, 0.796253, -0.108951};
+						buttonDown = "_this call RS_MH6V3_fnc_prepareFRIES";
+						label = "Grab Ropes & Attach to FRIES";
+						radius = 0.3;
+					};
+					class prepareFRIESRight: prepareFRIESLeft
+					{
+						position[] = {1.1333, 0.792804, -0.107751};
+					};
+				};
+				class RS_MH6V3_friesPrepared
+				{
+					condition = "_this call RS_MH6V3_fnc_canShowDeployRopes";
+					class deployRopesLeft
+					{
+						positionType = "coordinates";
+						position[] = {-1.1665, 0.796253, -0.108951};
+						buttonDown = "_this call RS_MH6V3_fnc_deployRopes";
+						label = "Deploy Fast Ropes";
+						radius = 0.3;
+					};
+					class deployRopesRight: deployRopesLeft
+					{
+						position[] = {1.1333, 0.792804, -0.107751};
+					};
+				};
+				class RS_MH6V3_ropesDeployed
+				{
+					condition = "_this call RS_MH6V3_fnc_canShowFastRope";
+					class fastRopeLeft
+					{
+						positionType = "coordinates";
+						position[] = {-1.23926, 0.791841, -0.109039};
+						buttonDown = "_this call RS_MH6V3_fnc_fastRope";
+						label = "Fast Rope";
+						radius = 0.3;
+					};
+					class fastRopeRight: fastRopeLeft
+					{
+						position[] = {1.35791, 0.775916, -0.107684};
+					};
+				};
+			};
+		};
+		class UserActions: UserActions
+		{
+			class RS_MH6V3_PrepareFRIES
+			{
+				displayName = "<t color='#7fd8ff'>Grab Ropes & Attach to FRIES</t>";
+				onlyforplayer = 1;
+				position = "doplnovani";
+				radius = 4;
+				condition = "[this] call RS_MH6V3_fnc_canPrepareFRIES";
+				statement = "[this] call RS_MH6V3_fnc_prepareFRIES";
+				showWindow = 0;
+				priority = 9.7;
+			};
+			class RS_MH6V3_DeployFastRopes
+			{
+				displayName = "<t color='#7fd8ff'>Deploy Fast Ropes</t>";
+				onlyforplayer = 1;
+				position = "";
+				radius = 10;
+				condition = "[this] call RS_MH6V3_fnc_canShowDeployRopes";
+				statement = "[this] call RS_MH6V3_fnc_deployRopes";
+				showWindow = 0;
+				priority = 9.6;
+			};
+			class RS_MH6V3_FastRope
+			{
+				displayName = "<t color='#7fd8ff'>Fast Rope</t>";
+				onlyforplayer = 1;
+				position = "";
+				radius = 10;
+				condition = "[this] call RS_MH6V3_fnc_canShowFastRope";
+				statement = "[this] call RS_MH6V3_fnc_fastRope";
+				showWindow = 0;
+				priority = 9.5;
+			};
 		};
 	};
 	class RHS_MELB_AH6M: RHS_MELB_base

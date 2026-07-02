@@ -28,7 +28,7 @@ private _drawIRLaser = {
 		(_origin distance (_surfaces # 0 # 0)) min _maxDistance
 	};
 	private _originCompensation = if (_compensateOrigin) then {
-		linearConversion [150, _maxDistance, _drawDistance, 0, 1.8, true]
+		linearConversion [150, _maxDistance, _drawDistance, 0, 2.2, true]
 	} else {
 		0
 	};

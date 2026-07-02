@@ -2245,42 +2245,6 @@ class CfgVehicles
 				};
 			};
 		};
-		class UserActions: UserActions
-		{
-			class RS_MH6V3_PrepareFRIES
-			{
-				displayName = "<t color='#7fd8ff'>Grab Ropes & Attach to FRIES</t>";
-				onlyforplayer = 1;
-				position = "doplnovani";
-				radius = 4;
-				condition = "[this] call RS_MH6V3_fnc_canPrepareFRIES";
-				statement = "[this] call RS_MH6V3_fnc_prepareFRIES";
-				showWindow = 0;
-				priority = 9.7;
-			};
-			class RS_MH6V3_DeployFastRopes
-			{
-				displayName = "<t color='#7fd8ff'>Deploy Fast Ropes</t>";
-				onlyforplayer = 1;
-				position = "";
-				radius = 10;
-				condition = "[this] call RS_MH6V3_fnc_canShowDeployRopes";
-				statement = "[this] call RS_MH6V3_fnc_deployRopes";
-				showWindow = 0;
-				priority = 9.6;
-			};
-			class RS_MH6V3_FastRope
-			{
-				displayName = "<t color='#7fd8ff'>Fast Rope</t>";
-				onlyforplayer = 1;
-				position = "";
-				radius = 10;
-				condition = "[this] call RS_MH6V3_fnc_canShowFastRope";
-				statement = "[this] call RS_MH6V3_fnc_fastRope";
-				showWindow = 0;
-				priority = 9.5;
-			};
-		};
 	};
 	class RHS_MELB_AH6M: RHS_MELB_base
 	{

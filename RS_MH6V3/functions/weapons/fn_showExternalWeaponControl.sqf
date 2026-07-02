@@ -17,12 +17,16 @@ private _pilotIZLIDOn = false;
 private _izlidMode = 3;
 private _coneMode = 1;
 private _izlidInstalled = !isNull _vehicle && {typeOf _vehicle == "RHS_MELB_AH6M"};
+private _handheldIZLIDInstalled = !isNull _vehicle && {typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]};
 private _izlidUnavailableNotice = !isNull _vehicle &&
 	{(_vehicle getVariable ["RS_MH6V3_izlidUnavailableNotice", -10]) > (diag_tickTime - 3)};
 
+if (_handheldIZLIDInstalled) then {
+	_pilotIZLIDOn = _vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false];
+};
+
 if (_izlidInstalled) then {
 	_izlidOn = _vehicle getVariable ["RS_MH6V3_izlidEnabled", false];
-	_pilotIZLIDOn = _vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false];
 	_izlidMode = _vehicle getVariable ["RS_MH6V3_izlidMode", 3];
 	_coneMode = _vehicle getVariable ["RS_MH6V3_izlidConeMode", 1];
 };
@@ -74,10 +78,10 @@ private _modeText = if (_izlidMode == 1) then {
 	format ["%1 %2", _outputText, _coneText]
 };
 
-if (_izlidInstalled && {_pilotIZLIDOn} && {!_izlidOn}) then {
+if (_handheldIZLIDInstalled && {_pilotIZLIDOn} && {!_izlidOn}) then {
 	_modeText = "HANDHELD IZLID";
 } else {
-	if (_izlidInstalled && {_pilotIZLIDOn}) then {
+	if (_handheldIZLIDInstalled && {_pilotIZLIDOn}) then {
 		_modeText = format ["%1 + HANDHELD", _modeText];
 	};
 };
@@ -87,4 +91,4 @@ if (!_izlidInstalled && {_izlidUnavailableNotice}) then {
 };
 
 _modeStatus ctrlSetText _modeText;
-_modeStatus ctrlSetTextColor ([_red, _amber] select ((_izlidOn || {_pilotIZLIDOn}) && {_izlidInstalled}));
+_modeStatus ctrlSetTextColor ([_red, _amber] select ((_izlidOn && {_izlidInstalled}) || {_pilotIZLIDOn && {_handheldIZLIDInstalled}}));

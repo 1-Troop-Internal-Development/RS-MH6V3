@@ -1599,9 +1599,8 @@ private _pilotIZLIDAction = [
 		];
 
 		alive _target
-		&& {typeOf _target == "RHS_MELB_AH6M"}
+		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
 		&& {_player isEqualTo currentPilot _target}
-		&& {isEngineOn _target}
 	}
 ] call ace_interact_menu_fnc_createAction;
 
@@ -1721,6 +1720,8 @@ private _pushPlacementAction = [
 
 [RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions"], _izlidModeActionRoot, true] call ace_interact_menu_fnc_addActionToClass;
 [RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions", "RS_MH6V3_izlid_mode"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
+[RS_MH6V3_MH6_CLASS, 0, ["ACE_MainActions"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
+[RS_MH6V3_OH6_CLASS, 0, ["ACE_MainActions"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
 [RS_MH6V3_AH6_CLASS, 1, ["ACE_SelfActions"], _quickFirePylonMenuAction, true] call ace_interact_menu_fnc_addActionToClass;
 
 if ([] call RS_MH6V3_fnc_isACREAvailable) then {

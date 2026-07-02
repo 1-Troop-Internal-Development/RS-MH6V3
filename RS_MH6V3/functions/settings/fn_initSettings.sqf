@@ -31,7 +31,7 @@ private _acreAvailable = [] call RS_MH6V3_fnc_isACREAvailable;
 	"SLIDER",
 	["Gun Vibration Intensity", "Scale interior weapon vibration strength from M134 and GAU-19 fire."],
 	_cameraCategory,
-	[0.1, 2, 1, 2, false],
+	[0.1, 2, 0.50, 2, false],
 	0
 ] call CBA_fnc_addSetting;
 

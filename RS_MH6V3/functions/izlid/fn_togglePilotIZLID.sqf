@@ -2,15 +2,15 @@ if (!hasInterface) exitWith {false};
 if (!isNull curatorCamera) exitWith {false};
 
 private _vehicle = vehicle player;
-if (typeOf _vehicle != "RHS_MELB_AH6M") exitWith {false};
+if !(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]) exitWith {false};
 if !(player isEqualTo currentPilot _vehicle) exitWith {false};
-if !(alive _vehicle && {isEngineOn _vehicle}) exitWith {false};
+if !(alive _vehicle) exitWith {false};
 
 private _enabled = !(_vehicle getVariable ["RS_MH6V3_pilotIZLIDEnabled", false]);
 
 _vehicle setVariable ["RS_MH6V3_pilotIZLIDEnabled", _enabled, true];
 
-if (_enabled && {_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]}) then {
+if (typeOf _vehicle == "RHS_MELB_AH6M" && {_enabled} && {_vehicle getVariable ["RS_MH6V3_izlidEnabled", false]}) then {
 	[_vehicle, false] call RS_MH6V3_fnc_setIZLIDState;
 };
 

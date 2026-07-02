@@ -9,9 +9,9 @@ private _activeVehicles = missionNamespace getVariable ["RS_MH6V3_activeIZLIDVeh
 _activeVehicles = _activeVehicles select {
 	!isNull _x &&
 	{alive _x} &&
-	{typeOf _x == "RHS_MELB_AH6M"} &&
+	{typeOf _x in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]} &&
 	{
-		_x getVariable ["RS_MH6V3_izlidEnabled", false] ||
+		(typeOf _x == "RHS_MELB_AH6M" && {_x getVariable ["RS_MH6V3_izlidEnabled", false]}) ||
 		{_x getVariable ["RS_MH6V3_pilotIZLIDEnabled", false]}
 	}
 };
@@ -20,7 +20,7 @@ if (
 	_enabled &&
 	{!isNull _vehicle} &&
 	{alive _vehicle} &&
-	{typeOf _vehicle == "RHS_MELB_AH6M"}
+	{typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]}
 ) then {
 	_activeVehicles pushBackUnique _vehicle;
 } else {

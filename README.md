@@ -116,6 +116,17 @@ Toggle Hydra Ripple Master Arm - Keybind / UserAction
 [*]Rotor assembly/disassembly.
 [*]Camera reset.
 [*]C-130 positioning support when available.
+[*]MH-6 FRIES fast-rope support through Hatchet-style interactions.
+[/list]
+
+[hr][/hr]
+[h2]FRIES Fast Rope[/h2]
+[list]
+[*]MH-6 only.
+[*]Grab Ropes & Attach to FRIES interaction.
+[*]Deploy Fast Ropes interaction.
+[*]Left and right Fast Rope interactions.
+[*]Ropes stow when cut.
 [/list]
 
 [hr][/hr]
@@ -126,6 +137,7 @@ Toggle Hydra Ripple Master Arm - Keybind / UserAction
 [*]ACRE Radio Management when ACRE is loaded.
 [*]Aircraft livery tools.
 [*]Pylon and aircraft service actions.
+[*]FRIES prepare, deploy, and fast-rope interactions when fast roping is available.
 [/list]
 
 [h2]Vanilla Interaction[/h2]
@@ -179,6 +191,7 @@ Addon / Keybind Group: [RS] MH-6V3
 [*]HEAT preset uses RS M134 guns and M247 HEAT Hydras.
 [*]Hydra Quick Launch requires a saved ripple sequence.
 [*]Weapon vibration is client-side.
+[*]FRIES fast rope applies to the MH-6 only.
 [*]ACRE features require ACRE.
 [*]ACE interaction features require ACE.
 [/list]
@@ -188,6 +201,7 @@ Addon / Keybind Group: [RS] MH-6V3
 [list]
 [*]CBA.
 [*]ACE for ACE interaction features.
+[*]ACE Fastroping for FRIES fast-rope actions.
 [*]ACRE for ACRE radio features.
 [*]RHS USAF / RHS MELB content.
 [/list]

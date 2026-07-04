@@ -1277,7 +1277,7 @@ class CfgVehicles
 			controllable = 1;
 		};
 		memoryPointGunnerOptics = "commanderview";
-		memoryPointDriverOptics = "commanderview";
+		memoryPointDriverOptics = "light_dir";
 		gunBeg = "commanderview";
 		gunEnd = "laserstart";
 		memoryPointGun = "commanderview";

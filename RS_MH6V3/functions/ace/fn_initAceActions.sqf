@@ -572,7 +572,7 @@ RS_MH6V3_fnc_drainFuel = {
 		["_duration", RS_MH6V3_DRAIN_FUEL_TIME]
 	];
 
-	if (!isServer) exitWith {
+	if (!isServer && {[] call RS_MH6V3_fnc_useServerPackageEvents}) exitWith {
 		["RS_MH6V3_requestDrainFuel", [_vehicle, _targetFuel, _caller, _duration]] call CBA_fnc_serverEvent;
 	};
 
@@ -612,7 +612,7 @@ RS_MH6V3_fnc_startDrainFuel = {
 	if (_vehicle getVariable ["RS_MH6V3_drainingFuel", false]) exitWith {};
 	if ((fuel _vehicle) <= _targetFuel) exitWith {};
 
-	["RS_MH6V3_requestDrainFuel", [_vehicle, _targetFuel, _caller, RS_MH6V3_DRAIN_FUEL_TIME]] call CBA_fnc_serverEvent;
+	[_vehicle, _targetFuel, _caller, RS_MH6V3_DRAIN_FUEL_TIME] call RS_MH6V3_fnc_drainFuel;
 	[format ["RS MH-6V3: fuel drain started. Target: %1%2.", round (_targetFuel * 100), "%"], _vehicle] call RS_MH6V3_fnc_notifyAircrew;
 };
 
@@ -676,15 +676,59 @@ RS_MH6V3_fnc_nearestC130 = {
 		["_radius", RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS]
 	];
 
-	private _c130s = vehicles select {
+	private _c130s = nearestObjects [_vehicle, [RS_MH6V3_C130_CLASS], _radius, true] select {
 		alive _x
-		&& {typeOf _x == RS_MH6V3_C130_CLASS}
-		&& {_x distance _vehicle <= _radius}
 	};
 
 	if (_c130s isEqualTo []) exitWith {objNull};
 
 	([_c130s, [], {_x distance _vehicle}, "ASCEND"] call BIS_fnc_sortBy) # 0
+};
+
+RS_MH6V3_fnc_cachedPushC130 = {
+	params ["_vehicle"];
+
+	if (isNull _vehicle || {!alive _vehicle}) exitWith {objNull};
+
+	private _now = diag_tickTime;
+	private _cache = _vehicle getVariable ["RS_MH6V3_pushC130Cache", [objNull, -1]];
+	_cache params [
+		["_cachedC130", objNull],
+		["_cacheTime", -1]
+	];
+
+	if ((_now - _cacheTime) < 1) exitWith {
+		if (!isNull _cachedC130 && {alive _cachedC130}) then {_cachedC130} else {objNull}
+	};
+
+	private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
+	private _c130 = [_vehicle, _searchRadius] call RS_MH6V3_fnc_nearestC130;
+	if (isNull _c130 && {!isNil "SOAR_fnc_lbNearestC130"}) then {
+		_c130 = [_vehicle, _searchRadius] call SOAR_fnc_lbNearestC130;
+	};
+
+	_vehicle setVariable ["RS_MH6V3_pushC130Cache", [_c130, _now], false];
+	_c130
+};
+
+RS_MH6V3_fnc_canPushToC130Cached = {
+	params ["_vehicle"];
+
+	if (
+		isNil "SOAR_fnc_lbStartPushPlacementPreview"
+		|| {isNull _vehicle}
+		|| {!alive _vehicle}
+		|| {!(typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES)}
+		|| {!([_vehicle] call RS_MH6V3_fnc_canService)}
+		|| {!isTouchingGround _vehicle}
+		|| {abs speed _vehicle >= 1}
+		|| {_vehicle getVariable ["SOAR_LB_pushing", false]}
+	) exitWith {false};
+
+	private _c130 = [_vehicle] call RS_MH6V3_fnc_cachedPushC130;
+	!isNull _c130
+	&& {isTouchingGround _c130}
+	&& {abs speed _c130 < 1}
 };
 
 RS_MH6V3_fnc_protectC130ForModelChange = {
@@ -818,7 +862,7 @@ RS_MH6V3_fnc_disassembleRotors = {
 		["_caller", objNull]
 	];
 
-	if (!isServer) exitWith {
+	if (!isServer && {[] call RS_MH6V3_fnc_useServerPackageEvents}) exitWith {
 		["RS_MH6V3_requestDisassembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
 	};
 
@@ -835,7 +879,7 @@ RS_MH6V3_fnc_assembleRotors = {
 		["_caller", objNull]
 	];
 
-	if (!isServer) exitWith {
+	if (!isServer && {[] call RS_MH6V3_fnc_useServerPackageEvents}) exitWith {
 		["RS_MH6V3_requestAssembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
 	};
 
@@ -879,7 +923,7 @@ RS_MH6V3_fnc_startAssembleRotors = {
 			params ["_args"];
 			_args params ["_vehicle", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			["RS_MH6V3_requestAssembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
+			[_vehicle, _caller] call RS_MH6V3_fnc_assembleRotors;
 		},
 		{
 			params ["_args"];
@@ -910,7 +954,7 @@ RS_MH6V3_fnc_startDisassembleRotors = {
 			params ["_args"];
 			_args params ["_vehicle", "_caller", "_fxId"];
 			[_caller, _fxId] call RS_MH6V3_fnc_stopServiceFx;
-			["RS_MH6V3_requestDisassembleRotors", [_vehicle, _caller]] call CBA_fnc_serverEvent;
+			[_vehicle, _caller] call RS_MH6V3_fnc_disassembleRotors;
 		},
 		{
 			params ["_args"];
@@ -1248,23 +1292,7 @@ RS_MH6V3_fnc_populateLogisticsManagement = {
 	(_display displayCtrl 86530) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_MH6_CLASS} && {_hasToolkit});
 	(_display displayCtrl 86531) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_AH6_CLASS} && {!(_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false])} && {_hasToolkit});
 
-	private _canPushToC130 = false;
-	if (
-		_aliveService
-		&& {!isNil "SOAR_fnc_lbStartPushPlacementPreview"}
-		&& {!isNil "SOAR_fnc_lbNearestC130"}
-	) then {
-		private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
-		private _c130 = [_vehicle, _searchRadius] call SOAR_fnc_lbNearestC130;
-		_canPushToC130 =
-			_canService
-			&& {isTouchingGround _vehicle}
-			&& {abs speed _vehicle < 1}
-			&& {!(_vehicle getVariable ["SOAR_LB_pushing", false])}
-			&& {!isNull _c130}
-			&& {isTouchingGround _c130}
-			&& {abs speed _c130 < 1};
-	};
+	private _canPushToC130 = _aliveService && {[_vehicle] call RS_MH6V3_fnc_canPushToC130Cached};
 	(_display displayCtrl 86532) ctrlEnable _canPushToC130;
 };
 
@@ -1424,8 +1452,8 @@ RS_MH6V3_fnc_initVanillaActions = {
 
 	{
 		[_x] call RS_MH6V3_fnc_addVanillaActionsToVehicle;
-	} forEach (vehicles select {
-		alive _x && {typeOf _x in RS_MH6V3_SERVICE_CLASSES}
+	} forEach (entities [RS_MH6V3_SERVICE_CLASSES, [], false, false] select {
+		alive _x
 	});
 };
 
@@ -1685,24 +1713,7 @@ private _pushPlacementAction = [
 	},
 	{
 		params ["_target"];
-		if (
-			isNil "SOAR_fnc_lbStartPushPlacementPreview"
-			|| {isNil "SOAR_fnc_lbNearestC130"}
-		) exitWith {false};
-
-		private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
-		private _c130 = [_target, _searchRadius] call SOAR_fnc_lbNearestC130;
-
-		alive _target
-		&& {typeOf _target in RS_MH6V3_SERVICE_CLASSES}
-		&& {crew _target isEqualTo []}
-		&& {isNull attachedTo _target}
-		&& {isTouchingGround _target}
-		&& {abs speed _target < 1}
-		&& {!(_target getVariable ["SOAR_LB_pushing", false])}
-		&& {!isNull _c130}
-		&& {isTouchingGround _c130}
-		&& {abs speed _c130 < 1}
+		[_target] call RS_MH6V3_fnc_canPushToC130Cached
 	}
 ] call ace_interact_menu_fnc_createAction;
 

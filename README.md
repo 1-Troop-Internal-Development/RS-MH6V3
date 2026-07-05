@@ -116,13 +116,13 @@ Toggle Hydra Ripple Master Arm - Keybind / UserAction
 [*]Rotor assembly/disassembly.
 [*]Camera reset.
 [*]C-130 positioning support when available.
-[*]MH-6 FRIES fast-rope support through Hatchet-style interactions.
+[*]MH-6  fast-rope support through Hatchet-style interactions.
 [/list]
 
 [hr][/hr]
-[h2]FRIES Fast Rope[/h2]
+[h2]FRIES Fast Rope - Hatchet Interactions[/h2]
 [list]
-[*]MH-6 only.
+[*]MH-6V3 now supports Hatchet Interactions for the Fast Roping system if the mod detects that Hatchet Framework is loaded.
 [*]Grab Ropes & Attach to FRIES interaction.
 [*]Deploy Fast Ropes interaction.
 [*]Left and right Fast Rope interactions.
@@ -201,7 +201,7 @@ Addon / Keybind Group: [RS] MH-6V3
 [list]
 [*]CBA.
 [*]ACE for ACE interaction features.
-[*]ACE Fastroping for FRIES fast-rope actions.
+[*]Hatchet Framework - for FRIES fast-rope interactions.
 [*]ACRE for ACRE radio features.
 [*]RHS USAF / RHS MELB content.
 [/list]

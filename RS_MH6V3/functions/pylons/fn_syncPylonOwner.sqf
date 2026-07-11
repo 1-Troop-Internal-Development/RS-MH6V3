@@ -28,7 +28,11 @@ if (!local _vehicle) exitWith {
 
 	sleep 0.1;
 
-	if (isNull _vehicle || {!local _vehicle}) exitWith {};
+	if (isNull _vehicle) exitWith {};
+
+	if (!local _vehicle) exitWith {
+		[_vehicle] remoteExecCall ["RS_MH6V3_fnc_syncPylonOwner", _vehicle];
+	};
 
 	private _ownerTurret = [];
 	private _ownerKey = "driver";
@@ -49,15 +53,19 @@ if (!local _vehicle) exitWith {
 	private _ownerSignature = str [_ownerKey, getPylonMagazines _vehicle];
 
 	if ((_vehicle getVariable ["RS_MH6V3_pylonOwner", ""]) != _ownerSignature) then {
+		private _allSucceeded = true;
 		{
 			private _pylonIndex = _forEachIndex + 1;
 			if (_x != "") then {
 				private _ammo = _vehicle ammoOnPylon _pylonIndex;
-				_vehicle setPylonLoadOut [_pylonIndex, _x, true, _ownerTurret];
+				private _loaded = _vehicle setPylonLoadOut [_pylonIndex, _x, true, _ownerTurret];
+				_allSucceeded = _allSucceeded && {_loaded};
 				_vehicle setAmmoOnPylon [_pylonIndex, _ammo];
 			};
 		} forEach getPylonMagazines _vehicle;
 
-		_vehicle setVariable ["RS_MH6V3_pylonOwner", _ownerSignature];
+		if (_allSucceeded) then {
+			_vehicle setVariable ["RS_MH6V3_pylonOwner", _ownerSignature, true];
+		};
 	};
 };

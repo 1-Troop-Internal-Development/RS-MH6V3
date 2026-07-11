@@ -149,6 +149,7 @@ class CfgFunctions
 			class openQuickFirePylonMenu {};
 			class populateQuickFirePylonMenu {};
 			class quickLaunchHydra {};
+			class setCrosshairVisible {};
 			class showExternalWeaponControl {};
 			class toggleQuickFireArm {};
 			class updateQuickFirePylonMenu {};
@@ -2335,6 +2336,26 @@ class CfgVehicles
 				control = "CheckboxNumber";
 				expression = "_this animateSource ['ExtLongR',_value,true]";
 				defaultValue = "0";
+			};
+		};
+		class UserActions: UserActions
+		{
+			class RS_MH6V3_HideCrosshair
+			{
+				displayName = "<t color='#7fd8ff'>Hide Crosshair</t>";
+				onlyforplayer = 1;
+				position = "doplnovani";
+				radius = 2;
+				condition = "(((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)) && {(this animationSourcePhase 'Addcrosshair') >= 0.5}";
+				statement = "[this, false] call RS_MH6V3_fnc_setCrosshairVisible";
+				showWindow = 0;
+				priority = 9.7;
+			};
+			class RS_MH6V3_ShowCrosshair: RS_MH6V3_HideCrosshair
+			{
+				displayName = "<t color='#7fd8ff'>Show Crosshair</t>";
+				condition = "(((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)) && {(this animationSourcePhase 'Addcrosshair') < 0.5}";
+				statement = "[this, true] call RS_MH6V3_fnc_setCrosshairVisible";
 			};
 		};
 		class Components: Components

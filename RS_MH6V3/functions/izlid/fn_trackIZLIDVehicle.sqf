@@ -56,7 +56,7 @@ if (_activeVehicles isEqualTo []) then {
 			call RS_MH6V3_fnc_updatePilotIZLIDDirection;
 			call RS_MH6V3_fnc_updateIZLIDTriggerCone;
 			call RS_MH6V3_fnc_updateIZLIDIlluminators;
-		}, 0.03] call CBA_fnc_addPerFrameHandler;
+		}, 0] call CBA_fnc_addPerFrameHandler;
 	};
 
 	if (isNil "RS_MH6V3_izlidRenderEh") then {

@@ -114,6 +114,7 @@ for "_pylonIndex" from 1 to _pylonCount do {
 };
 
 _vehicle setPylonsPriority _selectedPriorities;
+_vehicle setVariable ["RS_MH6V3_quickHydraRecoilPylon", [_selectedPylonIndex, diag_tickTime], false];
 _operator forceWeaponFire [_hydraWeapon, _mode];
 
 [

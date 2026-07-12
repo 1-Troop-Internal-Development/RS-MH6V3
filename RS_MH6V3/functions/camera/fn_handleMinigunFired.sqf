@@ -28,16 +28,22 @@ private _applyLaunchTorque = {
 	params [
 		["_vehicle", objNull],
 		["_projectile", objNull],
-		["_effect", "", [""]]
+		["_effect", "", [""]],
+		["_fallbackSideSign", 0, [0]]
 	];
 
-	if (isNull _vehicle || {!local _vehicle} || {isNull _projectile}) exitWith {};
+	if (isNull _vehicle || {!local _vehicle}) exitWith {};
 
-	private _projectileModelPos = _vehicle worldToModelVisual (getPosASL _projectile);
-	private _sideOffset = _projectileModelPos select 0;
-	if ((abs _sideOffset) < 0.2) exitWith {};
+	private _sideSign = _fallbackSideSign;
+	if (!isNull _projectile) then {
+		private _projectileModelPos = _vehicle worldToModelVisual (getPosASL _projectile);
+		private _sideOffset = _projectileModelPos select 0;
+		if ((abs _sideOffset) >= 0.2) then {
+			_sideSign = if (_sideOffset < 0) then {-1} else {1};
+		};
+	};
+	if (_sideSign == 0) exitWith {};
 
-	private _sideSign = if (_sideOffset < 0) then {-1} else {1};
 	private _baseTorque = if (_effect == "missile") then {725} else {500};
 	private _yawAxis = vectorUpVisual _vehicle;
 	private _rollAxis = vectorDirVisual _vehicle;
@@ -50,7 +56,16 @@ private _simulation = toLower getText (configFile >> "CfgAmmo" >> _ammo >> "simu
 if (_simulation in ["shotrocket", "shotmissile"]) exitWith {
 	private _strength = if (_simulation == "shotmissile") then {1.25} else {1};
 	private _effect = if (_simulation == "shotmissile") then {"missile"} else {"rocket"};
-	[_vehicle, _projectile, _effect] call _applyLaunchTorque;
+	private _fallbackSideSign = 0;
+	private _recoilPylon = _vehicle getVariable ["RS_MH6V3_quickHydraRecoilPylon", []];
+	if (
+		(count _recoilPylon) == 2 &&
+		{(diag_tickTime - (_recoilPylon # 1)) < 1}
+	) then {
+		_fallbackSideSign = if ((_recoilPylon # 0) in [1, 2]) then {1} else {-1};
+	};
+
+	[_vehicle, _projectile, _effect, _fallbackSideSign] call _applyLaunchTorque;
 	[_vehicle, _effect, _strength] call _sendShakeToCrew;
 };
 

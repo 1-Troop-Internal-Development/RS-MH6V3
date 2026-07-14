@@ -1,0 +1,4 @@
+class cfgAmmo
+{
+	class Bulletbase;
+};

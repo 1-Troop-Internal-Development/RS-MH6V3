@@ -1,292 +1,52 @@
+////////////////////////////////////////////////////////////////////
+//DeRap: config.bin
+//Produced from mikero's Dos Tools Dll version 9.98
+//https://mikero.bytex.digital/Downloads
+//'now' is Mon Jul 13 19:38:46 2026 : 'file' last modified on Wed Dec 31 16:00:00 1969
+////////////////////////////////////////////////////////////////////
+
+#define _ARMA_
+
+//(13 Enums)
+enum {
+	destructengine = 2,
+	destructdefault = 6,
+	destructwreck = 7,
+	destructtree = 3,
+	destructtent = 4,
+	stabilizedinaxisx = 1,
+	stabilizedinaxesxyz = 4,
+	stabilizedinaxisy = 2,
+	stabilizedinaxesboth = 3,
+	destructno = 0,
+	stabilizedinaxesnone = 0,
+	destructman = 5,
+	destructbuilding = 1
+};
+
 class CfgPatches
 {
-	class RS_MH6V3
+	class rhsusf_c_melb
 	{
-		units[] = {"RHS_MELB_AH6M"};
+		units[] = {"RHS_MELB_H6M","RHS_MELB_AH6M","RHS_MELB_AH6M_L","RHS_MELB_AH6M_M","RHS_MELB_AH6M_H","RHS_MELB_MH6M"};
 		weapons[] = {};
-		requiredVersion = 1.96;
-		requiredAddons[] =
-		{
-			"cba_main",
-			"rhsusf_main",
-			"A3_Data_F",
-			"rhsusf_c_melb",
-			"rhsusf_c_airweapons",
-			"rhsusf_c_heavyweapons"
-		};
+		requiredVersion = 0.1;
+		requiredAddons[] = {"rhsusf_main","rhsusf_c_airweapons","rhsusf_c_heavyweapons"};
 		magazines[] = {};
+		name = "MELB";
+		author = "$STR_RHSUSF_AUTHOR_FULL";
+		url = "http://www.rhsmods.org/";
 	};
-};
-
-class CfgFunctions
-{
-	class RS_MH6V3
+	class MELB_UI
 	{
-		class ace
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\ace";
-			class initAceActions
-			{
-				postInit = 1;
-			};
-		};
-		class camera
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\camera";
-			class drawFlirReticle {};
-			class handleMinigunFired {};
-			class initMinigunShake
-			{
-				postInit = 1;
-			};
-			class resetCameras {};
-			class flirHandler {};
-			class toggleCopilotGeolock {};
-		};
-		class fastrope
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\fastrope";
-			class canDeployRopes {};
-			class canFastRope {};
-			class canPrepareFRIES {};
-			class canShowDeployRopes {};
-			class canShowFastRope {};
-			class deployRopes {};
-			class drawFastRopePrompts {};
-			class fastRope {};
-			class getFastRopePoints {};
-			class initFastRope
-			{
-				postInit = 1;
-			};
-			class isACEFastRopingAvailable {};
-			class isFastRopeConfigured {};
-			class isHatchetFrameworkAvailable {};
-			class onRopesCut {};
-			class prepareFRIES {};
-		};
-		class acre
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\acre";
-			class isACREAvailable {};
-			class getACRERadioInfo {};
-			class getACRERadioLists {};
-			class initACRERadioStatus
-			{
-				postInit = 1;
-			};
-			class initACRERadioVolume
-			{
-				postInit = 1;
-			};
-			class adjustACRERadioVolume {};
-			class applyACRERadioTune {};
-			class cycleACRERadioSelection {};
-			class openACRERadioProgrammer {};
-			class populateACRERadioProgrammer {};
-			class publishACRERadioSnapshot {};
-			class receiveACRERadioSnapshot {};
-			class tuneACRERadio {};
-			class tuneACRERadioFromOther {};
-			class updateACRERadioStatus {};
-		};
-		class livery
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\livery";
-			class applyLivery {};
-			class applySelectedLivery {};
-			class getAvailableLiveries {};
-			class openLiveryMenu {};
-			class populateLiveryMenu {};
-		};
-		class input
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\input";
-			class initKeybinds
-			{
-				postInit = 1;
-			};
-		};
-		class settings
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\settings";
-			class initSettings
-			{
-				postInit = 1;
-			};
-		};
-		class izlid
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\izlid";
-			class canUseIZLID {};
-			class findIZLIDLaserSource {};
-			class handleIZLIDPowerState {};
-			class holdIZLID {};
-			class renderIZLID {};
-			class setIZLIDMode {};
-			class setIZLIDState {};
-			class trackIZLIDVehicle {};
-			class togglePilotIZLID {};
-			class toggleIZLIDMode {};
-			class toggleIZLID {};
-			class updateIZLIDIlluminators {};
-			class updatePilotIZLIDDirection {};
-			class updateIZLIDTriggerCone {};
-		};
-		class itn
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\izlid\itn";
-			class cleanupIlluminator {};
-			class updateIlluminator {};
-		};
-		class pylons
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\pylons";
-			class syncPylonOwner {};
-		};
-		class weapons
-		{
-			file = "\DEVGRU\RS_MH6V3\functions\weapons";
-			class applyQuickFirePylonMenu {};
-			class getHydraPylonData {};
-			class openQuickFirePylonMenu {};
-			class populateQuickFirePylonMenu {};
-			class cycleCrosshairTexture {};
-			class quickLaunchHydra {};
-			class setCrosshairVisible {};
-			class showExternalWeaponControl {};
-			class toggleQuickFireArm {};
-			class updateQuickFirePylonMenu {};
-		};
-	};
-};
-
-class CfgUserActions
-{
-	class RS_MH6V3_toggleIZLID
-	{
-		displayName = "Toggle IZLID";
-		tooltip = "Toggle the AH-6M IZLID marking laser.";
-		onActivate = "[] call RS_MH6V3_fnc_toggleIZLID";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_holdIZLID
-	{
-		displayName = "Hold IZLID";
-		tooltip = "Keep the AH-6M IZLID on while this key is held.";
-		onActivate = "[true] call RS_MH6V3_fnc_holdIZLID";
-		onDeactivate = "[false] call RS_MH6V3_fnc_holdIZLID";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_toggleIZLIDMode
-	{
-		displayName = "Cycle IZLID Mode";
-		tooltip = "Cycle between IZLID output and wide, narrow, or dynamic illuminator cone modes.";
-		onActivate = "[] call RS_MH6V3_fnc_toggleIZLIDMode";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_quickLaunchHydra
-	{
-		displayName = "Quick Launch Hydra";
-		tooltip = "Fire one AH-6M Hydra without selecting rockets.";
-		onActivate = "[] call RS_MH6V3_fnc_quickLaunchHydra";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_configureQuickFirePylons
-	{
-		displayName = "Hydra Rocket Ripple Configuration";
-		tooltip = "Open the AH-6M Hydra rocket ripple configuration.";
-		onActivate = "[] call RS_MH6V3_fnc_openQuickFirePylonMenu";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_togglePilotIZLID
-	{
-		displayName = "Toggle Handheld IZLID";
-		tooltip = "Toggle the handheld IZLID directed by the active pilot's view.";
-		onActivate = "[] call RS_MH6V3_fnc_togglePilotIZLID";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-	class RS_MH6V3_toggleQuickFireArm
-	{
-		displayName = "Toggle Hydra Ripple Master Arm";
-		tooltip = "Arm or safe the AH-6M Hydra rocket ripple key.";
-		onActivate = "[] call RS_MH6V3_fnc_toggleQuickFireArm";
-		onDeactivate = "";
-		onAnalog = "";
-		analogChangeThreshold = 0.01;
-		modifierBlocking = 1;
-	};
-};
-
-class UserActionGroups
-{
-	class RS_MH6V3
-	{
-		name = "[RS] MH-6V3";
-		group[] =
-		{
-			"RS_MH6V3_toggleIZLID",
-			"RS_MH6V3_holdIZLID",
-			"RS_MH6V3_toggleIZLIDMode",
-			"RS_MH6V3_togglePilotIZLID",
-			"RS_MH6V3_quickLaunchHydra",
-			"RS_MH6V3_configureQuickFirePylons",
-			"RS_MH6V3_toggleQuickFireArm"
-		};
-	};
-};
-
-#include "ui.hpp"
-
-class RscInGameUI
-{
-	class Rsc_MELB_Turret_UnitInfo;
-	class RS_MH6V3_MELB_Turret_UnitInfo: Rsc_MELB_Turret_UnitInfo
-	{
-		onLoad = "['onLoad',_this,'RscUnitInfo','IGUI'] call (uinamespace getvariable 'BIS_fnc_initDisplay'); _this spawn RS_MH6V3_fnc_flirHandler";
-	};
-};
-
-class CfgSounds
-{
-	class RS_MH6V3_FuelDrain
-	{
-		name = "RS_MH6V3_FuelDrain";
-		sound[] = {"\DEVGRU\RS_MH6V3\sounds\FuelDrain.ogg", 2, 1, 35};
-		titles[] = {};
-	};
-	class RS_MH6V3_ACRETune
-	{
-		name = "RS_MH6V3_ACRETune";
-		sound[] = {"\DEVGRU\RS_MH6V3\sounds\ACRETune.ogg", 1.5, 1};
-		titles[] = {};
+		units[] = {};
+		weapons[] = {};
+		requiredVersion = 0.1;
+		requiredAddons[] = {};
 	};
 };
 class SensorTemplatePassiveRadar;
-class SensorTemplateAntiRadiation;
-class SensorTemplateActiveRadar;
-class SensorTemplateIR;
-class SensorTemplateVisual;
-class SensorTemplateMan;
 class SensorTemplateLaser;
-class SensorTemplateNV;
 class SensorTemplateDataLink;
 class DefaultVehicleSystemsDisplayManagerLeft
 {
@@ -304,49 +64,18 @@ class VehicleSystemsTemplateRightPilot: DefaultVehicleSystemsDisplayManagerRight
 {
 	class components;
 };
+class Mode_SemiAuto;
+class Mode_Burst;
+class Mode_FullAuto;
 class RHS_Effects_Helicopter_Hull_Destruction;
 class cfgAmmo
 {
-	class B_127x99_SLAP;
-	class rhs_ammo_Hydra_M151;
-	class rhs_ammo_127x99_SLAP: B_127x99_SLAP
-	{
-		hit = 15;
-		indirectHit = 5;
-		indirectHitRange = 1;
-		caliber = 2.80992;
-		class CamShakeFire
-		{
-			power = 1;
-			duration = 0.2;
-			frequency = 20;
-			distance = 8;
-		};
-		class CamShakePlayerFire
-		{
-			power = 1;
-			duration = 0.1;
-			frequency = 20;
-			distance = 1;
-		};
-	};
-	class RS_MH6V3_ammo_Hydra_HEAT: rhs_ammo_Hydra_M151
-	{
-		hit = 375;
-		indirectHit = 32;
-		indirectHitRange = 3;
-		caliber = 18;
-		explosive = 0.65;
-		warheadName = "HEAT";
-		typicalSpeed = 740;
-	};
+	class Bulletbase;
 };
 class cfgMagazines
 {
+	class CA_Magazine;
 	class 5000Rnd_762x51_Belt;
-	class rhs_mag_M151_7;
-	class rhs_mag_M151_19;
-	class rhs_mag_m134_pylon_3000;
 	class RHS_FakeMagazine_MELB: 5000Rnd_762x51_Belt
 	{
 		count = 0;
@@ -356,179 +85,11 @@ class cfgMagazines
 		tracersEvery = 0;
 		weight = 0;
 	};
-	class RS_MH6V3_mag_Hydra_HEAT_7: rhs_mag_M151_7
-	{
-		displayName = "M247 HEAT Hydra (M260)";
-		displayNameShort = "M247 HEAT";
-		descriptionShort = "7-round M260 pod with RS MH-6V3 HEAT Hydra rockets. Reduced fragmentation radius with high direct-hit anti-armor damage.";
-		ammo = "RS_MH6V3_ammo_Hydra_HEAT";
-		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
-		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
-	};
-	class RS_MH6V3_mag_Hydra_HEAT_19: rhs_mag_M151_19
-	{
-		displayName = "M247 HEAT Hydra (M261)";
-		displayNameShort = "M247 HEAT";
-		descriptionShort = "19-round M261 pod with RS MH-6V3 HEAT Hydra rockets. Reduced fragmentation radius with high direct-hit anti-armor damage.";
-		ammo = "RS_MH6V3_ammo_Hydra_HEAT";
-		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
-		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
-	};
-	class RS_MH6V3_mag_m134_pylon_3000: rhs_mag_m134_pylon_3000
-	{
-		displayName = "M134D-H (RS)";
-		displayNameShort = "RS M134";
-		pylonWeapon = "RS_MH6V3_weap_m134_pylon";
-		hardpoints[] = {"RHS_HP_MELB_M134","RHS_HP_MELB"};
-	};
 };
 class cfgWeapons
 {
 	class MGun;
-	class RocketPods;
 	class Laserdesignator_mounted;
-	class RHS_weap_m134_pylon: MGun
-	{
-		class LowROF;
-		class HighROF;
-		class close;
-		class short;
-		class medium;
-		class far;
-	};
-	class RS_MH6V3_weap_m134_pylon: RHS_weap_m134_pylon
-	{
-		displayName = "M134D-H (RS)";
-		magazines[] = {"RS_MH6V3_mag_m134_pylon_3000"};
-		modes[] = {"LowROF","HighROF","close","short","medium","far"};
-		class LowROF: LowROF
-		{
-			displayName = "LO";
-			reloadTime = 0.03;
-			multiplier = 1;
-		};
-		class HighROF: HighROF
-		{
-			displayName = "HI";
-			reloadTime = 0.02;
-			multiplier = 2;
-		};
-		class close: close {};
-		class short: short {};
-		class medium: medium {};
-		class far: far {};
-	};
-	class rhs_weap_FFARLauncher: RocketPods
-	{
-		magazines[] =
-		{
-			"rhs_mag_M151_19",
-			"rhs_mag_M151_19_green",
-			"rhs_mag_M151_7",
-			"rhs_mag_M151_7_green",
-			"rhs_mag_M151_7_USAF_LAU131",
-			"rhs_mag_M151_21_USAF_LAU131_3",
-			"rhs_mag_FFAR_7_USAF",
-			"rhs_mag_FFAR_21_USAF_LAU68_3",
-			"rhs_mag_FFAR_19_USAF",
-			"rhs_mag_FFAR_57_USAF_LAU61_3"
-		};
-		displayName = "Hydra (M151 HE)";
-		magazineReloadTime = 0;
-		modes[] = {"Far_AI","Single","Two"};
-		cursor = "rocket";
-		cursorAim = "EmptyCursor";
-		cursorSize = 0;
-		class Far_AI: RocketPods
-		{
-			displayName = "Hydra";
-			burst = 1;
-			reloadTime = 0.08;
-			autoFire = 0;
-			showToPlayer = 0;
-			soundBurst = 0;
-			dispersion = 0.011;
-			minRange = 150;
-			minRangeProbab = 0.6;
-			midRange = 600;
-			midRangeProbab = 0.9;
-			maxRange = 2500;
-			maxRangeProbab = 0.12;
-		};
-		class Burst: RocketPods
-		{
-			displayName = "ALL";
-			burst = 1;
-			salvo = 2;
-			reloadTime = 0.08;
-			soundContinuous = 0;
-			autoFire = 1;
-			aiDispersionCoefX = 1.5;
-			aiDispersionCoefY = 1;
-			dispersion = 0.012;
-			textureType = "fullAuto";
-			minRange = 1;
-			minRangeProbab = 0.001;
-			midRange = 2;
-			midRangeProbab = 0.001;
-			maxRange = 3;
-			maxRangeProbab = 0.001;
-			soundBurst = 0;
-		};
-		class Single: Burst
-		{
-			displayName = "1";
-			autoFire = 0;
-			salvo = 1;
-			textureType = "semi";
-		};
-		class Two: Single
-		{
-			displayName = "2";
-			salvo = 2;
-			burst = 1;
-		};
-	};
-	class RS_MH6V3_weap_FFARLauncher_HEAT: rhs_weap_FFARLauncher
-	{
-		displayName = "Hydra (M247 HEAT)";
-		magazines[] =
-		{
-			"RS_MH6V3_mag_Hydra_HEAT_7",
-			"RS_MH6V3_mag_Hydra_HEAT_19"
-		};
-	};
-	class rhs_weap_FFARLauncher_M229: rhs_weap_FFARLauncher
-	{
-		displayName = "Hydra (M229 HEPD)";
-		magazines[] =
-		{
-			"rhs_mag_M229_19",
-			"rhs_mag_M229_19_green",
-			"rhs_mag_M229_7",
-			"rhs_mag_M229_7_green"
-		};
-	};
-	class rhs_weap_FFARLauncher_M257: rhs_weap_FFARLauncher
-	{
-		displayName = "Hydra (M257 ILLUM)";
-		magazines[] =
-		{
-			"rhs_mag_M257_7",
-			"rhs_mag_M257_7_green",
-			"rhs_mag_M257_7_USAF_LAU131"
-		};
-		modes[] = {"Far_AI","Single"};
-		class Far_AI: Far_AI
-		{
-			minRange = 3000;
-			minRangeProbab = 0.6;
-			midRange = 4000;
-			midRangeProbab = 0.9;
-			maxRange = 6000;
-			maxRangeProbab = 0.6;
-		};
-	};
 	class RHS_Laserdesignator_MELB: Laserdesignator_mounted
 	{
 		displayName = "Laser Designator";
@@ -543,80 +104,441 @@ class cfgWeapons
 		maxRangeProbab = 0.01;
 	};
 };
-class CfgVehicles
+class CfgFunctions
 {
-	class Lamps_base_F;
-	class RS_MH6V3_IZLID_Illuminator: Lamps_base_F
+	class RHS_MELB
 	{
-		scope = 1;
-		scopeCurator = 1;
-		displayName = "RS MH-6V3 IR Illuminator Wide";
-		model = "\DEVGRU\RS_MH6V3\data\light.p3d";
-		class Hitpoints {};
-		class AnimationSources {};
-		class Reflectors
+		recompile = 1;
+		tag = "RHS_MELB";
+		class functions
 		{
-			class Light_1
+			recompile = 1;
+			class MFD_toggle
 			{
-				irLight = 1;
-				color[] = {4,4,4};
-				ambient[] = {0,0,0};
-				intensity = 4000000;
-				size = 1;
-				innerAngle = 6.8;
-				outerAngle = 8;
-				coneFadeCoef = 1;
-				position = "light_pos";
-				direction = "light_dir";
-				hitpoint = "";
-				selection = "";
-				useFlare = 1;
-				flareSize = 0.2;
-				flareMaxDistance = 3000;
-				class Attenuation
+				file = "rhsusf\addons\rhsusf_c_melb\Scripts\MELB_toggleFLIR.sqf";
+				description = "MELB MFD Toggle";
+			};
+			class Handler
+			{
+				file = "rhsusf\addons\rhsusf_c_melb\Scripts\MELB_Handler.sqf";
+				description = "MELB Handler";
+			};
+			class FLIRHandler
+			{
+				file = "rhsusf\addons\rhsusf_c_melb\Scripts\MELB_FLIRHandler.sqf";
+				description = "MELB FLIR Handler";
+			};
+			class tailNumber
+			{
+				file = "rhsusf\addons\rhsusf_c_melb\Scripts\MELB_tailNumber.sqf";
+				description = "Tail number handler for MELB";
+			};
+		};
+	};
+};
+class CfgMovesBasic
+{
+	class DefaultDie;
+	class ManActions
+	{
+		MELB_Pilot = "MELB_Pilot";
+		MELB_Copilot = "MELB_Copilot";
+		MELB_FL_Bench = "MELB_FL_Bench";
+		MELB_L_Rack = "MELB_L_Rack";
+		MELB_L_Rack_in = "MELB_L_Rack_in";
+	};
+};
+class CfgMovesMaleSdr: CfgMovesBasic
+{
+	class States
+	{
+		class Crew;
+		class MELB_Pilot: Crew
+		{
+			leftHandIKCurve[] = {1};
+			rightHandIKCurve[] = {1};
+			leftLegIKCurve[] = {1};
+			rightLegIKCurve[] = {1};
+			file = "rhsusf\addons\rhsusf_melb\Data\anim\MELB_Pilot.rtm";
+			speed = 1e+10;
+			looped = 0;
+			interpolateTo[] = {"KIA_chopperLight_L_01_H",1,"KIA_chopperLight_L_02_H",1,"KIA_chopperLight_L_03_H",1};
+		};
+		class MELB_Copilot: Crew
+		{
+			leftHandIKCurve[] = {1};
+			rightHandIKCurve[] = {1};
+			leftLegIKCurve[] = {1};
+			rightLegIKCurve[] = {1};
+			file = "rhsusf\addons\rhsusf_melb\Data\anim\MELB_Copilot.rtm";
+			speed = 1e+10;
+			looped = 0;
+			interpolateTo[] = {"KIA_chopperLight_R_01_H",1,"KIA_chopperLight_R_02_H",1};
+		};
+		class MELB_FL_Bench: Crew
+		{
+			leftHandIKCurve[] = {1};
+			rightHandIKCurve[] = {1};
+			leftLegIKCurve[] = {1};
+			rightLegIKCurve[] = {1};
+			file = "rhsusf\addons\rhsusf_melb\Data\anim\MELB_FL_Bench.rtm";
+			speed = 1e+10;
+			looped = 0;
+			interpolateTo[] = {"KIA_chopperLight_L_01_H",1,"KIA_chopperLight_L_02_H",1,"KIA_chopperLight_L_03_H",1};
+		};
+		class MELB_L_Rack: Crew
+		{
+			leftHandIKCurve[] = {1};
+			rightHandIKCurve[] = {1};
+			leftLegIKCurve[] = {1};
+			rightLegIKCurve[] = {1};
+			file = "rhsusf\addons\rhsusf_melb\Data\anim\MELB_L_Rack.rtm";
+			speed = 0.43;
+			looped = 0;
+			interpolateTo[] = {"KIA_chopperLight_L_01_H",1,"KIA_chopperLight_L_02_H",1,"KIA_chopperLight_L_03_H",1};
+		};
+		class AmovPercMstpSnonWnonDnon;
+		class MELB_L_Rack_in: AmovPercMstpSnonWnonDnon
+		{
+			variantsPlayer[] = {};
+			file = "rhsusf\addons\rhsusf_melb\Data\anim\MELB_L_Rack_in.rtm";
+			speed = 1;
+			looped = 0;
+			soundOverride = "Walk";
+			disableWeapons = 0;
+			enableOptics = 0;
+			headBobMode = 1;
+			headBobStrength = 0.5;
+			ConnectTo[] = {"AmovPercMstpSnonWnonDnon",0.02};
+			InterpolateTo[] = {"Unconscious",0.1};
+		};
+	};
+};
+class RscControlsGroup;
+class RscText;
+class RangeText: RscText{};
+class RscPicture;
+class RscOpticsText;
+class RscIGProgress;
+class RscOpticsValue;
+class VScrollbar;
+class HScrollbar;
+class RscLadderPicture;
+class RscControlsGroupNoScrollbars;
+class RscIGUIValue;
+class RscIGUIText;
+class RscVehicleToggles;
+class RscInGameUI
+{
+	class RscUnitInfoArtillery;
+	class RscUnitInfo;
+	class RscUnitInfo_MELB: RscUnitInfo{};
+	class RscUnitInfoAir_NoRadar_MELB: RscUnitInfoArtillery
+	{
+		controls[] = {"CA_BackgroundVehicle","CA_BackgroundVehicleTitle","CA_BackgroundVehicleTitleDark","CA_BackgroundFuel","CA_Vehicle","CA_VehicleRole","CA_HitZones","CA_VehicleTogglesBackground","CA_VehicleToggles","CA_SpeedBackground","CA_SpeedUnits","CA_Speed","CA_ValueFuel","CA_AltBackground","CA_AltUnits","CA_Alt","WeaponInfoControlsGroupRight","CA_Zeroing","CA_Mode"};
+		onLoad = "['onLoad',_this,'RscUnitInfo','IGUI'] call (uinamespace getvariable 'BIS_fnc_initDisplay');_this call RHS_MELB_fnc_handler";
+	};
+	class Rsc_MELB_UnitInfo: RscUnitInfoAir_NoRadar_MELB
+	{
+		onLoad = "['onLoad',_this,'RscUnitInfo','IGUI'] call (uinamespace getvariable 'BIS_fnc_initDisplay');_this call RHS_MELB_fnc_handler";
+	};
+	class Rsc_MELB_Turret_UnitInfo: RscUnitInfo
+	{
+		idd = 300;
+		onLoad = "['onLoad',_this,'RscUnitInfo','IGUI'] call (uinamespace getvariable 'BIS_fnc_initDisplay'); _this spawn RHS_MELB_fnc_FLIRHandler";
+		controls[] = {"MELB_GUI"};
+		class MELB_GUI: RscControlsGroup
+		{
+			idc = 170;
+			class VScrollbar: VScrollbar
+			{
+				width = 0;
+			};
+			class HScrollbar: HScrollbar
+			{
+				height = 0;
+			};
+			x = "0 * 		(0.01875 * SafezoneH) + 		(SafezoneX + ((SafezoneW - SafezoneH) / 2))";
+			y = "0 * 		(0.025 * SafezoneH) + 		(SafezoneY)";
+			w = "53.5 * 		(0.01875 * SafezoneH)";
+			h = "40 * 		(0.025 * SafezoneH)";
+			class controls
+			{
+				class TextDistance: RangeText
 				{
-					start = 1;
-					constant = "3.14159*0.000305";
-					linear = 0;
-					quadratic = 1;
-					hardLimitStart = 3000;
-					hardLimitEnd = 3000;
+					idc = 1010;
+					text = "RNG";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "41.8 * 		(0.01875 * SafezoneH)";
+					y = "4.8 * 		(0.025 * SafezoneH)";
+					w = "3* 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class CA_Distance: RscText
+				{
+					idc = 151;
+					sizeEx = "0.0295*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					font = "PuristaMedium";
+					x = "46 * 		(0.01875 * SafezoneH)";
+					y = "4.8 * 		(0.025 * SafezoneH)";
+					w = "4 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class TextSpeed: RangeText
+				{
+					idc = 1010;
+					text = "SPD";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "2.5 * 		(0.01875 * SafezoneH)";
+					y = "4.8 * 		(0.025 * SafezoneH)";
+					w = "8 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class CA_Speed: RangeText
+				{
+					idc = 188;
+					sizeEx = "0.0295*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					font = "PuristaMedium";
+					text = "120";
+					x = "8 * 		(0.01875 * SafezoneH)";
+					y = "4.8 * 		(0.025 * SafezoneH)";
+					w = "4 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class TextAlt: RangeText
+				{
+					idc = 1010;
+					text = "ALT";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "2.5 * 		(0.01875 * SafezoneH)";
+					y = "5.6 * 		(0.025 * SafezoneH)";
+					w = "8 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class CA_Alt: RangeText
+				{
+					idc = 189;
+					sizeEx = "0.0295*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					font = "PuristaMedium";
+					text = "3825";
+					x = "8 * 		(0.01875 * SafezoneH)";
+					y = "5.6 * 		(0.025 * SafezoneH)";
+					w = "4 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class CA_VisionMode: RscText
+				{
+					idc = 152;
+					sizeEx = "0.022*SafezoneH";
+					colorText[] = {0,0,0,1};
+					colorBackground[] = {1,1,1,1};
+					shadow = 0;
+					font = "PuristaMedium";
+					text = "VIS";
+					x = "25.75 * 		(0.01875 * SafezoneH)";
+					y = "7.25 * 		(0.025 * SafezoneH)";
+					w = "1.5 * 		(0.01875 * SafezoneH)";
+					h = "0.6 * 		(0.025 * SafezoneH)";
+				};
+				class CA_FlirMode: RscText
+				{
+					idc = 153;
+					sizeEx = "0.022*SafezoneH";
+					shadow = 2;
+					colorText[] = {1,1,1,1};
+					font = "PuristaMedium";
+					text = "BHOT";
+					x = "25.5* 		(0.01875 * SafezoneH)";
+					y = "7.75 * 		(0.025 * SafezoneH)";
+					w = "2* 		(0.01875 * SafezoneH)";
+					h = "0.8 * 		(0.025 * SafezoneH)";
+				};
+				class TextACPOS: RangeText
+				{
+					idc = 1010;
+					text = "CRAFT POS";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "2.5 * 		(0.01875 * SafezoneH)";
+					y = "3 * 		(0.025 * SafezoneH)";
+					w = "8 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class ValueACPOS: RangeText
+				{
+					idc = 171;
+					font = "PuristaMedium";
+					sizeEx = "0.0295*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "2.5 * 		(0.01875 * SafezoneH)";
+					y = "4 * 		(0.025 * SafezoneH)";
+					w = "6 * 		(0.01875 * SafezoneH)";
+					h = "1 * 		(0.025 * SafezoneH)";
+				};
+				class TextTPOS: RangeText
+				{
+					idc = 1010;
+					text = "TARGET POS";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "41.8* 		(0.01875 * SafezoneH)";
+					y = "3 * 		(0.025 * SafezoneH)";
+					w = "8 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class ValueTPOS: RangeText
+				{
+					idc = 172;
+					font = "PuristaMedium";
+					sizeEx = "0.0295*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "41.8* 		(0.01875 * SafezoneH)";
+					y = "4 * 		(0.025 * SafezoneH)";
+					w = "6 * 		(0.01875 * SafezoneH)";
+					h = "1 * 		(0.025 * SafezoneH)";
+				};
+				class ValueTime: RangeText
+				{
+					idc = 190;
+					text = "20:28:35";
+					font = "PuristaMedium";
+					sizeEx = "0.0295*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "2.5* 		(0.01875 * SafezoneH)";
+					y = "9 * 		(0.025 * SafezoneH)";
+					w = "6 * 		(0.01875 * SafezoneH)";
+					h = "1 * 		(0.025 * SafezoneH)";
+				};
+				class TextLaser: RangeText
+				{
+					idc = 158;
+					text = "LRF    ARMED";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {0.9,0,0,1};
+					shadow = 2;
+					x = "3* 		(0.01875 * SafezoneH)";
+					y = "14.1 * 		(0.025 * SafezoneH)";
+					w = "13 * 		(0.01875 * SafezoneH)";
+					h = "2 * 		(0.025 * SafezoneH)";
+				};
+				class CA_Heading: RscText
+				{
+					idc = 156;
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					font = "PuristaMedium";
+					text = "023";
+					x = "27.25* 		(0.01875 * SafezoneH)";
+					y = "5 * 		(0.025 * SafezoneH)";
+					w = "4 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class TextHDG: RangeText
+				{
+					idc = 1010;
+					text = "HDG";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "24* 		(0.01875 * SafezoneH)";
+					y = "5* 		(0.025 * SafezoneH)";
+					w = "4 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
+				};
+				class OpticsZoom1: RangeText
+				{
+					idc = 180;
+					text = "28x";
+					colorText[] = {1,1,1,1};
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					shadow = 2;
+					x = "5 * 		(0.01875 * SafezoneH)";
+					y = "25 * 		(0.025 * SafezoneH)";
+					w = "6 * 		(0.01875 * SafezoneH)";
+					h = "1 * 		(0.025 * SafezoneH)";
+				};
+				class TextZOOM: RangeText
+				{
+					idc = 1010;
+					text = "ZOOM";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "2.5 * 		(0.01875 * SafezoneH)";
+					y = "25 * 		(0.025 * SafezoneH)";
+					w = "4 * 		(0.01875 * SafezoneH)";
+					h = "1 * 		(0.025 * SafezoneH)";
+				};
+				class ValueGEOLOCK: RscText
+				{
+					idc = 154;
+					text = "TRK COR";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "42* 		(0.01875 * SafezoneH)";
+					y = "33 * 		(0.025 * SafezoneH)";
+					w = "8 * 		(0.01875 * SafezoneH)";
+					h = "1 * 		(0.025 * SafezoneH)";
+				};
+				class TextGEOLOCK: RangeText
+				{
+					idc = 1010;
+					text = "GEOLOCK";
+					font = "PuristaMedium";
+					sizeEx = "0.0255*SafezoneH";
+					colorText[] = {1,1,1,1};
+					shadow = 2;
+					x = "42* 		(0.01875 * SafezoneH)";
+					y = "32 * 		(0.025 * SafezoneH)";
+					w = "8 * 		(0.01875 * SafezoneH)";
+					h = "1.2 * 		(0.025 * SafezoneH)";
 				};
 			};
 		};
 	};
-	class RS_MH6V3_IZLID_Illuminator_Narrow: RS_MH6V3_IZLID_Illuminator
+	class RscUnitInfoAir;
+	class RscUnitInfoAirRTDFullNoWeapon;
+	class RscUnitInfoAirRTD_NoRadar_MELB: RscUnitInfoAirRTDFullNoWeapon
 	{
-		displayName = "RS MH-6V3 IR Illuminator Narrow";
-		class Reflectors: Reflectors
-		{
-			class Light_1: Light_1
-			{
-				innerAngle = 2.55;
-				outerAngle = 3;
-			};
-		};
+		onLoad = "['onLoad',_this,'RscUnitInfoAirRTDFullNoWeapon','IGUI'] call (uinamespace getvariable 'BIS_fnc_initDisplay')";
 	};
-	class RS_MH6V3_IZLID_Illuminator_B90: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3600000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B80: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3200000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B70: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2800000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B60: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2400000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B50: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2000000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B40: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1600000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B30: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1200000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B20: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 800000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B10: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 400000;};};};
-	class RS_MH6V3_IZLID_Illuminator_B0: RS_MH6V3_IZLID_Illuminator {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 0;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B90: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3600000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B80: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 3200000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B70: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2800000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B60: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2400000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B50: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 2000000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B40: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1600000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B30: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 1200000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B20: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 800000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B10: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 400000;};};};
-	class RS_MH6V3_IZLID_Illuminator_Narrow_B0: RS_MH6V3_IZLID_Illuminator_Narrow {class Reflectors: Reflectors {class Light_1: Light_1 {intensity = 0;};};};
+	class Rsc_MELB_RTD_UnitInfo: RscUnitInfoAirRTD_NoRadar_MELB
+	{
+		controls[] = {"CA_BackgroundVehicle","CA_BackgroundVehicleTitle","CA_BackgroundVehicleTitleDark","CA_BackgroundFuel","CA_Vehicle","CA_VehicleRole","CA_HitZones","CA_VehicleTogglesBackground","CA_VehicleToggles","CA_SpeedBackground","CA_SpeedUnits","CA_Speed","CA_ValueFuel","CA_AltBackground","CA_AltUnits","CA_Alt","CA_Horizon_Lite","CA_Speed_Analogue","CA_Altitude_Analogue","CA_Horizon_Analogue","CA_Stability_Analogue","CA_Compass_Analogue","WeaponInfoControlsGroupRight"};
+		onLoad = "['onLoad',_this,'RscUnitInfoAirRTDFullNoWeapon','IGUI'] call (uinamespace getvariable 'BIS_fnc_initDisplay');_this call RHS_MELB_fnc_handler";
+	};
+};
+class CfgVehicles
+{
 	class Helicopter;
 	class Helicopter_Base_F: Helicopter
 	{
@@ -663,7 +585,7 @@ class CfgVehicles
 		picture = "rhsusf\addons\rhsusf_melb\Data\ui\melb_h_6m_ca.paa";
 		icon = "rhsusf\addons\rhsusf_melb\Data\ui\map_melb_h_6m_ca.paa";
 		mapSize = 11;
-		destrType = "DestructWreck";
+		destrType = DestructWreck;
 		accuracy = 0.5;
 		unitInfoType = "RscUnitInfoAir_NoRadar_MELB";
 		unitInfoTypeRTD = "RHSUSF_RscUnitInfoAirRTDFullDigital_MELB";
@@ -695,12 +617,6 @@ class CfgVehicles
 		hideWeaponsCargo = 1;
 		threat[] = {0,0,0};
 		radarType = 0;
-		laserScanner = 1;
-		nvScanner = 1;
-		allowTabLock = 1;
-		showAllTargets = 6;
-		showCrewAim = 4;
-		driverWeaponsInfoType = "RS_MH6V3_MELB_Turret_UnitInfo";
 		irTarget = 1;
 		irTargetSize = 0.7;
 		visualTarget = 1;
@@ -710,10 +626,10 @@ class CfgVehicles
 		receiveRemoteTargets = 1;
 		reportRemoteTargets = 1;
 		reportOwnPosition = 1;
-		LockDetectionSystem = "2 +4 + 8 + 16";
+		LockDetectionSystem = "4 + 8";
 		incomingMissileDetectionSystem = 16;
-		weapons[] = {"rhs_weap_laserDesignator_AI","rhsusf_weap_LWIRCM"};
-		magazines[] = {"rhs_laserfcsmag","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM"};
+		weapons[] = {"rhsusf_weap_LWIRCM"};
+		magazines[] = {"rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM"};
 		hiddenSelections[] = {"camo1","d_SN"};
 		hiddenSelectionsTextures[] = {"rhsusf\addons\rhsusf_melb\data\melb_ext_co.paa","rhsusf\addons\rhsusf_melb\data\decals\SN\blank_ca.paa"};
 		class MFD{};
@@ -776,59 +692,59 @@ class CfgVehicles
 		occludeSoundsWhenIn = 0.762341;
 		obstructSoundsWhenIn = 0.616228;
 		attenuationEffectType = "OpenHeliAttenuation";
-		soundGeneralCollision1[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_default_int_1",1,1,100};
-		soundGeneralCollision2[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_default_int_2",1,1,100};
-		soundGeneralCollision3[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_default_int_3",1,1,100};
+		soundGeneralCollision1[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_default_int_1",1.0,1,100};
+		soundGeneralCollision2[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_default_int_2",1.0,1,100};
+		soundGeneralCollision3[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_default_int_3",1.0,1,100};
 		soundCrashes[] = {"soundGeneralCollision1",0.33,"soundGeneralCollision2",0.33,"soundGeneralCollision3",0.33};
 		soundLandCrashes[] = {"emptySound",0};
 		soundBuildingCrash[] = {"soundGeneralCollision1",1,"soundGeneralCollision2",1,"soundGeneralCollision3",1};
 		soundArmorCrash[] = {"soundGeneralCollision1",1,"soundGeneralCollision2",1,"soundGeneralCollision3",1};
 		soundWoodCrash[] = {"soundGeneralCollision1",1,"soundGeneralCollision2",1,"soundGeneralCollision3",1};
-		soundBushCollision1[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_bush_int_1",1,1,100};
-		soundBushCollision2[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_bush_int_2",1,1,100};
-		soundBushCollision3[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_bush_int_3",1,1,100};
+		soundBushCollision1[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_bush_int_1",1.0,1,100};
+		soundBushCollision2[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_bush_int_2",1.0,1,100};
+		soundBushCollision3[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_bush_int_3",1.0,1,100};
 		soundBushCrash[] = {"soundBushCollision1",0.33,"soundBushCollision2",0.33,"soundBushCollision3",0.33};
-		soundWaterCollision1[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_water_ext_1",1,1,100};
-		soundWaterCollision2[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_water_ext_2",1,1,100};
+		soundWaterCollision1[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_water_ext_1",1.0,1,100};
+		soundWaterCollision2[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_coll_water_ext_2",1.0,1,100};
 		soundWaterCrashes[] = {"soundWaterCollision1",0.5,"soundWaterCollision2",0.5};
 		soundGetIn[] = {"A3\Sounds_F\vehicles\air\noises\heli_get_in2",0.56234133,1};
 		soundGetOut[] = {"A3\Sounds_F\vehicles\air\noises\heli_get_out2",0.7943282,1,20};
 		soundDammage[] = {"A3\Sounds_F\vehicles\crashes\helis\Heli_crash_default_ext_1",3.1622777,1};
 		soundEngineOnInt[] = {"rhsusf\addons\rhsusf_melb\Sound\Int_Start",0.4,1};
-		soundEngineOnExt[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Start",0.7943282,1,600};
+		soundEngineOnExt[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Start",0.7943282,1.0,600};
 		soundEngineOffInt[] = {"rhsusf\addons\rhsusf_melb\Sound\Int_Off",0.4,1};
-		soundEngineOffExt[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Off",0.7943282,1,600};
+		soundEngineOffExt[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Off",0.7943282,1.0,600};
 		soundLocked[] = {"\A3\Sounds_F\weapons\Rockets\opfor_lock_1",1,1};
 		soundIncommingMissile[] = {"\A3\Sounds_F\weapons\Rockets\opfor_lock_2",0.7,1};
-		rotorDamageInt[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_rotor_int_open_1",1,1};
-		rotorDamageOut[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_rotor_ext_1",2.5118864,1,150};
+		rotorDamageInt[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_rotor_int_open_1",1.0,1.0};
+		rotorDamageOut[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_rotor_ext_1",2.5118864,1.0,150};
 		rotorDamage[] = {"rotorDamageInt","rotorDamageOut"};
-		tailDamageInt[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_tail",1,1};
-		tailDamageOut[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_tail",1,1,300};
+		tailDamageInt[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_tail",1.0,1.0};
+		tailDamageOut[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_tail",1.0,1.0,300};
 		tailDamage[] = {"tailDamageInt","tailDamageOut"};
-		landingSoundInt0[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_int1_open",1,1,100};
-		landingSoundInt1[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_int1_open",1,1,100};
+		landingSoundInt0[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_int1_open",1.0,1.0,100};
+		landingSoundInt1[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_int1_open",1.0,1.0,100};
 		landingSoundInt[] = {"landingSoundInt0",0.5,"landingSoundInt1",0.5};
-		landingSoundOut0[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_ext1",1.7782794,1,100};
-		landingSoundOut1[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_ext1",1.7782794,1,100};
+		landingSoundOut0[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_ext1",1.7782794,1.0,100};
+		landingSoundOut1[] = {"A3\Sounds_F\vehicles\air\noises\landing_skids_ext1",1.7782794,1.0,100};
 		landingSoundOut[] = {"landingSoundOut0",0.5,"landingSoundOut1",0.5};
-		slingCargoAttach0[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownEndINT",1,1};
-		slingCargoAttach1[] = {"A3\Sounds_F\vehicles\air\noises\SL_1hookLock",1,1,80};
+		slingCargoAttach0[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownEndINT",1.0,1.0};
+		slingCargoAttach1[] = {"A3\Sounds_F\vehicles\air\noises\SL_1hookLock",1.0,1.0,80};
 		slingCargoAttach[] = {"slingCargoAttach0","slingCargoAttach1"};
-		slingCargoDetach0[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpEndINT",1,1};
-		slingCargoDetach1[] = {"A3\Sounds_F\vehicles\air\noises\SL_1hookUnlock",1,1,80};
+		slingCargoDetach0[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpEndINT",1.0,1.0};
+		slingCargoDetach1[] = {"A3\Sounds_F\vehicles\air\noises\SL_1hookUnlock",1.0,1.0,80};
 		slingCargoDetach[] = {"slingCargoDetach0","slingCargoDetach1"};
-		slingCargoDetachAir0[] = {"A3\Sounds_F\vehicles\air\noises\SL_unhook_air_int",1,1};
-		slingCargoDetachAir1[] = {"A3\Sounds_F\vehicles\air\noises\SL_unhook_air_ext",1,1,80};
+		slingCargoDetachAir0[] = {"A3\Sounds_F\vehicles\air\noises\SL_unhook_air_int",1.0,1.0};
+		slingCargoDetachAir1[] = {"A3\Sounds_F\vehicles\air\noises\SL_unhook_air_ext",1.0,1.0,80};
 		slingCargoDetachAir[] = {"slingCargoDetach0","slingCargoDetach1"};
-		slingCargoRopeBreak0[] = {"A3\Sounds_F\vehicles\air\noises\SL_rope_break_int",1,1};
-		slingCargoRopeBreak1[] = {"A3\Sounds_F\vehicles\air\noises\SL_rope_break_ext",1,1,80};
+		slingCargoRopeBreak0[] = {"A3\Sounds_F\vehicles\air\noises\SL_rope_break_int",1.0,1.0};
+		slingCargoRopeBreak1[] = {"A3\Sounds_F\vehicles\air\noises\SL_rope_break_ext",1.0,1.0,80};
 		slingCargoRopeBreak[] = {"slingCargoDetach0","slingCargoDetach1"};
 		class Sounds
 		{
 			class EngineExt
 			{
-				sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Idle",1.2889254,1,400};
+				sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Idle",1.2889254,1.0,400};
 				frequency = "rotorSpeed*(1+rotorThrust/6)*0.9";
 				volume = "camPos*((rotorSpeed-0.72)*4)";
 			};
@@ -840,7 +756,7 @@ class CfgVehicles
 			};
 			class RotorSwist
 			{
-				sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Close",1.2,1,600};
+				sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Close",1.2,1.0,600};
 				frequency = "rotorSpeed*(1+rotorThrust/6)*0.9";
 				volume = "camPos * (gmeterZ factor[1.5, 2.5]) + (gmeterZ factor[0.5, -0.5]) * (rotorThrust factor [0.7, 0.9])";
 			};
@@ -871,31 +787,31 @@ class CfgVehicles
 			};
 			class WindBench
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_out",0.56234133,1,50};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_out",0.56234133,1.0,50};
 				frequency = 1;
 				volume = "4 * (playerPos factor [3.9, 4]) * (1 - camPos) * ((speed factor[0, 30]) + (speed factor[0, -30]))";
 			};
 			class TransmissionDamageExt_phase1
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_1",1,1,150};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_1",1.0,1.0,150};
 				frequency = "0.66 + rotorSpeed / 3";
 				volume = "camPos * (transmissionDamage factor [0.3, 0.35]) * (transmissionDamage factor [0.5, 0.45]) * (rotorSpeed factor [0.2, 0.5])";
 			};
 			class TransmissionDamageExt_phase2
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_2",1,1,150};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_2",1.0,1.0,150};
 				frequency = "0.66 + rotorSpeed / 3";
 				volume = "camPos * (transmissionDamage factor [0.45, 0.5]) * (rotorSpeed factor [0.2, 0.5])";
 			};
 			class TransmissionDamageInt_phase1
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_1",1,1,150};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_1",1.0,1.0,150};
 				frequency = "0.66 + rotorSpeed / 3";
 				volume = "(1 - camPos) * (transmissionDamage factor [0.3, 0.35]) * (transmissionDamage factor [0.5, 0.45]) * (rotorSpeed factor [0.2, 0.5])";
 			};
 			class TransmissionDamageInt_phase2
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_2",1,1,150};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_2",1.0,1.0,150};
 				frequency = "0.66 + rotorSpeed / 3";
 				volume = "(1 - camPos) * (transmissionDamage factor [0.45, 0.5]) * (rotorSpeed factor [0.2, 0.5])";
 			};
@@ -920,115 +836,115 @@ class CfgVehicles
 			};
 			class damageAlarmInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.31622776,1};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.31622776,1.0};
 				frequency = 1;
 				volume = "engineOn * (1 - camPos) * ( 1 - ((transmissionDamage factor [0.61, 0.60]) * (motorDamage factor [0.61, 0.60]) * (rotorDamage factor [0.51, 0.50]))) * (rotorSpeed factor [0.0, 0.001])";
 			};
 			class damageAlarmExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.2238721,1,20};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.2238721,1.0,20};
 				frequency = 1;
 				volume = "engineOn * camPos * ( 1 - ((transmissionDamage factor [0.61, 0.60]) * (motorDamage factor [0.61, 0.60]) * (rotorDamage factor [0.51, 0.50]))) * (rotorSpeed factor [0, 0.001])";
 			};
 			class rotorLowAlarmInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.31622776,1};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.31622776,1.0};
 				frequency = 1;
 				volume = "engineOn * (1 - camPos) * (rotorSpeed factor [0.9, 0.8999]) * (rotorSpeed factor [-0.5, 1]) * (speed factor [3, 3.01])";
 			};
 			class rotorLowAlarmExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.2238721,1,20};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.2238721,1.0,20};
 				frequency = 1;
 				volume = "engineOn * camPos * (rotorSpeed factor [0.9, 0.8999]) * (rotorSpeed factor [-0.5, 1]) * (speed factor [3, 3.01])";
 			};
 			class scrubLandInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandInt_open",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandInt_open",1.0,1.0,100};
 				frequency = 1;
 				volume = "2 * (1-camPos) * (scrubLand factor[0.02, 0.05])";
 			};
 			class scrubLandExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandExt",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandExt",1.0,1.0,100};
 				frequency = 1;
 				volume = "camPos * (scrubLand factor[0.02, 0.05])";
 			};
 			class scrubBuildingInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingInt",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingInt",1.0,1.0,100};
 				frequency = 1;
 				volume = "2 * (1 - camPos) * (scrubBuilding factor[0.02, 0.05])";
 			};
 			class scrubBuildingExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingExt",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingExt",1.0,1.0,100};
 				frequency = 1;
 				volume = "camPos * (scrubBuilding factor[0.02, 0.05])";
 			};
 			class scrubTreeInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1.0,1.0,100};
 				frequency = 1;
 				volume = "(1 - camPos) * ((scrubTree) factor [0, 0.01])";
 			};
 			class scrubTreeExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1.0,1.0,100};
 				frequency = 1;
 				volume = "camPos * ((scrubTree) factor [0, 0.01])";
 			};
 			class RainExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\noises\rain1_ext",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\noises\rain1_ext",1.0,1.0,100};
 				frequency = 1;
 				volume = "camPos * (rain - rotorSpeed/2) * 2";
 			};
 			class RainInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\noises\rain1_int_open",1,1,100};
+				sound[] = {"A3\Sounds_F\vehicles\noises\rain1_int_open",1.0,1.0,100};
 				frequency = 1;
 				volume = "(1-camPos)*(rain - rotorSpeed/2)*2";
 			};
 			class SlingLoadDownExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownEXT",1,1,500};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownEXT",1.0,1.0,500};
 				frequency = 1;
 				volume = "camPos*(slingLoadActive factor [0,-1])";
 			};
 			class SlingLoadUpExt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpEXT",1,1,500};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpEXT",1.0,1.0,500};
 				frequency = 1;
 				volume = "camPos*(slingLoadActive factor [0,1])";
 			};
 			class SlingLoadDownInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownINT",1,1,500};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownINT",1.0,1.0,500};
 				frequency = 1;
 				volume = "(1-camPos)*(slingLoadActive factor [0,-1])";
 			};
 			class SlingLoadUpInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpINT",1,1,500};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpINT",1.0,1.0,500};
 				frequency = 1;
 				volume = "(1-camPos)*(slingLoadActive factor [0,1])";
 			};
 			class WindInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_int",1,1,50};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_int",1,1.0,50};
 				frequency = 1;
 				volume = "(1-camPos)*(speed factor[5, 50])*(speed factor[5, 50])";
 			};
 			class WindLateralMovementInt
 			{
-				sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_lateral_open_int",1,1,50};
+				sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_lateral_open_int",1,1.0,50};
 				frequency = 1;
 				volume = "(1-camPos)*lateralMovement*((speed factor [5,40]) + (speed factor [-5,-40]))";
 			};
 			class GStress
 			{
-				sound[] = {"A3\Sounds_F\vehicles\noises\vehicle_stress2b",0.11622776,1,50};
+				sound[] = {"A3\Sounds_F\vehicles\noises\vehicle_stress2b",0.11622776,1.0,50};
 				frequency = 1;
 				volume = "engineOn * (1-camPos) * ((gmeterZ factor[1.5, 2.5]) + (gmeterZ factor[0.5, -0.5]))";
 			};
@@ -1040,7 +956,7 @@ class CfgVehicles
 			{
 				class EngineExt
 				{
-					sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Idle",1.2889254,1,400};
+					sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Ext_Idle",1.2889254,1.0,400};
 					frequency = "1.3*rotorSpeed";
 					volume = "2 * camPos * (0 max (rotorSpeed-0.4))";
 				};
@@ -1052,7 +968,7 @@ class CfgVehicles
 				};
 				class RotorSwist
 				{
-					sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Close",1.2,1,600};
+					sound[] = {"rhsusf\addons\rhsusf_melb\Sound\Close",1.2,1.0,600};
 					frequency = "1.3*rotorspeed";
 					volume = "camPos * (gmeterZ factor[1.5, 2.5]) + (gmeterZ factor[0.5, -0.5]) * (rotorThrust factor [0.7, 0.9])";
 				};
@@ -1083,31 +999,31 @@ class CfgVehicles
 				};
 				class WindBench
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_out",0.56234133,1,50};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_out",0.56234133,1.0,50};
 					frequency = 1;
 					volume = "4 * (playerPos factor [3.9, 4]) * (1 - camPos) * ((speed factor[0, 30]) + (speed factor[0, -30]))";
 				};
 				class TransmissionDamageExt_phase1
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_1",1,1,150};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_1",1.0,1.0,150};
 					frequency = "0.66 + rotorSpeed / 3";
 					volume = "camPos * (transmissionDamage factor [0.3, 0.35]) * (transmissionDamage factor [0.5, 0.45]) * (rotorSpeed factor [0.2, 0.5])";
 				};
 				class TransmissionDamageExt_phase2
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_2",1,1,150};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_ext_2",1.0,1.0,150};
 					frequency = "0.66 + rotorSpeed / 3";
 					volume = "camPos * (transmissionDamage factor [0.45, 0.5]) * (rotorSpeed factor [0.2, 0.5])";
 				};
 				class TransmissionDamageInt_phase1
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_1",1,1,150};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_1",1.0,1.0,150};
 					frequency = "0.66 + rotorSpeed / 3";
 					volume = "(1 - camPos) * (transmissionDamage factor [0.3, 0.35]) * (transmissionDamage factor [0.5, 0.45]) * (rotorSpeed factor [0.2, 0.5])";
 				};
 				class TransmissionDamageInt_phase2
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_2",1,1,150};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_damage_transmission_int_2",1.0,1.0,150};
 					frequency = "0.66 + rotorSpeed / 3";
 					volume = "(1 - camPos) * (transmissionDamage factor [0.45, 0.5]) * (rotorSpeed factor [0.2, 0.5])";
 				};
@@ -1132,211 +1048,121 @@ class CfgVehicles
 				};
 				class damageAlarmInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.31622776,1};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.31622776,1.0};
 					frequency = 1;
 					volume = "engineOn * (1 - camPos) * ( 1 - ((transmissionDamage factor [0.61, 0.60]) * (motorDamage factor [0.61, 0.60]) * (rotorDamage factor [0.51, 0.50]))) * (rotorSpeed factor [0.0, 0.001])";
 				};
 				class damageAlarmExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.2238721,1,20};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_bluefor",0.2238721,1.0,20};
 					frequency = 1;
 					volume = "engineOn * camPos * ( 1 - ((transmissionDamage factor [0.61, 0.60]) * (motorDamage factor [0.61, 0.60]) * (rotorDamage factor [0.51, 0.50]))) * (rotorSpeed factor [0, 0.001])";
 				};
 				class rotorLowAlarmInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.31622776,1};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.31622776,1.0};
 					frequency = 1;
 					volume = "engineOn * (1 - camPos) * (rotorSpeed factor [0.9, 0.8999]) * (rotorSpeed factor [-0.5, 1]) * (speed factor [3, 3.01])";
 				};
 				class rotorLowAlarmExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.2238721,1,20};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\heli_alarm_rotor_low",0.2238721,1.0,20};
 					frequency = 1;
 					volume = "engineOn * camPos * (rotorSpeed factor [0.9, 0.8999]) * (rotorSpeed factor [-0.5, 1]) * (speed factor [3, 3.01])";
 				};
 				class scrubLandInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandInt_open",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandInt_open",1.0,1.0,100};
 					frequency = 1;
 					volume = "2 * (1-camPos) * (scrubLand factor[0.02, 0.05])";
 				};
 				class scrubLandExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandExt",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubLandExt",1.0,1.0,100};
 					frequency = 1;
 					volume = "camPos * (scrubLand factor[0.02, 0.05])";
 				};
 				class scrubBuildingInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingInt",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingInt",1.0,1.0,100};
 					frequency = 1;
 					volume = "2 * (1 - camPos) * (scrubBuilding factor[0.02, 0.05])";
 				};
 				class scrubBuildingExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingExt",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubBuildingExt",1.0,1.0,100};
 					frequency = 1;
 					volume = "camPos * (scrubBuilding factor[0.02, 0.05])";
 				};
 				class scrubTreeInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1.0,1.0,100};
 					frequency = 1;
 					volume = "(1 - camPos) * ((scrubTree) factor [0, 0.01])";
 				};
 				class scrubTreeExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\scrubTreeExt",1.0,1.0,100};
 					frequency = 1;
 					volume = "camPos * ((scrubTree) factor [0, 0.01])";
 				};
 				class RainExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\noises\rain1_ext",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\noises\rain1_ext",1.0,1.0,100};
 					frequency = 1;
 					volume = "camPos * (rain - rotorSpeed/2) * 2";
 				};
 				class RainInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\noises\rain1_int_open",1,1,100};
+					sound[] = {"A3\Sounds_F\vehicles\noises\rain1_int_open",1.0,1.0,100};
 					frequency = 1;
 					volume = "(1-camPos)*(rain - rotorSpeed/2)*2";
 				};
 				class SlingLoadDownExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownEXT",1,1,500};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownEXT",1.0,1.0,500};
 					frequency = 1;
 					volume = "camPos*(slingLoadActive factor [0,-1])";
 				};
 				class SlingLoadUpExt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpEXT",1,1,500};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpEXT",1.0,1.0,500};
 					frequency = 1;
 					volume = "camPos*(slingLoadActive factor [0,1])";
 				};
 				class SlingLoadDownInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownINT",1,1,500};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineDownINT",1.0,1.0,500};
 					frequency = 1;
 					volume = "(1-camPos)*(slingLoadActive factor [0,-1])";
 				};
 				class SlingLoadUpInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpINT",1,1,500};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\SL_engineUpINT",1.0,1.0,500};
 					frequency = 1;
 					volume = "(1-camPos)*(slingLoadActive factor [0,1])";
 				};
 				class WindInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_int",1.1220185,1,50};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_open_int",1.1220185,1.0,50};
 					frequency = 1;
 					volume = "(1-camPos)*(speed factor[5, 50])*(speed factor[5, 50])";
 				};
 				class WindLateralMovementInt
 				{
-					sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_lateral_open_int",1.9952624,1,50};
+					sound[] = {"A3\Sounds_F\vehicles\air\noises\wind_lateral_open_int",1.9952624,1.0,50};
 					frequency = 1;
 					volume = "(1-camPos)*lateralMovement*((speed factor [5,40]) + (speed factor [-5,-40]))";
 				};
 				class GStress
 				{
-					sound[] = {"A3\Sounds_F\vehicles\noises\vehicle_stress2b",0.11622776,1,50};
+					sound[] = {"A3\Sounds_F\vehicles\noises\vehicle_stress2b",0.11622776,1.0,50};
 					frequency = 1;
 					volume = "engineOn * (1-camPos) * ((gmeterZ factor[1.5, 2.5]) + (gmeterZ factor[0.5, -0.5]))";
 				};
 			};
 		};
-		class CargoTurret;
-		class pilotCamera
-		{
-			class OpticsIn
-			{
-				class Wide
-				{
-					opticsDisplayName = "WIDE";
-					initAngleX = 0;
-					minAngleX = 0;
-					maxAngleX = 0;
-					initAngleY = 0;
-					minAngleY = 0;
-					maxAngleY = 0;
-					initFov = 0.36;
-					minFov = 0.36;
-					maxFov = 0.36;
-					visionMode[] = {"Normal","NVG","Ti"};
-					thermalMode[] = {0,1};
-					directionStabilized = 0;
-					horizontallyStabilized = 0;
-					gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_wf.p3d";
-					opticsPPEffects[] = {"OpticsCHAbera3","OpticsBlur3"};
-					gunnerOpticsEffect[] = {"TankCommanderOptics2"};
-				};
-				class Medium: Wide
-				{
-					opticsDisplayName = "MED";
-					initFov = 0.24;
-					minFov = 0.24;
-					maxFov = 0.24;
-					gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_w2.p3d";
-				};
-				class Narrow: Wide
-				{
-					opticsDisplayName = "NAR";
-					initFov = 0.12;
-					minFov = 0.12;
-					maxFov = 0.12;
-					gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_m.p3d";
-				};
-				class Narrow2: Wide
-				{
-					opticsDisplayName = "NAR 2";
-					initFov = 0.035;
-					minFov = 0.035;
-					maxFov = 0.035;
-					gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_n.p3d";
-				};
-				class Narrow3: Wide
-				{
-					opticsDisplayName = "NAR 3";
-					initFov = 0.015;
-					minFov = 0.015;
-					maxFov = 0.015;
-					gunnerOpticsModel = "rhsusf\addons\rhsusf_melb\data\optics\melb_flir_n2.p3d";
-				};
-				showMiniMapInOptics = 0;
-				showUAVViewpInOptics = 0;
-				showSlingLoadManagerInOptics = 1;
-			};
-			gunBeg = "commanderview";
-			gunEnd = "laserstart";
-			memoryPointGun = "commanderview";
-			discretedistance[] = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000};
-			discretedistanceinitindex = 3;
-			weapons[] = {"rhs_weap_laserDesignator_AI","rhs_weap_fcs_ah64"};
-			magazines[] = {"rhs_laserfcsmag","rhs_LaserMag_ai"};
-			minTurn = -180;
-			maxTurn = 180;
-			initTurn = 0;
-			minElev = -45;
-			maxElev = 90;
-			initElev = 0;
-			maxXRotSpeed = 1;
-			maxYRotSpeed = 1;
-			pilotOpticsShowCursor = 1;
-			controllable = 1;
-		};
-		memoryPointGunnerOptics = "commanderview";
-		memoryPointDriverOptics = "light_dir";
-		gunBeg = "commanderview";
-		gunEnd = "laserstart";
-		memoryPointGun = "commanderview";
-		body = "obsTurret";
-		gun = "obsGun";
-		animationSourceBody = "obsTurret";
-		animationSourceGun = "obsGun";
-		turretInfoType = "RS_MH6V3_MELB_Turret_UnitInfo";
-		usepip = 1;
-		canUseScanners = 1;
+		class pilotCamera{};
 		class Exhausts
 		{
 			class Exhaust01
@@ -1346,8 +1172,12 @@ class CfgVehicles
 				effect = "ExhaustEffectHeli";
 			};
 		};
+		class Library
+		{
+			libTextDesc = "Syko's Little Birds";
+		};
 		armor = 35;
-		armorStructural = 20;
+		armorStructural = 20.0;
 		epeImpulseDamageCoef = 20;
 		damageResistance = 0.01039;
 		crewCrashProtection = 0.2;
@@ -1776,28 +1606,6 @@ class CfgVehicles
 				statement = "call RHS_MELB_fnc_MFD_toggle";
 				showWindow = 0;
 			};
-			class RS_MH6V3_ResetCameras
-			{
-				displayName = "<t color='#7fd8ff'>Reset Cameras</t>";
-				onlyforplayer = 1;
-				position = "doplnovani";
-				radius = 2;
-				condition = "((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)";
-				statement = "[this] call RS_MH6V3_fnc_resetCameras";
-				showWindow = 0;
-				priority = 9.8;
-			};
-			class RS_MH6V3_ToggleCopilotGeolock
-			{
-				displayName = "<t color='#7fd8ff'>Toggle Copilot GEOLOCK</t>";
-				onlyforplayer = 1;
-				position = "doplnovani";
-				radius = 2;
-				condition = "alive this && {player == (this turretUnit [0])}";
-				statement = "[this] call RS_MH6V3_fnc_toggleCopilotGeolock";
-				showWindow = 0;
-				priority = 9.72;
-			};
 			class SAFEMODE
 			{
 				displayName = "<t color='#00FF7F'>MASTERSAFE</t>";
@@ -2045,7 +1853,7 @@ class CfgVehicles
 				gun = "obsGun";
 				animationSourceBody = "obsTurret";
 				animationSourceGun = "obsGun";
-				turretInfoType = "RS_MH6V3_MELB_Turret_UnitInfo";
+				turretInfoType = "Rsc_MELB_Turret_UnitInfo";
 				stabilizedInAxes = 3;
 				memoryPointGunnerOptics = "commanderview";
 				minElev = -180;
@@ -2161,15 +1969,8 @@ class CfgVehicles
 		{
 			class RHS_MELB_EH
 			{
-				init = "_this call RS_MH6V3_fnc_syncPylonOwner; params ['_vehicle']; if (_vehicle isKindOf 'RHS_MELB_AH6M') then {_vehicle animate ['Addcrosshair', 1, true]}";
-				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
-				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
-				engine = "params ['_vehicle', '_engineOn']; [_vehicle, _engineOn] call RS_MH6V3_fnc_handleIZLIDPowerState";
-				fired = "_this call RS_MH6V3_fnc_handleMinigunFired";
-				killed = "params ['_vehicle']; [_vehicle, false] call RS_MH6V3_fnc_handleIZLIDPowerState";
-				controlsShifted = "params ['_vehicle', '_activeCopilot']; _vehicle setVariable ['RS_MH6V3_activeCopilot', _activeCopilot, true]; [_vehicle] call RS_MH6V3_fnc_syncPylonOwner";
 				handleDamage = "_this call RHS_MELB_fnc_fallDamage";
-				postInit = "params ['_vehicle']; if (_vehicle isKindOf 'RHS_MELB_AH6M') then {_vehicle animate ['Addcrosshair', 1, true]}; _this call rhs_fnc_reapplyTextures";
+				postInit = "_this call rhs_fnc_reapplyTextures";
 			};
 		};
 		class Components: Components
@@ -2178,158 +1979,67 @@ class CfgVehicles
 			{
 				class Components
 				{
-					class IRSensorComponent: SensorTemplateIR
-					{
-						class AirTarget
-						{
-							minRange = 50;
-							maxRange = 4000;
-							objectDistanceLimitCoef = -1;
-							viewDistanceLimitCoef = 1;
-						};
-						class GroundTarget
-						{
-							minRange = 50;
-							maxRange = 3000;
-							objectDistanceLimitCoef = 1;
-							viewDistanceLimitCoef = 1;
-						};
-						maxTrackableSpeed = 75;
-						angleRangeHorizontal = 240;
-						angleRangeVertical = 110;
-						animDirection = "commanderview";
-					};
-					class VisualSensorComponent: SensorTemplateVisual
-					{
-						class AirTarget
-						{
-							minRange = 50;
-							maxRange = 4000;
-							objectDistanceLimitCoef = -1;
-							viewDistanceLimitCoef = 1;
-						};
-						class GroundTarget
-						{
-							minRange = 50;
-							maxRange = 3000;
-							objectDistanceLimitCoef = 1;
-							viewDistanceLimitCoef = 1;
-						};
-						maxTrackableSpeed = 75;
-						angleRangeHorizontal = 240;
-						angleRangeVertical = 110;
-						aimDown = 1;
-						animDirection = "commanderview";
-					};
-					class ActiveRadarSensorComponent: SensorTemplateActiveRadar
-					{
-						class AirTarget
-						{
-							minRange = 7000;
-							maxRange = 7000;
-							objectDistanceLimitCoef = -1;
-							viewDistanceLimitCoef = -1;
-						};
-						class GroundTarget
-						{
-							minRange = 4000;
-							maxRange = 4000;
-							objectDistanceLimitCoef = -1;
-							viewDistanceLimitCoef = -1;
-						};
-						angleRangeHorizontal = 240;
-						angleRangeVertical = 110;
-						groundNoiseDistanceCoef = -1;
-						maxGroundNoiseDistance = -1;
-						minSpeedThreshold = 0;
-						maxSpeedThreshold = 0;
-						aimDown = 35;
-					};
 					class DataLinkSensorComponent: SensorTemplateDataLink{};
 					class PassiveRadarSensorComponent: SensorTemplatePassiveRadar{};
-					class LaserSensorComponent: SensorTemplateLaser
-					{
-						angleRangeHorizontal = 360;
-						angleRangeVertical = 120;
-						aimDown = 30;
-					};
-					class NVSensorComponent: SensorTemplateNV
-					{
-						angleRangeHorizontal = 360;
-						angleRangeVertical = 120;
-						aimDown = 30;
-					};
+					class LaserSensorComponent: SensorTemplateLaser{};
 				};
 			};
 			class VehicleSystemsDisplayManagerComponentLeft: VehicleSystemsTemplateLeftPilot{};
 			class VehicleSystemsDisplayManagerComponentRight: VehicleSystemsTemplateRightPilot{};
 		};
 	};
-	class RHS_MELB_MH6M: RHS_MELB_base
+	class RHS_MELB_H6M: RHS_MELB_base
 	{
-		ace_fastroping_enabled = 2;
-		ace_fastroping_friesType = "ACE_friesAnchorBar";
-		ace_fastroping_friesAttachmentPoint[] = {0.026611, 0.821605, -0.107002};
-		ace_fastroping_onCut = "RS_MH6V3_fnc_onRopesCut";
-		ace_fastroping_onPrepare = "ace_fastroping_fnc_onPrepareCommon";
-		ace_fastroping_ropeOrigins[] =
+		editorPreview = "rhsusf\addons\rhsusf_editorPreviews\data\rhs_MELB_H6M.paa";
+		scope = 2;
+		displayName = "OH-6M";
+		dlc = "RHS_USAF";
+		author = "$STR_RHSUSF_AUTHOR_FULL";
+		transportSoldier = 1;
+		cargoProxyIndexes[] = {9};
+		availableForSupportTypes[] = {"Drop","Transport"};
+		threat[] = {0.6,0.4,0.1};
+		class Turrets: Turrets
 		{
-			{-1.23242, 0.794033, -0.0076561},
-			{1.26709, 0.794001, -0.00635719}
-		};
-		class hct_cargo
-		{
-			class interaction
+			class CopilotTurret: CopilotTurret{};
+			class CargoTurret_01: CargoTurret
 			{
-				class RS_MH6V3_friesNotPrepared
-				{
-					condition = "_this call RS_MH6V3_fnc_canPrepareFRIES";
-					class prepareFRIESLeft
-					{
-						positionType = "coordinates";
-						position[] = {-1.1665, 0.796253, -0.108951};
-						buttonDown = "_this call RS_MH6V3_fnc_prepareFRIES";
-						label = "Grab Ropes & Attach to FRIES";
-						radius = 0.3;
-					};
-					class prepareFRIESRight: prepareFRIESLeft
-					{
-						position[] = {1.1333, 0.792804, -0.107751};
-					};
-				};
-				class RS_MH6V3_friesPrepared
-				{
-					condition = "_this call RS_MH6V3_fnc_canShowDeployRopes";
-					class deployRopesLeft
-					{
-						positionType = "coordinates";
-						position[] = {-1.1665, 0.796253, -0.108951};
-						buttonDown = "_this call RS_MH6V3_fnc_deployRopes";
-						label = "Deploy Fast Ropes";
-						radius = 0.3;
-					};
-					class deployRopesRight: deployRopesLeft
-					{
-						position[] = {1.1333, 0.792804, -0.107751};
-					};
-				};
-				class RS_MH6V3_ropesDeployed
-				{
-					condition = "_this call RS_MH6V3_fnc_canShowFastRope";
-					class fastRopeLeft
-					{
-						positionType = "coordinates";
-						position[] = {-1.23926, 0.791841, -0.109039};
-						buttonDown = "_this call RS_MH6V3_fnc_fastRope";
-						label = "Fast Rope";
-						radius = 0.3;
-					};
-					class fastRopeRight: fastRopeLeft
-					{
-						position[] = {1.35791, 0.775916, -0.107684};
-					};
-				};
+				gunnerAction = "passenger_bench_1";
+				gunnerCompartments = "compartment3";
+				memoryPointsGetInGunner = "pos L";
+				memoryPointsGetInGunnerDir = "pos L dir";
+				gunnerName = "Passenger (Left Door)";
+				proxyIndex = 1;
+				maxElev = 55;
+				minElev = -55;
+				maxTurn = 80;
+				minTurn = -50;
+				isPersonTurret = 1;
+				ejectDeadGunner = 0;
+				playerPosition = 4;
+				soundAttenuationTurret = "";
+				disableSoundAttenuation = 1;
+				gunnerGetInAction = "GetInHeli_Light_01bench";
+				class Hitpoints{};
 			};
+			class CargoTurret_02: CargoTurret_01
+			{
+				gunnerCompartments = "compartment3";
+				memoryPointsGetInGunner = "pos R";
+				memoryPointsGetInGunnerDir = "pos R dir";
+				gunnerName = "Passenger (Right Door)";
+				proxyIndex = 2;
+				maxTurn = 60;
+				minTurn = -60;
+			};
+		};
+		class Attributes: Attributes
+		{
+			class rhs_MELB_TailNumber: rhs_MELB_TailNumber{};
+			class rhs_MELB_NoFear: rhs_MELB_NoFear{};
+			class rhs_MELB_SN_Nose: rhs_MELB_SN_Nose{};
+			class rhs_MELB_clan: rhs_MELB_clan{};
+			class MELB_ToggleBoy: MELB_ToggleBoy{};
 		};
 	};
 	class RHS_MELB_AH6M: RHS_MELB_base
@@ -2341,7 +2051,7 @@ class CfgVehicles
 		dlc = "RHS_USAF";
 		picture = "rhsusf\addons\rhsusf_melb\Data\ui\melb_ah_6m_ca.paa";
 		icon = "rhsusf\addons\rhsusf_melb\Data\ui\map_melb_ah_6m_l_ca.paa";
-		displayName = "AH-6M Little Bird 1TRP";
+		displayName = "AH-6M Little Bird";
 		slingLoadMaxCargoMass = 0;
 		fuelCapacity = 436;
 		fuelConsumptionRate = 0.08;
@@ -2356,10 +2066,8 @@ class CfgVehicles
 		memoryPointsGetInCargoPrecise[] = {"pos rack"};
 		usePreciseGetInAction = 1;
 		availableForSupportTypes[] = {"CAS_Heli"};
-		weapons[] = {"Laserdesignator_mounted","rhs_weap_MASTERSAFE","rhsusf_weap_LWIRCM"};
-		magazines[] = {"Laserbatteries","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM"};
-		hiddenSelections[] = {"camo1","d_SN","crosshair"};
-		hiddenSelectionsTextures[] = {"rhsusf\addons\rhsusf_melb\data\melb_ext_co.paa","rhsusf\addons\rhsusf_melb\data\decals\SN\blank_ca.paa","\rhsusf\addons\rhsusf_melb\Data\optics\melb_crosshair_dot_ca.paa"};
+		weapons[] = {"rhs_weap_MASTERSAFE","rhsusf_weap_LWIRCM"};
+		magazines[] = {"rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM","rhsusf_mag_LWIRCM"};
 		threat[] = {0.6,0.4,0.1};
 		cost = 1000000;
 		class Turrets: Turrets
@@ -2425,33 +2133,6 @@ class CfgVehicles
 				defaultValue = "0";
 			};
 		};
-		class UserActions: UserActions
-		{
-			class RS_MH6V3_HideCrosshair
-			{
-				displayName = "<t color='#7fd8ff'>Hide Crosshair</t>";
-				onlyforplayer = 1;
-				position = "doplnovani";
-				radius = 2;
-				condition = "(((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)) && {(this animationSourcePhase 'Addcrosshair') >= 0.5}";
-				statement = "[this, false] call RS_MH6V3_fnc_setCrosshairVisible";
-				showWindow = 0;
-				priority = 9.7;
-			};
-			class RS_MH6V3_ShowCrosshair: RS_MH6V3_HideCrosshair
-			{
-				displayName = "<t color='#7fd8ff'>Show Crosshair</t>";
-				condition = "(((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)) && {(this animationSourcePhase 'Addcrosshair') < 0.5}";
-				statement = "[this, true] call RS_MH6V3_fnc_setCrosshairVisible";
-			};
-			class RS_MH6V3_CycleCrosshairTexture: RS_MH6V3_HideCrosshair
-			{
-				displayName = "<t color='#7fd8ff'>Cycle Crosshair</t>";
-				condition = "((call rhsusf_fnc_findPlayer)==driver this) or ((call rhsusf_fnc_findPlayer)==gunner this)";
-				statement = "[this] call RS_MH6V3_fnc_cycleCrosshairTexture";
-				priority = 9.69;
-			};
-		};
 		class Components: Components
 		{
 			class TransportPylonsComponent
@@ -2472,10 +2153,10 @@ class CfgVehicles
 					};
 					class pylon2: pylon1
 					{
-						hardpoints[] = {"RHS_HP_MELB_M134","RHS_HP_MELB"};
+						hardpoints[] = {"RHS_HP_MELB_M134"};
 						UIposition[] = {0.562,0.3};
 						priority = 1;
-						attachment = "RS_MH6V3_mag_m134_pylon_3000";
+						attachment = "rhs_mag_m134_pylon_3000";
 						turret[] = {};
 						hitpoint = "HitPylon2";
 					};
@@ -2483,7 +2164,7 @@ class CfgVehicles
 					{
 						UIposition[] = {0.103,0.3};
 						mirroredMissilePos = 2;
-						attachment = "RS_MH6V3_mag_m134_pylon_3000";
+						attachment = "rhs_mag_m134_pylon_3000";
 						turret[] = {};
 						hitpoint = "HitPylon3";
 					};
@@ -2500,18 +2181,13 @@ class CfgVehicles
 				{
 					class Light
 					{
-						attachment[] = {"rhs_mag_M151_7","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_m134_pylon_3000","rhs_mag_M151_7"};
+						attachment[] = {"rhs_mag_M151_7","rhs_mag_m134_pylon_3000","rhs_mag_m134_pylon_3000","rhs_mag_M151_7"};
 						displayname = "Light";
 					};
 					class Medium
 					{
 						attachment[] = {"rhsusf_mag_gau19_melb_left","","","rhs_mag_M151_19"};
 						displayname = "Medium";
-					};
-					class HEAT
-					{
-						attachment[] = {"RS_MH6V3_mag_Hydra_HEAT_7","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_Hydra_HEAT_7"};
-						displayname = "HEAT";
 					};
 					class Heavy
 					{
@@ -2520,6 +2196,230 @@ class CfgVehicles
 					};
 				};
 			};
+		};
+	};
+	class RHS_MELB_AH6M_L: RHS_MELB_AH6M
+	{
+		scope = 1;
+		scopeCurator = 2;
+		author = "$STR_RHSUSF_AUTHOR_FULL";
+		dlc = "RHS_USAF";
+		displayName = "AH-6M-L Little Bird";
+		class components: Components
+		{
+			class TransportPylonsComponent: TransportPylonsComponent
+			{
+				class pylons: pylons
+				{
+					class pylon1: pylon1
+					{
+						attachment = "rhs_mag_M151_7";
+					};
+					class pylon2: pylon2
+					{
+						attachment = "rhs_mag_m134_pylon_3000";
+					};
+					class pylon3: pylon3
+					{
+						attachment = "rhs_mag_m134_pylon_3000";
+					};
+					class pylon4: pylon4
+					{
+						attachment = "rhs_mag_M151_7";
+					};
+				};
+			};
+		};
+	};
+	class RHS_MELB_AH6M_M: RHS_MELB_AH6M
+	{
+		scope = 1;
+		scopeCurator = 2;
+		author = "$STR_RHSUSF_AUTHOR_FULL";
+		dlc = "RHS_USAF";
+		displayName = "AH-6M-M Little Bird";
+		class components: Components
+		{
+			class TransportPylonsComponent: TransportPylonsComponent
+			{
+				class pylons: pylons
+				{
+					class pylon1: pylon1
+					{
+						attachment = "rhsusf_mag_gau19_melb_left";
+					};
+					class pylon2: pylon2
+					{
+						attachment = "";
+					};
+					class pylon3: pylon3
+					{
+						attachment = "";
+					};
+					class pylon4: pylon4
+					{
+						attachment = "rhs_mag_M151_19";
+					};
+				};
+			};
+		};
+	};
+	class RHS_MELB_AH6M_H: RHS_MELB_AH6M
+	{
+		scope = 1;
+		scopeCurator = 2;
+		author = "$STR_RHSUSF_AUTHOR_FULL";
+		dlc = "RHS_USAF";
+		displayName = "AH-6M-H Little Bird";
+		class components: Components
+		{
+			class TransportPylonsComponent: TransportPylonsComponent
+			{
+				class pylons: pylons
+				{
+					class pylon1: pylon1
+					{
+						attachment = "rhsusf_mag_gau19_melb_left";
+					};
+					class pylon2: pylon2
+					{
+						attachment = "";
+					};
+					class pylon3: pylon3
+					{
+						attachment = "";
+					};
+					class pylon4: pylon4
+					{
+						attachment = "rhs_mag_AGM114K_2";
+						turret[] = {0};
+					};
+				};
+			};
+		};
+	};
+	class RHS_MELB_MH6M: RHS_MELB_base
+	{
+		editorPreview = "rhsusf\addons\rhsusf_editorPreviews\data\rhs_MELB_MH6M.paa";
+		scope = 2;
+		forceInGarage = 1;
+		author = "$STR_RHSUSF_AUTHOR_FULL";
+		dlc = "RHS_USAF";
+		picture = "rhsusf\addons\rhsusf_melb\Data\ui\melb_mh_6m_ca.paa";
+		icon = "rhsusf\addons\rhsusf_melb\Data\ui\map_melb_mh_6m_ca.paa";
+		displayName = "MH-6M Little Bird";
+		fuelCapacity = 436;
+		fuelConsumptionRate = 0.08;
+		ejectDeadCargo = 0;
+		transportsoldier = 1;
+		cargoProxyIndexes[] = {9};
+		threat[] = {0.6,0.4,0.1};
+		cost = 7000000;
+		availableForSupportTypes[] = {"Drop","Transport"};
+		class Turrets: Turrets
+		{
+			class CopilotTurret: CopilotTurret{};
+			class CargoTurret_03: CargoTurret
+			{
+				gunnerAction = "passenger_bench_1";
+				gunnerCompartments = "Compartment2";
+				memoryPointsGetInGunner = "pos L1";
+				memoryPointsGetInGunnerDir = "pos L1 dir";
+				gunnerName = "Passenger (Left Bench 1)";
+				proxyIndex = 3;
+				maxElev = 45;
+				minElev = -60;
+				maxTurn = 95;
+				minTurn = -15;
+				isPersonTurret = 1;
+				ejectDeadGunner = 0;
+				playerPosition = 4;
+				soundAttenuationTurret = "";
+				disableSoundAttenuation = 1;
+				gunnerGetInAction = "GetInHeli_Light_01bench";
+				class Hitpoints{};
+			};
+			class CargoTurret_04: CargoTurret_03
+			{
+				gunnerCompartments = "compartment3";
+				memoryPointsGetInGunner = "pos R1";
+				memoryPointsGetInGunnerDir = "pos R1 dir";
+				gunnerName = "Passenger (Right Bench 1)";
+				proxyIndex = 4;
+				maxTurn = 15;
+				minTurn = -95;
+			};
+			class CargoTurret_05: CargoTurret_04
+			{
+				gunnerCompartments = "Compartment2";
+				memoryPointsGetInGunner = "pos L2";
+				memoryPointsGetInGunnerDir = "pos L2 dir";
+				gunnerName = "Passenger (Left Bench 2)";
+				proxyIndex = 5;
+				maxElev = 45;
+				minElev = -45;
+				maxTurn = 95;
+				minTurn = -95;
+				class dynamicViewLimits
+				{
+					CargoTurret_03[] = {-30,95};
+					CargoTurret_07[] = {-95,50};
+				};
+			};
+			class CargoTurret_06: CargoTurret_05
+			{
+				gunnerCompartments = "compartment3";
+				memoryPointsGetInGunner = "pos R2";
+				memoryPointsGetInGunnerDir = "pos R2 dir";
+				gunnerName = "Passenger (Right Bench 2)";
+				proxyIndex = 6;
+				class dynamicViewLimits
+				{
+					CargoTurret_04[] = {-95,30};
+					CargoTurret_08[] = {-50,95};
+				};
+			};
+			class CargoTurret_07: CargoTurret_06
+			{
+				gunnerCompartments = "Compartment2";
+				memoryPointsGetInGunner = "pos L3";
+				memoryPointsGetInGunnerDir = "pos L3 dir";
+				gunnerName = "Passenger (Left Bench 3)";
+				proxyIndex = 7;
+				class dynamicViewLimits
+				{
+					CargoTurret_05[] = {-50,95};
+				};
+			};
+			class CargoTurret_08: CargoTurret_07
+			{
+				gunnerCompartments = "compartment3";
+				memoryPointsGetInGunner = "pos R3";
+				memoryPointsGetInGunnerDir = "pos R3 dir";
+				gunnerName = "Passenger (Right Bench 3)";
+				proxyIndex = 8;
+				class dynamicViewLimits
+				{
+					CargoTurret_06[] = {-95,50};
+				};
+			};
+		};
+		class AnimationSources: AnimationSources
+		{
+			class AddBenches
+			{
+				source = "user";
+				animPeriod = 1e-06;
+				initPhase = 1;
+			};
+		};
+		class Attributes: Attributes
+		{
+			class rhs_MELB_TailNumber: rhs_MELB_TailNumber{};
+			class rhs_MELB_NoFear: rhs_MELB_NoFear{};
+			class rhs_MELB_SN_Nose: rhs_MELB_SN_Nose{};
+			class rhs_MELB_clan: rhs_MELB_clan{};
+			class MELB_ToggleBoy: MELB_ToggleBoy{};
 		};
 	};
 };

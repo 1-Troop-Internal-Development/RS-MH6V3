@@ -1,0 +1,6 @@
+//<'rhsusf_c_melb.pbo' properties via Mikero's dos tools, dll version 9.98>
+prefix=rhsusf\addons\rhsusf_c_melb;
+Mikero=DePbo.dll;
+version=RedHammerStudios.0.5.6.6813.r4486;
+//PboType=Arma Addon;
+//</properties>

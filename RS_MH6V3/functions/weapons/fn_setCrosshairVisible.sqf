@@ -4,6 +4,7 @@ params [
 ];
 
 if (isNull _vehicle) exitWith {};
+if !(typeOf _vehicle isEqualTo "RHS_MELB_AH6M") exitWith {};
 
 if (!local _vehicle) exitWith {
 	[_vehicle, _visible] remoteExecCall ["RS_MH6V3_fnc_setCrosshairVisible", _vehicle];

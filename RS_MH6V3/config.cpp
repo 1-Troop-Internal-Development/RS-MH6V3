@@ -33,7 +33,6 @@ class CfgFunctions
 		class camera
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\camera";
-			class drawFlirReticle {};
 			class handleMinigunFired {};
 			class initMinigunShake
 			{
@@ -739,7 +738,7 @@ class CfgVehicles
 		tailBladeRadius = 0.77;
 		class RotorLibHelicopterProperties: RotorLibHelicopterProperties
 		{
-			RTDconfig = "rhsusf\addons\rhsusf_c_melb\RTD_MELB.xml";
+			RTDconfig = "\DEVGRU\RS_MH6V3\RTD_MELB.xml";
 			autoHoverCorrection[] = {0.28,2.88,0};
 			defaultCollective = 0.5;
 			throttleOffToIdle = 8;

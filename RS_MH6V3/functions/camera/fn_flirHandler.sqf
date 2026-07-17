@@ -39,14 +39,6 @@ uiNameSpace setVariable ["RS_MH6V3_MELB_FLIRCtrl", _display];
 
 	private _previousMode = _vehicle getVariable ["MELB_mode", -1];
 	private _lockInputDown = false;
-	private _reticleEh = uiNamespace getVariable ["RS_MH6V3_flirReticleEh", -1];
-	if (_reticleEh >= 0) then {
-		removeMissionEventHandler ["Draw3D", _reticleEh];
-	};
-	_reticleEh = addMissionEventHandler ["Draw3D", {
-		call RS_MH6V3_fnc_drawFlirReticle;
-	}];
-	uiNamespace setVariable ["RS_MH6V3_flirReticleEh", _reticleEh];
 
 	private _geolockPfh = _vehicle getVariable ["RS_MH6V3_copilotGeolockPfh", -1];
 	if (_geolockPfh >= 0) then {
@@ -141,11 +133,6 @@ uiNameSpace setVariable ["RS_MH6V3_MELB_FLIRCtrl", _display];
 
 	if (!isNull _altitude) then {
 		_altitude ctrlSetBackgroundColor [0, 0, 0, 0];
-	};
-	_reticleEh = uiNamespace getVariable ["RS_MH6V3_flirReticleEh", -1];
-	if (_reticleEh >= 0) then {
-		removeMissionEventHandler ["Draw3D", _reticleEh];
-		uiNamespace setVariable ["RS_MH6V3_flirReticleEh", -1];
 	};
 	_vehicle lockCameraTo [objNull, [0]];
 	_vehicle enableDirectionStabilization [false, [0]];

@@ -1,6 +1,6 @@
 /*
 	RS MH-6V3 MELB FLIR HUD handler.
-	Handles copilot FLIR HUD effects, zoom telemetry, and explicit GEOLOCK input.
+	Handles FLIR HUD effects, zoom telemetry, and pilot HUD altitude warning.
 */
 disableSerialization;
 
@@ -33,30 +33,10 @@ uiNameSpace setVariable ["RS_MH6V3_MELB_FLIRCtrl", _display];
 	private _display = uiNamespace getVariable ["RS_MH6V3_MELB_FLIRCtrl", displayNull];
 	private _zoomSource = _display displayCtrl 180;
 	private _distance = _display displayCtrl 151;
-	private _geoLock = _display displayCtrl 154;
 	private _zoom = _display displayCtrl 2;
 	private _altitude = _display displayCtrl 189;
 
 	private _previousMode = _vehicle getVariable ["MELB_mode", -1];
-	private _lockInputDown = false;
-
-	private _geolockPfh = _vehicle getVariable ["RS_MH6V3_copilotGeolockPfh", -1];
-	if (_geolockPfh >= 0) then {
-		[_geolockPfh] call CBA_fnc_removePerFrameHandler;
-	};
-	private _geolockHelper = _vehicle getVariable ["RS_MH6V3_copilotGeolockHelper", objNull];
-	if (!isNull _geolockHelper) then {
-		deleteVehicle _geolockHelper;
-	};
-	_vehicle lockCameraTo [objNull, [0]];
-	_vehicle enableDirectionStabilization [false, [0]];
-	_vehicle setTurretOpticsMode [[0], 0];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockPfh", -1, false];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockBaseMode", 0, false];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockHelper", objNull, false];
-	_vehicle setVariable ["RS_MH6V3_FLIRGeolockTarget", objNull, false];
-	_vehicle setVariable ["RS_MH6V3_FLIRGeolockActive", false, false];
-	_geoLock ctrlSetText "----";
 
 	while {!isNull _distance} do {
 		if (cameraView == "gunner") then {
@@ -88,27 +68,12 @@ uiNameSpace setVariable ["RS_MH6V3_MELB_FLIRCtrl", _display];
 		} else {
 			{_x ppEffectEnable false} forEach [_noiseEffect, _aberrEffect, _nvEffect];
 			_previousMode = -1;
-			_geoLock ctrlSetText "----";
 		};
 
 		private _zoomLevel = (parseNumber (ctrlText _zoomSource)) * 70;
 		_zoomLevel = (if (_zoomLevel <= 99) then {"0"} else {""}) + str _zoomLevel;
 		private _zoomArray = toArray _zoomLevel;
 		_zoom ctrlSetText (toString (call compile (format ["[%1,%2,32,%3]", _zoomArray select 0, _zoomArray select 1, _zoomArray select 2])));
-
-		private _canToggleGeolock = cameraView == "gunner" && {_player isEqualTo (_vehicle turretUnit [0])};
-		private _pressed = _canToggleGeolock && {
-			((inputAction "LockTurretView") > 0) ||
-			{((inputAction "lockTurretView") > 0) ||
-			{(inputAction "lockTarget") > 0}}
-		};
-
-		if (_pressed && {!_lockInputDown}) then {
-			[_vehicle] call RS_MH6V3_fnc_toggleCopilotGeolock;
-		};
-		_lockInputDown = _pressed;
-
-		_geoLock ctrlSetText (if (_vehicle getVariable ["RS_MH6V3_FLIRGeolockActive", false]) then {"TRK COR"} else {"----"});
 
 		if (!isNull _altitude) then {
 			private _agl = (getPosATL _vehicle) # 2;
@@ -134,22 +99,6 @@ uiNameSpace setVariable ["RS_MH6V3_MELB_FLIRCtrl", _display];
 	if (!isNull _altitude) then {
 		_altitude ctrlSetBackgroundColor [0, 0, 0, 0];
 	};
-	_vehicle lockCameraTo [objNull, [0]];
-	_vehicle enableDirectionStabilization [false, [0]];
-	_vehicle setTurretOpticsMode [[0], 0];
-	private _geolockPfh = _vehicle getVariable ["RS_MH6V3_copilotGeolockPfh", -1];
-	if (_geolockPfh >= 0) then {
-		[_geolockPfh] call CBA_fnc_removePerFrameHandler;
-	};
-	private _geolockHelper = _vehicle getVariable ["RS_MH6V3_copilotGeolockHelper", objNull];
-	if (!isNull _geolockHelper) then {
-		deleteVehicle _geolockHelper;
-	};
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockPfh", -1, false];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockBaseMode", 0, false];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockHelper", objNull, false];
-	_vehicle setVariable ["RS_MH6V3_FLIRGeolockTarget", objNull, false];
-	_vehicle setVariable ["RS_MH6V3_FLIRGeolockActive", false, false];
 
 	ppEffectDestroy _noiseEffect;
 	ppEffectDestroy _aberrEffect;

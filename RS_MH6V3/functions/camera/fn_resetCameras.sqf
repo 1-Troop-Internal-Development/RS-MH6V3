@@ -4,14 +4,15 @@ params [
 ];
 
 if (!hasInterface) exitWith {};
+
 if (isNull _vehicle) then {
 	_vehicle = vehicle player;
 };
 if (isNull _vehicle || {!alive _vehicle}) exitWith {};
-if !(typeOf _vehicle in ["RHS_MELB_H6M", "RHS_MELB_MH6M", "RHS_MELB_AH6M"]) exitWith {};
+if !(_vehicle isKindOf "RHS_MELB_base") exitWith {};
 
 if (!_executeLocal) exitWith {
-	private _recipients = [driver _vehicle, gunner _vehicle] select {
+	private _recipients = [driver _vehicle, _vehicle turretUnit [0]] select {
 		!isNull _x && {isPlayer _x}
 	};
 	_recipients = _recipients arrayIntersect _recipients;
@@ -34,7 +35,6 @@ private _resetVehicleCameras = {
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
 
-	cameraEffect ["terminate", "back"];
 	(cameraOn) switchCamera "INTERNAL";
 
 	_vehicle setPilotCameraTarget objNull;
@@ -44,22 +44,6 @@ private _resetVehicleCameras = {
 	_vehicle setVariable ["RS_MH6V3_pilotCameraOpticsMode", 0, false];
 
 	_vehicle lockCameraTo [objNull, []];
-	_vehicle lockCameraTo [objNull, [0]];
-	_vehicle enableDirectionStabilization [false, [0]];
-	_vehicle setTurretOpticsMode [[0], 0];
-	private _geolockPfh = _vehicle getVariable ["RS_MH6V3_copilotGeolockPfh", -1];
-	if (_geolockPfh >= 0) then {
-		[_geolockPfh] call CBA_fnc_removePerFrameHandler;
-	};
-	private _geolockHelper = _vehicle getVariable ["RS_MH6V3_copilotGeolockHelper", objNull];
-	if (!isNull _geolockHelper) then {
-		deleteVehicle _geolockHelper;
-	};
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockPfh", -1, false];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockBaseMode", 0, false];
-	_vehicle setVariable ["RS_MH6V3_copilotGeolockHelper", objNull, false];
-	_vehicle setVariable ["RS_MH6V3_FLIRGeolockTarget", objNull, false];
-	_vehicle setVariable ["RS_MH6V3_FLIRGeolockActive", false, false];
 
 	if (vehicle player isEqualTo _vehicle) then {
 		_vehicle switchCamera "INTERNAL";
@@ -73,7 +57,6 @@ private _resetVehicleCameras = {
 
 		if (isNull _vehicle || {!alive _vehicle}) exitWith {};
 
-		cameraEffect ["terminate", "back"];
 		(cameraOn) switchCamera "INTERNAL";
 
 		_vehicle setPilotCameraTarget objNull;
@@ -83,22 +66,6 @@ private _resetVehicleCameras = {
 		_vehicle setVariable ["RS_MH6V3_pilotCameraOpticsMode", 0, false];
 
 		_vehicle lockCameraTo [objNull, []];
-		_vehicle lockCameraTo [objNull, [0]];
-		_vehicle enableDirectionStabilization [false, [0]];
-		_vehicle setTurretOpticsMode [[0], 0];
-		private _geolockPfh = _vehicle getVariable ["RS_MH6V3_copilotGeolockPfh", -1];
-		if (_geolockPfh >= 0) then {
-			[_geolockPfh] call CBA_fnc_removePerFrameHandler;
-		};
-		private _geolockHelper = _vehicle getVariable ["RS_MH6V3_copilotGeolockHelper", objNull];
-		if (!isNull _geolockHelper) then {
-			deleteVehicle _geolockHelper;
-		};
-		_vehicle setVariable ["RS_MH6V3_copilotGeolockPfh", -1, false];
-		_vehicle setVariable ["RS_MH6V3_copilotGeolockBaseMode", 0, false];
-		_vehicle setVariable ["RS_MH6V3_copilotGeolockHelper", objNull, false];
-		_vehicle setVariable ["RS_MH6V3_FLIRGeolockTarget", objNull, false];
-		_vehicle setVariable ["RS_MH6V3_FLIRGeolockActive", false, false];
 
 		if (vehicle player isEqualTo _vehicle) then {
 			_vehicle switchCamera "INTERNAL";
@@ -109,7 +76,7 @@ private _resetVehicleCameras = {
 ] call CBA_fnc_waitAndExecute;
 
 private _message = "RS MH-6V3: pilot and copilot cameras reset.";
-private _recipients = [driver _vehicle, gunner _vehicle] select {
+private _recipients = [driver _vehicle, _vehicle turretUnit [0]] select {
 	!isNull _x && {isPlayer _x}
 };
 

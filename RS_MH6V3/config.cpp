@@ -38,9 +38,12 @@ class CfgFunctions
 			{
 				postInit = 1;
 			};
+			class initResetCameraEvents
+			{
+				postInit = 1;
+			};
 			class resetCameras {};
 			class flirHandler {};
-			class toggleCopilotGeolock {};
 		};
 		class fastrope
 		{
@@ -110,6 +113,14 @@ class CfgFunctions
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\settings";
 			class initSettings
+			{
+				postInit = 1;
+			};
+		};
+		class ui
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\ui";
+			class showTrueAFMHitters
 			{
 				postInit = 1;
 			};
@@ -738,7 +749,7 @@ class CfgVehicles
 		tailBladeRadius = 0.77;
 		class RotorLibHelicopterProperties: RotorLibHelicopterProperties
 		{
-			RTDconfig = "\DEVGRU\RS_MH6V3\RTD_MELB.xml";
+			RTDconfig = "DEVGRU\RS_MH6V3\RTD_MELB.xml";
 			autoHoverCorrection[] = {0.28,2.88,0};
 			defaultCollective = 0.5;
 			throttleOffToIdle = 8;
@@ -1786,17 +1797,6 @@ class CfgVehicles
 				showWindow = 0;
 				priority = 9.8;
 			};
-			class RS_MH6V3_ToggleCopilotGeolock
-			{
-				displayName = "<t color='#7fd8ff'>Toggle Copilot GEOLOCK</t>";
-				onlyforplayer = 1;
-				position = "doplnovani";
-				radius = 2;
-				condition = "alive this && {player == (this turretUnit [0])}";
-				statement = "[this] call RS_MH6V3_fnc_toggleCopilotGeolock";
-				showWindow = 0;
-				priority = 9.72;
-			};
 			class SAFEMODE
 			{
 				displayName = "<t color='#00FF7F'>MASTERSAFE</t>";
@@ -2044,7 +2044,7 @@ class CfgVehicles
 				gun = "obsGun";
 				animationSourceBody = "obsTurret";
 				animationSourceGun = "obsGun";
-				turretInfoType = "RS_MH6V3_MELB_Turret_UnitInfo";
+				turretInfoType = "Rsc_MELB_Turret_UnitInfo";
 				stabilizedInAxes = 3;
 				memoryPointGunnerOptics = "commanderview";
 				minElev = -180;

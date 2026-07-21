@@ -14,6 +14,25 @@ class RS_MH6V3_RscText
 	text = "";
 };
 
+class RS_MH6V3_RscPicture
+{
+	type = 0;
+	idc = -1;
+	style = 48;
+	x = 0;
+	y = 0;
+	w = 0.1;
+	h = 0.1;
+	colorBackground[] = {0,0,0,0};
+	colorText[] = {1,1,1,1};
+	font = "RobotoCondensed";
+	sizeEx = 0;
+	lineSpacing = 0;
+	text = "";
+	fixedWidth = 0;
+	shadow = 0;
+};
+
 class RS_MH6V3_RscButton
 {
 	type = 1;
@@ -986,6 +1005,28 @@ class RS_MH6V3_QuickFirePylonMenu
 
 class RscTitles
 {
+	class RS_MH6V3_TrueAFMHitters
+	{
+		idd = -1;
+		duration = 999999;
+		fadeIn = 1.25;
+		fadeOut = 1.5;
+		movingEnable = 0;
+
+		class controls
+		{
+			class Image: RS_MH6V3_RscPicture
+			{
+				idc = 86600;
+				text = "\DEVGRU\RS_MH6V3\TrueAFMHitters.paa";
+				x = safeZoneX + safeZoneW * 0.11;
+				y = safeZoneY + safeZoneH * 0.11;
+				w = safeZoneW * 0.78;
+				h = safeZoneH * 0.78;
+			};
+		};
+	};
+
 	class RS_MH6V3_ACRERadioStatus
 	{
 		idd = -1;

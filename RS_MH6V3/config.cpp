@@ -3,18 +3,36 @@ class CfgPatches
 	class RS_MH6V3
 	{
 		units[] = {"RHS_MELB_AH6M"};
-		weapons[] = {};
+		weapons[] =
+		{
+			"RS_MH6V3_weap_FFARLauncher_HEAT",
+			"RS_MH6V3_weap_FFARLauncher_M274"
+		};
 		requiredVersion = 1.96;
 		requiredAddons[] =
 		{
 			"cba_main",
 			"rhsusf_main",
 			"A3_Data_F",
+			"A3_Weapons_F",
 			"rhsusf_c_melb",
 			"rhsusf_c_airweapons",
 			"rhsusf_c_heavyweapons"
 		};
-		magazines[] = {};
+		magazines[] =
+		{
+			"RS_MH6V3_mag_Hydra_HEAT_7",
+			"RS_MH6V3_mag_Hydra_HEAT_19",
+			"RS_MH6V3_mag_Hydra_M274_7",
+			"RS_MH6V3_mag_Hydra_M274_19",
+			"RS_MH6V3_mag_m134_pylon_3000"
+		};
+		ammo[] =
+		{
+			"RS_MH6V3_ammo_Hydra_HEAT",
+			"RS_MH6V3_ammo_Hydra_M274",
+			"RS_MH6V3_ammo_Hydra_M274_SmokeCloud"
+		};
 	};
 };
 
@@ -159,7 +177,9 @@ class CfgFunctions
 			file = "\DEVGRU\RS_MH6V3\functions\weapons";
 			class applyQuickFirePylonMenu {};
 			class getHydraPylonData {};
+			class handleM274HydraImpact {};
 			class openQuickFirePylonMenu {};
+			class playM274ImpactEffect {};
 			class populateQuickFirePylonMenu {};
 			class cycleCrosshairTexture {};
 			class quickLaunchHydra {};
@@ -319,6 +339,7 @@ class cfgAmmo
 {
 	class B_127x99_SLAP;
 	class rhs_ammo_Hydra_M151;
+	class SmokeShell;
 	class rhs_ammo_127x99_SLAP: B_127x99_SLAP
 	{
 		hit = 15;
@@ -350,12 +371,46 @@ class cfgAmmo
 		warheadName = "HEAT";
 		typicalSpeed = 740;
 	};
+	class RS_MH6V3_ammo_Hydra_M274_SmokeCloud: SmokeShell
+	{
+		model = "\A3\Weapons_f\empty.p3d";
+		timeToLive = 45;
+		aiAmmoUsageFlags = 4;
+		smokeColor[] = {1, 1, 1, 1};
+		effectsSmoke = "SmokeShellWhiteEffect";
+	};
+	class RS_MH6V3_ammo_Hydra_M274: rhs_ammo_Hydra_M151
+	{
+		hit = 4;
+		indirectHit = 4;
+		indirectHitRange = 2.5;
+		caliber = 1;
+		explosive = 0.35;
+		warheadName = "HE";
+		typicalSpeed = 740;
+		explosionEffects = "";
+		CraterEffects = "";
+		CraterWaterEffects = "";
+		explosionEffectsRadius = 0;
+		explosionSoundEffect = "";
+		visibleFire = 0.05;
+		audibleFire = 0.05;
+		visibleFireTime = 0;
+		class CamShakeExplode
+		{
+			power = 0.5;
+			duration = 0.12;
+			frequency = 20;
+			distance = 20;
+		};
+	};
 };
 class cfgMagazines
 {
 	class 5000Rnd_762x51_Belt;
 	class rhs_mag_M151_7;
 	class rhs_mag_M151_19;
+	class rhs_mag_M257_7;
 	class rhs_mag_m134_pylon_3000;
 	class RHS_FakeMagazine_MELB: 5000Rnd_762x51_Belt
 	{
@@ -382,6 +437,26 @@ class cfgMagazines
 		descriptionShort = "19-round M261 pod with RS MH-6V3 HEAT Hydra rockets. Reduced fragmentation radius with high direct-hit anti-armor damage.";
 		ammo = "RS_MH6V3_ammo_Hydra_HEAT";
 		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_HEAT";
+		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
+	};
+	class RS_MH6V3_mag_Hydra_M274_7: rhs_mag_M257_7
+	{
+		displayName = "M274 Smoke Hydra (M260)";
+		displayNameShort = "M274 Smoke";
+		descriptionShort = "7-round M260 pod with RS MH-6V3 M274 smoke-screen Hydra rockets. Light fragmentation impact followed by smoke deployment.";
+		count = 7;
+		ammo = "RS_MH6V3_ammo_Hydra_M274";
+		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_M274";
+		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
+	};
+	class RS_MH6V3_mag_Hydra_M274_19: rhs_mag_M257_7
+	{
+		displayName = "M274 Smoke Hydra (M261)";
+		displayNameShort = "M274 Smoke";
+		descriptionShort = "19-round M261 pod with RS MH-6V3 M274 smoke-screen Hydra rockets. Light fragmentation impact followed by smoke deployment.";
+		count = 19;
+		ammo = "RS_MH6V3_ammo_Hydra_M274";
+		pylonWeapon = "RS_MH6V3_weap_FFARLauncher_M274";
 		hardpoints[] = {"RHS_HP_MELB","RHS_HP_MELB_L","RHS_HP_MELB_R"};
 	};
 	class RS_MH6V3_mag_m134_pylon_3000: rhs_mag_m134_pylon_3000
@@ -506,6 +581,15 @@ class cfgWeapons
 		{
 			"RS_MH6V3_mag_Hydra_HEAT_7",
 			"RS_MH6V3_mag_Hydra_HEAT_19"
+		};
+	};
+	class RS_MH6V3_weap_FFARLauncher_M274: rhs_weap_FFARLauncher
+	{
+		displayName = "Hydra (M274 Smoke)";
+		magazines[] =
+		{
+			"RS_MH6V3_mag_Hydra_M274_7",
+			"RS_MH6V3_mag_Hydra_M274_19"
 		};
 	};
 	class rhs_weap_FFARLauncher_M229: rhs_weap_FFARLauncher
@@ -2511,6 +2595,11 @@ class CfgVehicles
 					{
 						attachment[] = {"RS_MH6V3_mag_Hydra_HEAT_7","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_Hydra_HEAT_7"};
 						displayname = "HEAT";
+					};
+					class Smoke
+					{
+						attachment[] = {"RS_MH6V3_mag_Hydra_M274_7","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_m134_pylon_3000","RS_MH6V3_mag_Hydra_M274_7"};
+						displayname = "Smoke";
 					};
 					class Heavy
 					{

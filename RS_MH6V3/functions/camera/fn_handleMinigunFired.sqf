@@ -10,6 +10,33 @@ params [
 
 if (isNull _vehicle || {!(_vehicle isKindOf "RHS_MELB_AH6M")}) exitWith {};
 
+private _isM274Hydra =
+	_ammo == "RS_MH6V3_ammo_Hydra_M274"
+	|| {_magazine in ["RS_MH6V3_mag_Hydra_M274_7", "RS_MH6V3_mag_Hydra_M274_19"]}
+	|| {_weapon == "RS_MH6V3_weap_FFARLauncher_M274"};
+
+if (_isM274Hydra && {!isNull _projectile} && {local _vehicle}) then {
+	[_projectile] spawn {
+		params ["_projectile"];
+
+		private _lastPositionASL = getPosASL _projectile;
+		private _deadline = time + 20;
+
+		waitUntil {
+			if (!isNull _projectile) then {
+				_lastPositionASL = getPosASL _projectile;
+			};
+
+			sleep 0.01;
+			isNull _projectile || {time > _deadline}
+		};
+
+		if (time <= _deadline) then {
+			[_lastPositionASL] remoteExecCall ["RS_MH6V3_fnc_handleM274HydraImpact", 2];
+		};
+	};
+};
+
 private _sendShakeToCrew = {
 	params ["_vehicle", "_effect", "_strength"];
 

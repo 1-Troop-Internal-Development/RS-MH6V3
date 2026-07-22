@@ -6,6 +6,7 @@ if (isNull _vehicle) exitWith {[]};
 
 private _knownWeapons = [
 	"RS_MH6V3_weap_FFARLauncher_HEAT",
+	"RS_MH6V3_weap_FFARLauncher_M274",
 	"rhs_weap_FFARLauncher",
 	"rhs_weap_FFARLauncher_M229",
 	"rhs_weap_FFARLauncher_M257",
@@ -37,6 +38,7 @@ private _findWeapon = {
 	if (_weapon != "" && {isClass (configFile >> "CfgWeapons" >> _weapon)}) exitWith {_weapon};
 
 	if ((_magazineLower find "heat") >= 0) exitWith {"RS_MH6V3_weap_FFARLauncher_HEAT"};
+	if ((_magazineLower find "rs_mh6v3_mag_hydra_m274") >= 0) exitWith {"RS_MH6V3_weap_FFARLauncher_M274"};
 	if ((_magazineLower find "m229") >= 0) exitWith {"rhs_weap_FFARLauncher_M229"};
 	if ((_magazineLower find "m257") >= 0) exitWith {"rhs_weap_FFARLauncher_M257"};
 	if ((_magazineLower find "m282") >= 0) exitWith {"rhs_weap_FFARLauncher_M282"};

@@ -7,6 +7,8 @@ RS_MH6V3_DRAIN_FUEL_TIME = 25;
 RS_MH6V3_ASSEMBLE_ROTORS_TIME = 10;
 RS_MH6V3_DISASSEMBLE_ROTORS_TIME = 10;
 RS_MH6V3_ROTOR_SERVICE_POSITION = [-0.0424805, 0.696106, 0.592959];
+RS_MH6V3_ROTOR_INTERACTION_DISTANCE = 4.5;
+RS_MH6V3_PACKAGE_INTERACTION_DISTANCE = 4.5;
 RS_MH6V3_ROTOR_HIT_INDICES = [5];
 RS_MH6V3_FUEL_DRAIN_SOUND = "RS_MH6V3_FuelDrain";
 RS_MH6V3_FUEL_DRAIN_SOUND_INTERVAL = 1;
@@ -18,10 +20,8 @@ RS_MH6V3_MH6_PACKAGE_POSITIONS = [
 	[1.01953, 0.753662, -1.30649]
 ];
 RS_MH6V3_AH6_PACKAGE_POSITION = [-0.0869141, 0.72403, -0.607061];
-RS_MH6V3_AH6_PACKAGE_DISTANCE = 3.25;
+RS_MH6V3_AH6_PACKAGE_DISTANCE = RS_MH6V3_PACKAGE_INTERACTION_DISTANCE;
 RS_MH6V3_AMMO_SUPPORT_RADIUS = 25;
-RS_MH6V3_C130_CLASS = "USAF_C130J_Cargo";
-RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS = 40;
 RS_MH6V3_SAFE_SPAWN_HEIGHT = 25;
 
 if (isServer) then {
@@ -166,6 +166,42 @@ RS_MH6V3_fnc_canService = {
 	&& {typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES}
 	&& {crew _vehicle isEqualTo []}
 	&& {isNull attachedTo _vehicle}
+};
+
+RS_MH6V3_fnc_canMoveToC130 = {
+	params ["_vehicle"];
+
+	if (isNil "SOAR_fnc_lbStartPushPlacementPreview") exitWith {false};
+	if (isNil "SOAR_fnc_lbNearestC130") exitWith {false};
+	if (isNull _vehicle || {!alive _vehicle}) exitWith {false};
+	if !(typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES) exitWith {false};
+	if !(crew _vehicle isEqualTo []) exitWith {false};
+	if !(isNull attachedTo _vehicle) exitWith {false};
+	if !(isTouchingGround _vehicle) exitWith {false};
+	if (abs speed _vehicle >= 1) exitWith {false};
+	if (_vehicle getVariable ["SOAR_LB_pushing", false]) exitWith {false};
+
+	private _radius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
+	private _c130 = [_vehicle, _radius] call SOAR_fnc_lbNearestC130;
+	!isNull _c130
+	&& {alive _c130}
+	&& {isTouchingGround _c130}
+	&& {abs speed _c130 < 1}
+};
+
+RS_MH6V3_fnc_startMoveToC130 = {
+	params [
+		"_vehicle",
+		["_caller", player]
+	];
+
+	if !(hasInterface) exitWith {};
+	if !([_vehicle] call RS_MH6V3_fnc_canMoveToC130) exitWith {
+		systemChat "RS MH-6V3: C-130 move option requires the C-130 Little Bird Logistics mod, an empty stopped aircraft, and a nearby stopped C-130.";
+	};
+
+	private _fnc = missionNamespace getVariable ["SOAR_fnc_lbStartPushPlacementPreview", {}];
+	[_vehicle, _caller] call _fnc;
 };
 
 RS_MH6V3_fnc_hasToolkit = {
@@ -670,121 +706,13 @@ RS_MH6V3_fnc_isNearAmmoSupport = {
 	!(_sources isEqualTo [])
 };
 
-RS_MH6V3_fnc_nearestC130 = {
-	params [
-		"_vehicle",
-		["_radius", RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS]
-	];
-
-	private _c130s = nearestObjects [_vehicle, [RS_MH6V3_C130_CLASS], _radius, true] select {
-		alive _x
-	};
-
-	if (_c130s isEqualTo []) exitWith {objNull};
-
-	([_c130s, [], {_x distance _vehicle}, "ASCEND"] call BIS_fnc_sortBy) # 0
-};
-
-RS_MH6V3_fnc_c130DeploymentActive = {
-	!(isNil "SOAR_fnc_lbCanConvertNearC130") || {missionNamespace getVariable ["SOAR_LB_deploymentModActive", false]}
-};
-
-RS_MH6V3_fnc_nearC130DeploymentCarrier = {
-	params ["_vehicle"];
-
-	if !([] call RS_MH6V3_fnc_c130DeploymentActive) exitWith {false};
-
-	private _radius = missionNamespace getVariable ["SOAR_LB_CONVERT_RADIUS", RS_MH6V3_C130_MODEL_CHANGE_PROTECT_RADIUS];
-	private _c130 = [_vehicle, _radius] call RS_MH6V3_fnc_nearestC130;
-	!isNull _c130
-};
-
-RS_MH6V3_fnc_cachedPushC130 = {
-	params ["_vehicle"];
-
-	if (isNull _vehicle || {!alive _vehicle}) exitWith {objNull};
-
-	private _now = diag_tickTime;
-	private _cache = _vehicle getVariable ["RS_MH6V3_pushC130Cache", [objNull, -1]];
-	_cache params [
-		["_cachedC130", objNull],
-		["_cacheTime", -1]
-	];
-
-	if ((_now - _cacheTime) < 1) exitWith {
-		if (!isNull _cachedC130 && {alive _cachedC130}) then {_cachedC130} else {objNull}
-	};
-
-	private _searchRadius = missionNamespace getVariable ["SOAR_LB_PUSH_TOWARD_SEARCH_RADIUS", 120];
-	private _c130 = [_vehicle, _searchRadius] call RS_MH6V3_fnc_nearestC130;
-	if (isNull _c130 && {!isNil "SOAR_fnc_lbNearestC130"}) then {
-		_c130 = [_vehicle, _searchRadius] call SOAR_fnc_lbNearestC130;
-	};
-
-	_vehicle setVariable ["RS_MH6V3_pushC130Cache", [_c130, _now], false];
-	_c130
-};
-
-RS_MH6V3_fnc_canPushToC130Cached = {
-	params ["_vehicle"];
-
-	if (
-		isNil "SOAR_fnc_lbStartPushPlacementPreview"
-		|| {isNull _vehicle}
-		|| {!alive _vehicle}
-		|| {!(typeOf _vehicle in RS_MH6V3_SERVICE_CLASSES)}
-		|| {!([_vehicle] call RS_MH6V3_fnc_canService)}
-		|| {!isTouchingGround _vehicle}
-		|| {abs speed _vehicle >= 1}
-		|| {[] call RS_MH6V3_fnc_c130DeploymentActive}
-		|| {_vehicle getVariable ["SOAR_LB_pushing", false]}
-	) exitWith {false};
-
-	private _c130 = [_vehicle] call RS_MH6V3_fnc_cachedPushC130;
-	!isNull _c130
-	&& {isTouchingGround _c130}
-	&& {abs speed _c130 < 1}
-};
-
-RS_MH6V3_fnc_protectC130ForModelChange = {
-	params ["_c130"];
-
-	if (isNull _c130 || {!alive _c130}) exitWith {};
-
-	private _count = _c130 getVariable ["RS_LB_C130ModelChangeProtectionCount", 0];
-	if (_count <= 0) then {
-		_c130 setVariable ["RS_LB_C130ModelChangeDamageAllowed", isDamageAllowed _c130, false];
-		_c130 setVariable ["RS_LB_C130ModelChangeSimulationEnabled", simulationEnabled _c130, false];
-		_c130 allowDamage false;
-		_c130 enableSimulationGlobal false;
-	};
-
-	_c130 setVariable ["RS_LB_C130ModelChangeProtectionCount", _count + 1, true];
-};
-
-RS_MH6V3_fnc_restoreC130AfterModelChange = {
-	params ["_c130"];
-
-	if (isNull _c130) exitWith {};
-
-	private _count = (_c130 getVariable ["RS_LB_C130ModelChangeProtectionCount", 0]) - 1;
-	_c130 setVariable ["RS_LB_C130ModelChangeProtectionCount", 0 max _count, true];
-
-	if (_count > 0) exitWith {};
-
-	_c130 enableSimulationGlobal (_c130 getVariable ["RS_LB_C130ModelChangeSimulationEnabled", true]);
-	_c130 allowDamage (_c130 getVariable ["RS_LB_C130ModelChangeDamageAllowed", true]);
-	_c130 setVariable ["RS_LB_C130ModelChangeSimulationEnabled", nil, false];
-	_c130 setVariable ["RS_LB_C130ModelChangeDamageAllowed", nil, false];
-};
-
 RS_MH6V3_fnc_clearPylonAmmo = {
 	params ["_vehicle"];
 
 	if (isNull _vehicle || {!alive _vehicle}) exitWith {};
 
 	{
-		if (_x != "") then {
+		if (_x != "" && {!([_x] call RS_MH6V3_fnc_isCountermeasurePylonMagazine)}) then {
 			_vehicle setAmmoOnPylon [_forEachIndex + 1, 0];
 		};
 	} forEach getPylonMagazines _vehicle;
@@ -866,7 +794,6 @@ RS_MH6V3_fnc_breakRotorsForCargo = {
 	private _damageAllowed = isDamageAllowed _bird;
 	_bird allowDamage true;
 	_bird setVariable ["RS_MH6V3_rotorsAssembled", false, true];
-	_bird setVariable ["SOAR_LB_rotorsAssembled", false, true];
 	[_bird, 1] call RS_MH6V3_fnc_applyRotorDamageGlobal;
 	_bird allowDamage _damageAllowed;
 };
@@ -911,7 +838,6 @@ RS_MH6V3_fnc_assembleRotors = {
 	[_vehicle, 0] call RS_MH6V3_fnc_applyRotorDamageGlobal;
 	_vehicle allowDamage _damageAllowed;
 	_vehicle setVariable ["RS_MH6V3_rotorsAssembled", true, true];
-	_vehicle setVariable ["SOAR_LB_rotorsAssembled", true, true];
 	_vehicle setVariable ["RS_MH6V3_assemblingRotors", false, true];
 
 	[format ["RS MH-6V3: rotors assembled on %1.", typeOf _vehicle], _vehicle] call RS_MH6V3_fnc_notifyAircrew;
@@ -980,6 +906,30 @@ RS_MH6V3_fnc_startDisassembleRotors = {
 	] call RS_MH6V3_fnc_runServiceTask;
 };
 
+RS_MH6V3_fnc_isCountermeasurePylonMagazine = {
+	params ["_magazine"];
+
+	if (_magazine == "") exitWith {false};
+
+	private _magazineLower = toLower _magazine;
+	if (
+		(_magazineLower find "flare") >= 0
+		|| {(_magazineLower find "chaff") >= 0}
+		|| {(_magazineLower find "countermeasure") >= 0}
+	) exitWith {true};
+
+	private _ammo = getText (configFile >> "CfgMagazines" >> _magazine >> "ammo");
+	private _ammoLower = toLower _ammo;
+	if (
+		(_ammoLower find "flare") >= 0
+		|| {(_ammoLower find "chaff") >= 0}
+		|| {(_ammoLower find "countermeasure") >= 0}
+	) exitWith {true};
+
+	private _simulation = toLower (getText (configFile >> "CfgAmmo" >> _ammo >> "simulation"));
+	_simulation == "shotcm" || {(_simulation find "countermeasure") >= 0}
+};
+
 RS_MH6V3_fnc_convertVariant = {
 	params [
 		"_vehicle",
@@ -1007,12 +957,8 @@ RS_MH6V3_fnc_convertVariant = {
 	private _damageAllowed = isDamageAllowed _vehicle;
 	private _rotorsAssembled = _vehicle getVariable ["RS_MH6V3_rotorsAssembled", true];
 	private _texture = _vehicle getVariable ["RS_MH6V3_liveryTexture", ""];
-	private _protectedC130 = [_vehicle] call RS_MH6V3_fnc_nearestC130;
 
 	[_vehicle] call RS_MH6V3_fnc_cancelFuelDrain;
-	if (!isNull _protectedC130) then {
-		[_protectedC130] call RS_MH6V3_fnc_protectC130ForModelChange;
-	};
 	deleteVehicle _vehicle;
 
 	private _newVehicle = createVehicle [_newClass, [0, 0, 1000], [], 0, "CAN_COLLIDE"];
@@ -1024,7 +970,6 @@ RS_MH6V3_fnc_convertVariant = {
 	_newVehicle setFuel _fuel;
 	_newVehicle setDamage _damage;
 	_newVehicle setVariable ["RS_MH6V3_rotorsAssembled", _rotorsAssembled, true];
-	_newVehicle setVariable ["SOAR_LB_rotorsAssembled", _rotorsAssembled, true];
 	_newVehicle setVariable ["RS_MH6V3_cancelDrainFuel", false, true];
 	_newVehicle setVariable ["RS_MH6V3_drainingFuel", false, true];
 	_newVehicle setVariable ["RS_MH6V3_fuelDrainSoundActive", false, true];
@@ -1044,11 +989,12 @@ RS_MH6V3_fnc_convertVariant = {
 	};
 
 	if (_newClass == RS_MH6V3_AH6_CLASS) then {
-		_newVehicle setVehicleAmmo 0;
 		{
 			_newVehicle setPylonLoadOut [_forEachIndex + 1, _x, true];
+			if (_x != "" && {!([_x] call RS_MH6V3_fnc_isCountermeasurePylonMagazine)}) then {
+				_newVehicle setAmmoOnPylon [_forEachIndex + 1, 0];
+			};
 		} forEach getPylonMagazines _newVehicle;
-		_newVehicle setVehicleAmmo 0;
 
 		if (!isNull _caller) then {
 			["RS_MH6V3_openRearmMenu", [_newVehicle], _caller] call CBA_fnc_targetEvent;
@@ -1059,14 +1005,13 @@ RS_MH6V3_fnc_convertVariant = {
 		[_newVehicle] call RS_MH6V3_fnc_breakRotorsForCargo;
 	};
 
-	[_newVehicle, _terrainPos, _dir, _terrainUp, _damageAllowed, _protectedC130] spawn {
+	[_newVehicle, _terrainPos, _dir, _terrainUp, _damageAllowed] spawn {
 		params [
 			"_newVehicle",
 			"_terrainPos",
 			"_dir",
 			"_terrainUp",
-			"_damageAllowed",
-			["_protectedC130", objNull]
+			"_damageAllowed"
 		];
 
 		sleep 0.05;
@@ -1081,10 +1026,6 @@ RS_MH6V3_fnc_convertVariant = {
 		if (!isNull _newVehicle && {alive _newVehicle}) then {
 			_newVehicle setVelocity [0, 0, 0];
 			_newVehicle allowDamage _damageAllowed;
-		};
-
-		if (!isNull _protectedC130) then {
-			[_protectedC130] call RS_MH6V3_fnc_restoreC130AfterModelChange;
 		};
 	};
 
@@ -1108,7 +1049,6 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 	if (_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false]) exitWith {};
 
 	_vehicle setVariable ["RS_MH6V3_removingAh6Armaments", true, true];
-	_vehicle setVehicleAmmo 0;
 
 	[_vehicle, _caller, _duration] spawn {
 		params [
@@ -1119,7 +1059,7 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 
 		private _loadedPylonIndexes = [];
 		{
-			if (_x != "") then {
+			if (_x != "" && {!([_x] call RS_MH6V3_fnc_isCountermeasurePylonMagazine)}) then {
 				_loadedPylonIndexes pushBack (_forEachIndex + 1);
 			};
 		} forEach getPylonMagazines _vehicle;
@@ -1135,7 +1075,6 @@ RS_MH6V3_fnc_removeAh6ArmamentsForCargo = {
 			sleep _delay;
 			if (isNull _vehicle || {!alive _vehicle}) exitWith {};
 			_vehicle setPylonLoadOut [_x, "", true];
-			_vehicle setVehicleAmmo 0;
 		} forEach _loadedPylonIndexes;
 
 		if (isNull _vehicle || {!alive _vehicle}) exitWith {};
@@ -1198,9 +1137,6 @@ RS_MH6V3_fnc_startMh6CargoPrep = {
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
 	if (typeOf _vehicle != RS_MH6V3_MH6_CLASS) exitWith {};
-	if ([_vehicle] call RS_MH6V3_fnc_nearC130DeploymentCarrier) exitWith {
-		systemChat "RS MH-6V3: use C-130 Deployment logistics actions near the C-130.";
-	};
 	if !([_caller] call RS_MH6V3_fnc_hasToolkit) exitWith {
 		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
 	};
@@ -1240,9 +1176,6 @@ RS_MH6V3_fnc_startAh6CargoPrep = {
 	if !(hasInterface) exitWith {};
 	if !([_vehicle] call RS_MH6V3_fnc_canService) exitWith {};
 	if (typeOf _vehicle != RS_MH6V3_AH6_CLASS) exitWith {};
-	if ([_vehicle] call RS_MH6V3_fnc_nearC130DeploymentCarrier) exitWith {
-		systemChat "RS MH-6V3: use C-130 Deployment logistics actions near the C-130.";
-	};
 	if !([_caller] call RS_MH6V3_fnc_hasToolkit) exitWith {
 		systemChat "RS MH-6V3: Toolkit required to change aircraft package.";
 	};
@@ -1288,7 +1221,6 @@ RS_MH6V3_fnc_populateLogisticsManagement = {
 	private _canService = _aliveService && {[_vehicle] call RS_MH6V3_fnc_canService};
 	private _hasToolkit = [player] call RS_MH6V3_fnc_hasToolkit;
 	private _vehicleType = if (_aliveService) then {typeOf _vehicle} else {""};
-	private _c130DeploymentNear = _aliveService && {[_vehicle] call RS_MH6V3_fnc_nearC130DeploymentCarrier};
 
 	(_display displayCtrl 86510) ctrlSetText (if (_aliveService) then {
 		format [
@@ -1309,13 +1241,10 @@ RS_MH6V3_fnc_populateLogisticsManagement = {
 	(_display displayCtrl 86524) ctrlEnable _aliveService;
 	(_display displayCtrl 86526) ctrlEnable (_canService && {_vehicle getVariable ["RS_MH6V3_rotorsAssembled", true]});
 	(_display displayCtrl 86527) ctrlEnable (_canService && {(_vehicle getVariable ["RS_MH6V3_rotorsAssembled", true]) isEqualTo false} && {!(_vehicle getVariable ["RS_MH6V3_assemblingRotors", false])});
-	(_display displayCtrl 86528) ctrlEnable (_canService && {!_c130DeploymentNear} && {_vehicleType == RS_MH6V3_OH6_CLASS} && {_hasToolkit});
-	(_display displayCtrl 86529) ctrlEnable (_canService && {!_c130DeploymentNear} && {_vehicleType == RS_MH6V3_OH6_CLASS} && {_hasToolkit});
-	(_display displayCtrl 86530) ctrlEnable (_canService && {!_c130DeploymentNear} && {_vehicleType == RS_MH6V3_MH6_CLASS} && {_hasToolkit});
-	(_display displayCtrl 86531) ctrlEnable (_canService && {!_c130DeploymentNear} && {_vehicleType == RS_MH6V3_AH6_CLASS} && {!(_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false])} && {_hasToolkit});
-
-	private _canPushToC130 = _aliveService && {[_vehicle] call RS_MH6V3_fnc_canPushToC130Cached};
-	(_display displayCtrl 86532) ctrlEnable _canPushToC130;
+	(_display displayCtrl 86528) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_OH6_CLASS} && {_hasToolkit});
+	(_display displayCtrl 86529) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_OH6_CLASS} && {_hasToolkit});
+	(_display displayCtrl 86530) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_MH6_CLASS} && {_hasToolkit});
+	(_display displayCtrl 86531) ctrlEnable (_canService && {_vehicleType == RS_MH6V3_AH6_CLASS} && {!(_vehicle getVariable ["RS_MH6V3_removingAh6Armaments", false])} && {_hasToolkit});
 };
 
 RS_MH6V3_fnc_openLogisticsManagement = {
@@ -1365,15 +1294,9 @@ RS_MH6V3_fnc_runLogisticsManagementAction = {
 			[_vehicle, player] call RS_MH6V3_fnc_startAssembleRotors;
 		};
 		case "installmh6": {
-			if ([_vehicle] call RS_MH6V3_fnc_nearC130DeploymentCarrier) exitWith {
-				systemChat "RS MH-6V3: use C-130 Deployment logistics actions near the C-130.";
-			};
 			[_vehicle, RS_MH6V3_MH6_CLASS, player] call RS_MH6V3_fnc_startConvertVariant;
 		};
 		case "installah6": {
-			if ([_vehicle] call RS_MH6V3_fnc_nearC130DeploymentCarrier) exitWith {
-				systemChat "RS MH-6V3: use C-130 Deployment logistics actions near the C-130.";
-			};
 			[_vehicle, RS_MH6V3_AH6_CLASS, player] call RS_MH6V3_fnc_startConvertVariant;
 		};
 		case "removemh6": {
@@ -1382,14 +1305,9 @@ RS_MH6V3_fnc_runLogisticsManagementAction = {
 		case "removeah6": {
 			[_vehicle, player] call RS_MH6V3_fnc_startAh6CargoPrep;
 		};
-		case "pushc130": {
-			if !(isNil "SOAR_fnc_lbStartPushPlacementPreview") then {
-				[_vehicle, player] call SOAR_fnc_lbStartPushPlacementPreview;
-			};
-		};
 	};
 
-	if !(toLower _action in ["livery", "cameras", "stopdrain", "pushc130"]) then {
+	if !(toLower _action in ["livery", "cameras", "stopdrain"]) then {
 		closeDialog 0;
 	} else {
 		[] call RS_MH6V3_fnc_populateLogisticsManagement;
@@ -1426,6 +1344,27 @@ RS_MH6V3_fnc_initVanillaActions = {
 				""
 			];
 			_vehicle setVariable ["RS_MH6V3_vanillaLogisticsActionId", _logisticsId];
+		};
+
+		if (isNil {_vehicle getVariable "RS_MH6V3_vanillaMoveToC130ActionId"}) then {
+			private _moveToC130Id = _vehicle addAction [
+				"<t color='#7fd8ff'>Move to C-130</t>",
+				{
+					params ["_target"];
+					[_target, player] call RS_MH6V3_fnc_startMoveToC130;
+				},
+				nil,
+				49.5,
+				true,
+				true,
+				"",
+				"alive _target && {typeOf _target in RS_MH6V3_SERVICE_CLASSES} && {vehicle _this == _this} && {[_target] call RS_MH6V3_fnc_canMoveToC130}",
+				6,
+				false,
+				"",
+				""
+			];
+			_vehicle setVariable ["RS_MH6V3_vanillaMoveToC130ActionId", _moveToC130Id];
 		};
 
 		if (isNil {_vehicle getVariable "RS_MH6V3_vanillaResetCameraActionId"}) then {
@@ -1680,6 +1619,37 @@ private _quickFirePylonMenuAction = [
 	}
 ] call ace_interact_menu_fnc_createAction;
 
+private _configurePylonsAction = [
+	"RS_MH6V3_configure_pylons",
+	"Configure Pylons",
+	"",
+	{
+		params ["_target"];
+		[_target] call RS_MH6V3_fnc_openRearmMenu;
+	},
+	{
+		params ["_target"];
+		[_target] call RS_MH6V3_fnc_canService
+		&& {!((getPylonMagazines _target) isEqualTo [])}
+		&& {[_target] call RS_MH6V3_fnc_isNearAmmoSupport}
+		&& {!(isNil "ace_pylons_fnc_showDialog") || {!(isNil "ace_rearm_fnc_showDialog")}}
+	}
+] call ace_interact_menu_fnc_createAction;
+
+private _moveToC130Action = [
+	"RS_MH6V3_move_to_c130",
+	"Move to C-130",
+	"",
+	{
+		params ["_target"];
+		[_target, player] call RS_MH6V3_fnc_startMoveToC130;
+	},
+	{
+		params ["_target"];
+		[_target] call RS_MH6V3_fnc_canMoveToC130
+	}
+] call ace_interact_menu_fnc_createAction;
+
 private _disassembleAction = [
 	"RS_MH6V3_disassemble_rotors",
 	"Disassemble Rotors",
@@ -1697,12 +1667,12 @@ private _disassembleAction = [
 		_params params ["_servicePos"];
 		[_target] call RS_MH6V3_fnc_canService
 		&& {_target getVariable ["RS_MH6V3_rotorsAssembled", true]}
-		&& {_player distance (_target modelToWorld _servicePos) <= 2.5}
+		&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_ROTOR_INTERACTION_DISTANCE}
 	},
 	{},
 	[RS_MH6V3_ROTOR_SERVICE_POSITION],
 	RS_MH6V3_ROTOR_SERVICE_POSITION,
-	2.5
+	RS_MH6V3_ROTOR_INTERACTION_DISTANCE
 ] call ace_interact_menu_fnc_createAction;
 
 private _assembleAction = [
@@ -1723,38 +1693,25 @@ private _assembleAction = [
 		[_target] call RS_MH6V3_fnc_canService
 		&& {_target getVariable ["RS_MH6V3_rotorsAssembled", true] isEqualTo false}
 		&& {!(_target getVariable ["RS_MH6V3_assemblingRotors", false])}
-		&& {_player distance (_target modelToWorld _servicePos) <= 2.5}
+		&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_ROTOR_INTERACTION_DISTANCE}
 	},
 	{},
 	[RS_MH6V3_ROTOR_SERVICE_POSITION],
 	RS_MH6V3_ROTOR_SERVICE_POSITION,
-	2.5
-] call ace_interact_menu_fnc_createAction;
-
-private _pushPlacementAction = [
-	"RS_MH6V3_push_place_c130",
-	"Position Near C-130",
-	"",
-	{
-		params ["_target"];
-		[_target, player] call SOAR_fnc_lbStartPushPlacementPreview;
-	},
-	{
-		params ["_target"];
-		[_target] call RS_MH6V3_fnc_canPushToC130Cached
-	}
+	RS_MH6V3_ROTOR_INTERACTION_DISTANCE
 ] call ace_interact_menu_fnc_createAction;
 
 {
 	[_x, 0, ["ACE_MainActions"], _rootAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, [], _disassembleAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, [], _assembleAction, true] call ace_interact_menu_fnc_addActionToClass;
-	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _pushPlacementAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _drainFuel25Action, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _drainFuelEmptyAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _stopDrainFuelAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _liveryAction, true] call ace_interact_menu_fnc_addActionToClass;
 	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _cameraResetAction, true] call ace_interact_menu_fnc_addActionToClass;
+	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _configurePylonsAction, true] call ace_interact_menu_fnc_addActionToClass;
+	[_x, 0, ["ACE_MainActions", "RS_MH6V3_packages"], _moveToC130Action, true] call ace_interact_menu_fnc_addActionToClass;
 } forEach RS_MH6V3_SERVICE_CLASSES;
 
 [RS_MH6V3_AH6_CLASS, 0, ["ACE_MainActions"], _izlidModeActionRoot, true] call ace_interact_menu_fnc_addActionToClass;
@@ -1838,14 +1795,13 @@ if ([] call RS_MH6V3_fnc_isACREAvailable) then {
 			_params params ["_servicePos"];
 			[_target] call RS_MH6V3_fnc_canService
 			&& {typeOf _target == RS_MH6V3_MH6_CLASS}
-			&& {!([_target] call RS_MH6V3_fnc_nearC130DeploymentCarrier)}
 			&& {[_player] call RS_MH6V3_fnc_hasToolkit}
-			&& {_player distance (_target modelToWorld _servicePos) <= 2.5}
+			&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_PACKAGE_INTERACTION_DISTANCE}
 		},
 		{},
 		[_position],
 		_position,
-		2.5
+		RS_MH6V3_PACKAGE_INTERACTION_DISTANCE
 	] call ace_interact_menu_fnc_createAction;
 
 	[RS_MH6V3_MH6_CLASS, 0, [], _action, true] call ace_interact_menu_fnc_addActionToClass;
@@ -1870,14 +1826,13 @@ if ([] call RS_MH6V3_fnc_isACREAvailable) then {
 			_params params ["_servicePos"];
 			[_target] call RS_MH6V3_fnc_canService
 			&& {typeOf _target == RS_MH6V3_OH6_CLASS}
-			&& {!([_target] call RS_MH6V3_fnc_nearC130DeploymentCarrier)}
 			&& {[_player] call RS_MH6V3_fnc_hasToolkit}
-			&& {_player distance (_target modelToWorld _servicePos) <= 2.5}
+			&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_PACKAGE_INTERACTION_DISTANCE}
 		},
 		{},
 		[_position],
 		_position,
-		2.5
+		RS_MH6V3_PACKAGE_INTERACTION_DISTANCE
 	] call ace_interact_menu_fnc_createAction;
 
 	[RS_MH6V3_OH6_CLASS, 0, [], _action, true] call ace_interact_menu_fnc_addActionToClass;
@@ -1898,11 +1853,10 @@ private _ah6PackageAction = [
 			"_params"
 		];
 		_params params ["_servicePos"];
-			[_target] call RS_MH6V3_fnc_canService
-			&& {typeOf _target == RS_MH6V3_AH6_CLASS}
-			&& {!([_target] call RS_MH6V3_fnc_nearC130DeploymentCarrier)}
-			&& {!(_target getVariable ["RS_MH6V3_removingAh6Armaments", false])}
-			&& {[_player] call RS_MH6V3_fnc_hasToolkit}
+		[_target] call RS_MH6V3_fnc_canService
+		&& {typeOf _target == RS_MH6V3_AH6_CLASS}
+		&& {!(_target getVariable ["RS_MH6V3_removingAh6Armaments", false])}
+		&& {[_player] call RS_MH6V3_fnc_hasToolkit}
 		&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_AH6_PACKAGE_DISTANCE}
 	},
 	{},
@@ -1926,11 +1880,10 @@ private _ah6InstallAction = [
 			"_params"
 		];
 		_params params ["_servicePos"];
-			[_target] call RS_MH6V3_fnc_canService
-			&& {typeOf _target == RS_MH6V3_OH6_CLASS}
-			&& {!([_target] call RS_MH6V3_fnc_nearC130DeploymentCarrier)}
-			&& {[_player] call RS_MH6V3_fnc_hasToolkit}
-			&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_AH6_PACKAGE_DISTANCE}
+		[_target] call RS_MH6V3_fnc_canService
+		&& {typeOf _target == RS_MH6V3_OH6_CLASS}
+		&& {[_player] call RS_MH6V3_fnc_hasToolkit}
+		&& {_player distance (_target modelToWorld _servicePos) <= RS_MH6V3_AH6_PACKAGE_DISTANCE}
 	},
 	{},
 	[RS_MH6V3_AH6_PACKAGE_POSITION],

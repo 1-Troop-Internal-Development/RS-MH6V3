@@ -744,20 +744,6 @@ class RS_MH6V3_LogisticsManagement
 			y = 0.62 * safezoneH + safezoneY;
 			action = "['removeah6'] call RS_MH6V3_fnc_runLogisticsManagementAction";
 		};
-		class PushC130Button: RS_MH6V3_RscButton
-		{
-			idc = 86532;
-			text = "Position Near C-130";
-			x = 0.342 * safezoneW + safezoneX;
-			y = 0.72 * safezoneH + safezoneY;
-			w = 0.316 * safezoneW;
-			h = 0.04 * safezoneH;
-			sizeEx = 0.028;
-			colorBackground[] = {0.16,0.16,0.16,1};
-			colorBackgroundActive[] = {0.36,0.22,0.08,1};
-			colorFocused[] = {0.36,0.22,0.08,1};
-			action = "['pushc130'] call RS_MH6V3_fnc_runLogisticsManagementAction";
-		};
 		class RefreshButton: RS_MH6V3_RscButton
 		{
 			idc = -1;

@@ -188,6 +188,20 @@ class CfgFunctions
 			class toggleQuickFireArm {};
 			class updateQuickFirePylonMenu {};
 		};
+		class laircm
+		{
+			file = "\DEVGRU\RS_MH6V3\functions\laircm";
+			class handleIncomingMissile {};
+			class initLAIRCM
+			{
+				postInit = 1;
+			};
+			class initLAIRCMVehicle {};
+			class applyLAIRCMMode {};
+			class renderLAIRCMDebug {};
+			class laircmDeflect {};
+			class laircmVisual {};
+		};
 	};
 };
 
@@ -2244,11 +2258,12 @@ class CfgVehicles
 		{
 			class RHS_MELB_EH
 			{
-				init = "_this call RS_MH6V3_fnc_syncPylonOwner; params ['_vehicle']; if (_vehicle isKindOf 'RHS_MELB_AH6M') then {_vehicle animate ['Addcrosshair', 1, true]}";
-				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner";
-				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner";
+				init = "_this call RS_MH6V3_fnc_syncPylonOwner; _this call RS_MH6V3_fnc_initLAIRCMVehicle; params ['_vehicle']; if (_vehicle isKindOf 'RHS_MELB_AH6M') then {_vehicle animate ['Addcrosshair', 1, true]}";
+				getIn = "_this call RS_MH6V3_fnc_syncPylonOwner; params ['_vehicle']; [_vehicle] call RS_MH6V3_fnc_applyLAIRCMMode";
+				getOut = "_this call RS_MH6V3_fnc_syncPylonOwner; params ['_vehicle']; [_vehicle] call RS_MH6V3_fnc_applyLAIRCMMode";
 				engine = "params ['_vehicle', '_engineOn']; [_vehicle, _engineOn] call RS_MH6V3_fnc_handleIZLIDPowerState";
 				fired = "_this call RS_MH6V3_fnc_handleMinigunFired";
+				incomingMissile = "_this call RS_MH6V3_fnc_handleIncomingMissile";
 				killed = "params ['_vehicle']; [_vehicle, false] call RS_MH6V3_fnc_handleIZLIDPowerState";
 				controlsShifted = "params ['_vehicle', '_activeCopilot']; _vehicle setVariable ['RS_MH6V3_activeCopilot', _activeCopilot, true]; [_vehicle] call RS_MH6V3_fnc_syncPylonOwner";
 				handleDamage = "_this call RHS_MELB_fnc_fallDamage";

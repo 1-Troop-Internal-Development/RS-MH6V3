@@ -1,5 +1,6 @@
 private _cameraCategory = ["[RS] MH-6V3", "Camera & Effects"];
 private _izlidCategory = ["[RS] MH-6V3", "IZLID & Illumination"];
+private _laircmCategory = ["[RS] MH-6V3", "LAIRCM"];
 private _acreAvailable = [] call RS_MH6V3_fnc_isACREAvailable;
 
 // Camera & Effects
@@ -61,6 +62,37 @@ private _acreAvailable = [] call RS_MH6V3_fnc_isACREAvailable;
 	_izlidCategory,
 	[0, 100, 100, 0, false],
 	0
+] call CBA_fnc_addSetting;
+
+// LAIRCM
+[
+	"RS_MH6V3_laircmEnabled",
+	"CHECKBOX",
+	["Scripted LWIRCM", "Enable the RS scripted LWIRCM replacement. Disable to use the original MELB LWIRCM system."],
+	_laircmCategory,
+	true,
+	1,
+	{
+		{
+			if (_x isKindOf "RHS_MELB_base") then {
+				[_x] call RS_MH6V3_fnc_applyLAIRCMMode;
+			};
+		} forEach vehicles;
+	}
+] call CBA_fnc_addSetting;
+
+[
+	"RS_MH6V3_laircmDebugEnabled",
+	"CHECKBOX",
+	["LWIRCM Debug", "Draw the local LWIRCM detection envelope and active missile line for development testing."],
+	_laircmCategory,
+	false,
+	0,
+	{
+		if (hasInterface) then {
+			[] call RS_MH6V3_fnc_renderLAIRCMDebug;
+		};
+	}
 ] call CBA_fnc_addSetting;
 
 if (_acreAvailable) then {

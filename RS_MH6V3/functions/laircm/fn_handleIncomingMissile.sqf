@@ -58,7 +58,7 @@ missionNamespace setVariable [_missileKey, true, false];
 
 	if (isNull _vehicle || {!alive _vehicle} || {isNull _missile}) exitWith {};
 
-	sleep 2.5;
+	sleep 1.8;
 
 	if (
 		isNull _vehicle
@@ -94,7 +94,7 @@ missionNamespace setVariable [_missileKey, true, false];
 	};
 
 	private _aspect = [_vehicle, _missile] call _getMissileAspect;
-	private _waitUntil = diag_tickTime + 2;
+	private _waitUntil = diag_tickTime + 1.3;
 	while {
 		diag_tickTime < _waitUntil
 		&& {!isNull _vehicle}
@@ -228,11 +228,7 @@ missionNamespace setVariable [_missileKey, true, false];
 			};
 		};
 
-		if (local _missile) then {
-			[_vehicle, _missile] call RS_MH6V3_fnc_laircmDeflect;
-		} else {
-			[_vehicle, _missile] remoteExecCall ["RS_MH6V3_fnc_laircmDeflect", _missile];
-		};
+		[_vehicle, _missile] remoteExecCall ["RS_MH6V3_fnc_laircmDeflect", 0];
 	};
 
 	{

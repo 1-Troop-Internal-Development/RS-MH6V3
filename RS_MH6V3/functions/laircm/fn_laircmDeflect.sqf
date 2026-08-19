@@ -6,13 +6,14 @@ params [
 if (isNull _vehicle || {isNull _missile}) exitWith {};
 if !(_vehicle isKindOf "RHS_MELB_base") exitWith {};
 
-if (!local _missile) exitWith {
-	[_vehicle, _missile] remoteExecCall ["RS_MH6V3_fnc_laircmDeflect", _missile];
-};
+if (!local _missile) exitWith {};
 
 private _activeKey = format ["RS_MH6V3_laircmDeflectActive_%1", netId _missile];
 if (missionNamespace getVariable [_activeKey, false]) exitWith {};
 missionNamespace setVariable [_activeKey, true, false];
+
+_missile setMissileTarget objNull;
+_missile setMissileTargetPos ((getPosASL _missile) vectorAdd ((vectorNormalized velocity _missile) vectorMultiply 500));
 
 [_vehicle, _missile, _activeKey] spawn {
 	params ["_vehicle", "_missile", "_activeKey"];

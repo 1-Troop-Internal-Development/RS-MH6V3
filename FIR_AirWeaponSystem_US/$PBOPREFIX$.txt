@@ -1,0 +1,4 @@
+//<'FIR_AirWeaponSystem_US.pbo' properties via Mikero's dos tools, dll version 9.98>
+prefix=FIR_AirWeaponSystem_US;
+//PboType=Arma Addon;
+//</properties>

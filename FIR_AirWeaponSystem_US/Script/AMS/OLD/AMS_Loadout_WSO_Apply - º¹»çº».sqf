@@ -1,0 +1,76 @@
+if (not Local player) Exitwith {};
+// _plane = vehicle player;
+
+
+private _plane = "";
+private _planetype = "";
+
+private _UAV = getConnectedUAV player;
+
+//if not UAV
+if (_UAV isEqualTo objNull) then
+{
+	_plane = vehicle player;
+	_plane_pilot = driver _plane;
+}
+else
+{
+// if UAV and MQ-81U only
+
+		_plane = _UAV;	
+		_plane_pilot = player;		
+};
+
+private _weap = _this;
+private _weapcount = (count _weap)-1;
+private _count = 1;
+private _interval = 0.5;
+private _custom = false;
+private _mass = 0;
+
+private _configPath = configFile >> "CfgVehicles" >> typeOf _plane >> "AMSData";
+private _weap_wso_number = getNumber (_configPath >> "WSONumber");
+
+private _weap_wso = lbdata [_weap_wso_number,(lbCurSel _weap_wso_number)];
+
+if (isNil "AWS_AMS_LoadingTime") then 
+{
+	systemchat "custom value not found. standard inverval time : 0.5s";
+}
+else
+{
+	systemchat "Weight-based Loading time enabled.";
+	_custom = true;
+};
+
+
+for "_i" from 0 to _weapcount do
+{
+	_equip = _weap select _i;
+	if (_custom) then
+	{
+		_mass = getNumber  (configFile >> "CfgMagazines" >> _equip >> "mass");		
+		_interval = _mass * 0.1;
+	};
+	systemchat format ["%1 / load time : %2 s",_equip,_interval];	
+	sleep _interval;	
+	if (_weap_wso == "wso") then
+	{
+			_pylon_except_check = getText (configFile >> "CfgMagazines" >> _equip >> "FIR_AWS_F15E_EXCEPT");
+			if ((_pylon_except_check == "yes") or _equip == "") then
+			{
+				_plane setPylonLoadOut [_count, _equip, false, []];	
+			}
+			else
+			{
+				_plane setPylonLoadOut [_count, _equip, false, [0]];
+			};
+	}
+	else
+	{
+		_plane setPylonLoadOut [_count,_equip, false, []];
+	};	
+	_count = _count + 1;
+};
+
+

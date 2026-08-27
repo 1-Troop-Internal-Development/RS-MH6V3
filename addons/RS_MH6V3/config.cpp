@@ -4,7 +4,7 @@ class CfgPatches
 	{
 		units[] = {"RHS_MELB_AH6M"};
 		weapons[] = {"RHS_Laserdesignator_MELB","RS_MH6V3_weap_FFARLauncher_APKWS","RS_MH6V3_weap_FFARLauncher_HEAT","RS_MH6V3_weap_FFARLauncher_M274"};
-		requiredVersion = 1.96;
+		requiredVersion = 2.10;
 		requiredAddons[] = {"cba_main","rhsusf_main","A3_Data_F","A3_Weapons_F","rhsusf_c_melb","rhsusf_c_airweapons","rhsusf_c_heavyweapons"};
 		magazines[] = {"RS_MH6V3_mag_Hydra_APKWS_7","RS_MH6V3_mag_Hydra_HEAT_7","RS_MH6V3_mag_Hydra_HEAT_19","RS_MH6V3_mag_Hydra_M274_7","RS_MH6V3_mag_Hydra_M274_19","RS_MH6V3_mag_m134_pylon_3000"};
 		ammo[] = {"RS_MH6V3_ammo_Hydra_APKWS","RS_MH6V3_ammo_Hydra_HEAT","RS_MH6V3_ammo_Hydra_M274","RS_MH6V3_ammo_Hydra_M274_SmokeCloud","rhs_ammo_127x99_SLAP"};
@@ -145,6 +145,9 @@ class CfgFunctions
 		{
 			file = "\DEVGRU\RS_MH6V3\functions\pylons";
 			class syncPylonOwner{};
+			class openPylonOwnerMenu{};
+			class populatePylonOwnerMenu{};
+			class applyPylonOwnerMenu{};
 		};
 		class weapons
 		{
@@ -1231,6 +1234,150 @@ class RS_MH6V3_QuickFirePylonMenu
 		};
 	};
 };
+class RS_MH6V3_PylonOwnerMenu
+{
+	idd = 86500;
+	movingEnable = 1;
+	enableSimulation = 1;
+	onLoad = "uiNamespace setVariable ['RS_MH6V3_pylonOwnerMenuDisplay', _this # 0]; [] call RS_MH6V3_fnc_populatePylonOwnerMenu";
+	onUnload = "uiNamespace setVariable ['RS_MH6V3_pylonOwnerMenuDisplay', displayNull]; uiNamespace setVariable ['RS_MH6V3_pylonOwnerMenuVehicle', objNull]";
+	class controlsBackground
+	{
+		class Border: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = "0.3 * safezoneW + safezoneX";
+			y = "0.28 * safezoneH + safezoneY";
+			w = "0.4 * safezoneW";
+			h = "0.36 * safezoneH";
+			colorBackground[] = {0.18,0.18,0.18,1};
+		};
+		class Background: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = "0.302 * safezoneW + safezoneX";
+			y = "0.282 * safezoneH + safezoneY";
+			w = "0.396 * safezoneW";
+			h = "0.356 * safezoneH";
+			colorBackground[] = {0.015,0.015,0.015,0.98};
+		};
+		class Header: RS_MH6V3_RscText
+		{
+			idc = -1;
+			text = "Pylon Ownership Configuration";
+			x = "0.302 * safezoneW + safezoneX";
+			y = "0.282 * safezoneH + safezoneY";
+			w = "0.32 * safezoneW";
+			h = "0.045 * safezoneH";
+			style = 0;
+			sizeEx = 0.033;
+			colorBackground[] = {0.025,0.025,0.025,1};
+		};
+		class HeaderAccent: RS_MH6V3_RscText
+		{
+			idc = -1;
+			x = "0.302 * safezoneW + safezoneX";
+			y = "0.327 * safezoneH + safezoneY";
+			w = "0.396 * safezoneW";
+			h = "0.002 * safezoneH";
+			colorBackground[] = {0.82,0.43,0.04,1};
+		};
+	};
+	class controls
+	{
+		class CloseButton: RS_MH6V3_RscButton
+		{
+			idc = -1;
+			text = "x";
+			x = "0.67 * safezoneW + safezoneX";
+			y = "0.286 * safezoneH + safezoneY";
+			w = "0.028 * safezoneW";
+			h = "0.036 * safezoneH";
+			sizeEx = 0.029;
+			colorBackground[] = {0.65,0.05,0.04,1};
+			colorBackgroundActive[] = {0.85,0.08,0.06,1};
+			colorFocused[] = {0.65,0.05,0.04,1};
+			action = "closeDialog 0";
+		};
+		class Pylon1Label: RS_MH6V3_RscText
+		{
+			idc = 86610;
+			x = "0.315 * safezoneW + safezoneX";
+			y = "0.345 * safezoneH + safezoneY";
+			w = "0.16 * safezoneW";
+			h = "0.04 * safezoneH";
+			sizeEx = 0.027;
+			colorText[] = {0.9,0.9,0.9,1};
+		};
+		class Pylon2Label: Pylon1Label
+		{
+			idc = 86611;
+			y = "0.395 * safezoneH + safezoneY";
+		};
+		class Pylon3Label: Pylon1Label
+		{
+			idc = 86612;
+			y = "0.445 * safezoneH + safezoneY";
+		};
+		class Pylon4Label: Pylon1Label
+		{
+			idc = 86613;
+			y = "0.495 * safezoneH + safezoneY";
+		};
+		class Pylon1Combo: RS_MH6V3_RscCombo
+		{
+			idc = 86620;
+			x = "0.485 * safezoneW + safezoneX";
+			y = "0.345 * safezoneH + safezoneY";
+			w = "0.19 * safezoneW";
+			h = "0.04 * safezoneH";
+			sizeEx = 0.028;
+			colorBackground[] = {0.04,0.04,0.04,1};
+			colorSelectBackground[] = {0.36,0.22,0.08,1};
+		};
+		class Pylon2Combo: Pylon1Combo
+		{
+			idc = 86621;
+			y = "0.395 * safezoneH + safezoneY";
+		};
+		class Pylon3Combo: Pylon1Combo
+		{
+			idc = 86622;
+			y = "0.445 * safezoneH + safezoneY";
+		};
+		class Pylon4Combo: Pylon1Combo
+		{
+			idc = 86623;
+			y = "0.495 * safezoneH + safezoneY";
+		};
+		class ApplyButton: RS_MH6V3_RscButton
+		{
+			idc = -1;
+			text = "Apply";
+			x = "0.315 * safezoneW + safezoneX";
+			y = "0.55 * safezoneH + safezoneY";
+			w = "0.17 * safezoneW";
+			h = "0.045 * safezoneH";
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "[] call RS_MH6V3_fnc_applyPylonOwnerMenu";
+		};
+		class CancelButton: RS_MH6V3_RscButton
+		{
+			idc = -1;
+			text = "Cancel";
+			x = "0.495 * safezoneW + safezoneX";
+			y = "0.55 * safezoneH + safezoneY";
+			w = "0.17 * safezoneW";
+			h = "0.045 * safezoneH";
+			colorBackground[] = {0.16,0.16,0.16,1};
+			colorBackgroundActive[] = {0.36,0.22,0.08,1};
+			colorFocused[] = {0.36,0.22,0.08,1};
+			action = "closeDialog 0";
+		};
+	};
+};
 class RscTitles
 {
 	class RS_MH6V3_TrueAFMHitters
@@ -1581,10 +1728,10 @@ class cfgAmmo
 		missileLockMaxDistance = 4500;
 		missileLockMinDistance = 100;
 		maxControlRange = 4500;
-		maneuvrability = 4;
-		trackLead = 0.05;
-		trackOversteer = 0.05;
-		sideAirFriction = 0.16;
+		maneuvrability = 20;
+		trackLead = 1;
+		trackOversteer = 0.9;
+		sideAirFriction = 0.9;
 		thrustTime = 5.7;
 		timeToLive = 12;
 		typicalSpeed = 740;
@@ -1592,8 +1739,8 @@ class cfgAmmo
 		class ace_missileguidance
 		{
 			enabled = 1;
-			pitchRate = 10;
-			yawRate = 10;
+			pitchRate = 15;
+			yawRate = 20;
 			canVanillaLock = 0;
 			defaultSeekerType = "SALH";
 			seekerTypes[] = {"SALH"};

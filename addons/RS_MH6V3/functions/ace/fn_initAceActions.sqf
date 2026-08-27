@@ -1619,6 +1619,26 @@ private _quickFirePylonMenuAction = [
 	}
 ] call ace_interact_menu_fnc_createAction;
 
+private _pylonOwnerMenuAction = [
+	"RS_MH6V3_pylon_owner_menu",
+	"Pylon Ownership Configuration",
+	"",
+	{
+		params ["_target", "_player"];
+		[vehicle _player] call RS_MH6V3_fnc_openPylonOwnerMenu;
+	},
+	{
+		params ["_target", "_player"];
+		private _vehicle = vehicle _player;
+
+		_vehicle != _player
+		&& {alive _vehicle}
+		&& {typeOf _vehicle == RS_MH6V3_AH6_CLASS}
+		&& {currentPilot _vehicle isEqualTo _player}
+		&& {!((getPylonMagazines _vehicle) isEqualTo [])}
+	}
+] call ace_interact_menu_fnc_createAction;
+
 private _configurePylonsAction = [
 	"RS_MH6V3_configure_pylons",
 	"Configure Pylons",
@@ -1719,6 +1739,7 @@ private _assembleAction = [
 [RS_MH6V3_MH6_CLASS, 0, ["ACE_MainActions"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
 [RS_MH6V3_OH6_CLASS, 0, ["ACE_MainActions"], _pilotIZLIDAction, true] call ace_interact_menu_fnc_addActionToClass;
 [RS_MH6V3_AH6_CLASS, 1, ["ACE_SelfActions"], _quickFirePylonMenuAction, true] call ace_interact_menu_fnc_addActionToClass;
+[RS_MH6V3_AH6_CLASS, 1, ["ACE_SelfActions"], _pylonOwnerMenuAction, true] call ace_interact_menu_fnc_addActionToClass;
 
 if ([] call RS_MH6V3_fnc_isACREAvailable) then {
 	{
